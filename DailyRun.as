@@ -1,4 +1,5 @@
 ﻿package  {
+
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.utils.AssetManager;
@@ -9,7 +10,8 @@
 	* 
 	* 
 	*/
-	public class DailyRun extends Sprite{
+	public class DailyRun extends Sprite
+	{
 
 		var assetManager:AssetManager;
 		
