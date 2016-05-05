@@ -1,7 +1,9 @@
 ﻿package  {
 	
 	import flash.display.MovieClip;
-	import starling.core.Starling;
+import flash.geom.Rectangle;
+
+import starling.core.Starling;
 	
 	/*
 	* This class sets up the Starling framework and the stage.
@@ -13,7 +15,7 @@
 		
 		public function Main():void
 		{
-			var _starling:Starling = new Starling( DailyRun, this.stage );
+			var _starling:Starling = new Starling( DailyRun, this.stage, new flash.geom.Rectangle(0, 0, 480, 320 ) );
 			_starling.start();
 		}
 	}

@@ -2,7 +2,6 @@
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.utils.AssetManager;
-	import flash.filesystem.File;
 	
 	/*
 	* This class manages the state of the game, such as the Main Menu Screen, High Score Screen,
@@ -26,6 +25,11 @@
 			this.assetManager = assetManager;
 			addEventListener( Event.ADDED_TO_STAGE, initialize );
 		}
+
+		public function getAssetManager():AssetManager
+		{
+			return this.assetManager;
+		}
 		
 		/*
 		* This function sets the initial gameState (Main Menu) and adds an eventlistener
@@ -34,7 +38,7 @@
 		*/
 		private function initialize():void
 		{
-			setGameState( MainMenu );
+			setGameState( Level1 );
 			addEventListener( Event.ENTER_FRAME, update );
 		}
 		
