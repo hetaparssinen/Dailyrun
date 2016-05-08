@@ -2,6 +2,8 @@
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.utils.AssetManager;
+	import starling.events.TouchEvent;
+
 	
 	/*
 	* This class manages the state of the game, such as the Main Menu Screen, High Score Screen,
@@ -40,6 +42,7 @@
 		{
 			setGameState( Level1 );
 			addEventListener( Event.ENTER_FRAME, update );
+			addEventListener( TouchEvent.TOUCH, touchEventHandler);
 		}
 		
 		/*
@@ -65,6 +68,11 @@
 			currentGameState.update( deltaTime );
 			
 			lastUpdate = currentTime;
+		}
+		
+		private function touchEventHandler():void 
+		{
+			trace("touceg");
 		}
 
 	}
