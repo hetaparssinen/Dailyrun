@@ -1,0 +1,13 @@
+{
+	"level1":
+	{
+		"platformHeight": 3
+	},
+
+	"levelStart":
+	{
+		"marginX": 50,
+		"marginY": 50,
+		"borderThickness": 10
+	}
+}
