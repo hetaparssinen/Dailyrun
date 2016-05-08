@@ -113,7 +113,6 @@ public class Level1 implements GameState
             //Move all platforms
             for (var i:int = platforms.length - 1; i > 0; i--) {
                 platforms[i].x -= Math.floor(150 * deltaTime);
-                trace( platforms[i].x );
             }
         }
     }
