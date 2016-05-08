@@ -1,6 +1,6 @@
 ﻿package  {
 
-	import starling.display.Sprite;
+import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.utils.AssetManager;
 	import flash.filesystem.File;

@@ -85,6 +85,7 @@ public class Level1 implements GameState
         var newPlatforms:Boolean = false;
         var spawnX:int = 0;
 
+        
         if( isPlaying ) {
             //Check if platforms are going off stage and determine the x coordinate for new platforms
             for (var i:int = platforms.length - 1; i > 0; i--) {
@@ -111,7 +112,8 @@ public class Level1 implements GameState
 
             //Move all platforms
             for (var i:int = platforms.length - 1; i > 0; i--) {
-                platforms[i].x -= 5;
+                platforms[i].x -= Math.floor(150 * deltaTime);
+                trace( platforms[i].x );
             }
         }
     }

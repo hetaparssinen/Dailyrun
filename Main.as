@@ -17,6 +17,7 @@ import starling.core.Starling;
 		{
 			var _starling:Starling = new Starling( DailyRun, this.stage, new flash.geom.Rectangle(0, 0, 480, 320 ) );
 			_starling.start();
+			Starling.current.nativeStage.frameRate = 30;
 		}
 	}
 	
