@@ -1,7 +1,8 @@
 {
 	"level1":
 	{
-		"platformHeight": 3
+		"platformHeight": 3,
+		"playerX": 30
 	},
 
 	"levelStart":

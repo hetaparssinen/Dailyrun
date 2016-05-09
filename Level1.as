@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by Lourens on 5-5-2016.
  */
 package {
@@ -23,6 +23,7 @@ public class Level1 implements GameState
     private var stageWidth:int;
     private var isPlaying:Boolean;
     private var levelStart:LevelStart;
+	private var character:Character;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -72,11 +73,23 @@ public class Level1 implements GameState
     private function touchEventHandler( event:TouchEvent )
     {
         var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
+        var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
         if( startTouch && !isPlaying)
         {
             isPlaying = true;
             game.removeChild( levelStart );
-        }
+			
+			character = new Character();
+			character.alignPivot();
+			character.x = config.level1.playerX;
+			character.y = game.stage.stageHeight - character.height / 2 - platformHeight * tileWidth;
+			game.addChild( character );
+        } 
+		else if ( isPlaying && !character.jumping && touch )
+		{
+			character.jumping = true;
+			character.velocity.y = -100;
+		}
 
     }
 
@@ -114,6 +127,11 @@ public class Level1 implements GameState
             for (var i:int = platforms.length - 1; i > 0; i--) {
                 platforms[i].x -= Math.floor(150 * deltaTime);
             }
+			
+			if (character.jumping) {
+				character.platformHeight = game.stage.stageHeight - platformHeight * tileWidth;
+				character.update(deltaTime);
+			}
         }
     }
 }
