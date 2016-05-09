@@ -79,7 +79,7 @@ public class Level1 implements GameState
             isPlaying = true;
             game.removeChild( levelStart );
 			
-			character = new Character( assetManager );
+			character = new Character();
 			character.alignPivot();
 			character.x = config.level1.playerX;
 			character.y = game.stage.stageHeight - character.height / 2 - platformHeight * tileWidth;

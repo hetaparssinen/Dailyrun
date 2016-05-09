@@ -8,18 +8,12 @@
 	
 	public class Character extends Sprite {
 		
-		private var assetManager:AssetManager;
-		
-		private var jumpHeight:int = 0;
-		private var defaultJumpSpeed:int = 20;
-		private var jumpSpeed:int = 20;
-		
 		public var jumping = false;
 		public var platformHeight:int;
 		
 		public var velocity:Point = new Point(0, 0);
 
-		public function Character( assetManager:AssetManager ) {
+		public function Character() {
 			[Embed(source="assets/character.png")]
 			var Character:Class;
 			var bitmap:Bitmap = new Character();
