@@ -3,6 +3,9 @@
  */
 package {
 
+import flash.events.TimerEvent;
+import flash.utils.Timer;
+
 import starling.display.Image;
 import starling.display.Quad;
 import starling.events.Touch;
@@ -24,6 +27,8 @@ public class Level1 implements GameState
     private var isPlaying:Boolean;
     private var levelStart:LevelStart;
 	private var character:Character;
+    private var timer:Timer;
+    private var enemies:Vector.<Enemy>;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -47,6 +52,7 @@ public class Level1 implements GameState
         stageHeight = game.stage.stageHeight;
         stageWidth = game.stage.stageWidth;
         isPlaying = false;
+        enemies = new Vector.<Enemy>();
 
         //Set and display initial platforms
         for( var i:int = 0; i < platformHeight; i++ ) {
@@ -70,6 +76,30 @@ public class Level1 implements GameState
         game.addChild( levelStart );
     }
 
+    private function setTimer():void
+    {
+        timer = new Timer( config.timer.initialValue, 1 );
+        timer.start();
+        timer.addEventListener( TimerEvent.TIMER, timerHandler );
+    }
+
+    private function timerHandler( e:TimerEvent ):void
+    {
+        timer.delay = timer.delay * config.timer.decreaseRate;
+        timer.reset();
+        timer.start();
+        spawnEnemy();
+    }
+
+    private function spawnEnemy():void
+    {
+        var enemy:Enemy = new Enemy( assetManager.getTexture( "enemy" ) );
+        enemy.x = game.stage.stageWidth;
+        enemy.y = game.stage.stageHeight - (platformHeight * tileWidth) - tileWidth;
+        game.addChild( enemy );
+        enemies.push( enemy );
+    }
+
     private function touchEventHandler( event:TouchEvent )
     {
         var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
@@ -83,6 +113,10 @@ public class Level1 implements GameState
 			character.x = config.level1.playerX;
 			character.y = game.stage.stageHeight - character.height / 2 - platformHeight * tileWidth;
 			game.addChild( character );
+
+            //start the timer and spawn first enemy
+            spawnEnemy();
+            setTimer();
         } 
 		else if ( isPlaying && !character.jumping ) 
 		{
@@ -125,13 +159,24 @@ public class Level1 implements GameState
             //Move all platforms
             for (var i:int = platforms.length - 1; i > 0; i--) {
                 platforms[i].x -= Math.floor(150 * deltaTime);
-                trace( platforms[i].x );
             }
 			
 			if (character.jumping) {
 				character.platformHeight = game.stage.stageHeight - platformHeight * tileWidth;
 				character.update(deltaTime);
 			}
+
+            //Move enemies and remove them if they left the screen
+            for (var i:int = enemies.length - 1; i > 0; i--) {
+                if( enemies[i].x < -tileWidth )
+                {
+                    game.removeChild( enemies[i] );
+                    enemies.splice( i, 1 );
+                }
+                else {
+                    enemies[i].x -= Math.floor(150 * deltaTime);
+                }
+            }
         }
     }
 }
