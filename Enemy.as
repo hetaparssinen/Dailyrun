@@ -11,10 +11,12 @@ public class Enemy extends Sprite
 {
     
     private var texture:Texture;
+    public var isHit:Boolean;
 
     public function Enemy( enemyTexture:Texture )
     {
         this.texture = enemyTexture;
+        touchable = false;
         addEventListener( Event.ADDED_TO_STAGE, initialize );
     }
 

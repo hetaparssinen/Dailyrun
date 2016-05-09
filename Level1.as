@@ -182,6 +182,16 @@ public class Level1 implements GameState
                 }
             }
 
+            //check collision with enemies
+            for ( var i:int = enemies.length -1; i > 0; i-- )
+            {
+                if( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit )
+                {
+                    enemies[i].isHit = true;
+                    trace("collision");
+                }
+            }
+
             game.addChild( character );
         }
 
