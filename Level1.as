@@ -29,6 +29,7 @@ public class Level1 implements GameState
 	private var character:Character;
     private var timer:Timer;
     private var enemies:Vector.<Enemy>;
+    private var healthBar:HealthBar;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -112,12 +113,20 @@ public class Level1 implements GameState
         {
             isPlaying = true;
             game.removeChild( levelStart );
-			
-			character = new Character();
+
+			//Draw player
+			character = new Character( assetManager );
 			character.alignPivot();
 			character.x = config.level1.playerX;
 			character.y = game.stage.stageHeight - character.height / 2 - platformHeight * tileWidth;
 			game.addChild( character );
+
+            //draw healthbar
+            healthBar = new HealthBar();
+            healthBar.alignPivot();
+            healthBar.x = character.x;
+            healthBar.y = character.y - ( character.height / 2 ) - 10;
+            game.addChild( healthBar );
 
             //start the timer and spawn first enemy
             spawnEnemy();
@@ -190,8 +199,15 @@ public class Level1 implements GameState
                 {
                     enemies[i].isHit = true;
                     trace("collision");
+                    if( character.health > 0 ) {
+                        character.health -= 1;
+                    }
+                    healthBar.update( character.health / character.maxHealth );
                 }
             }
+
+            //move healthbar
+            healthBar.y = character.y - ( character.height / 2 ) - 10;
 
             game.addChild( character );
         }

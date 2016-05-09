@@ -9,11 +9,15 @@
 	{
 		"marginX": 50,
 		"marginY": 50,
-		"borderThickness": 10
+		"borderThickness": 30
 	},
 	"timer":
 	{
 		"initialValue": 3000,
 		"decreaseRate": 0.95
+	},
+	"character":
+	{
+		"maxHealth": 3
 	}
 }
