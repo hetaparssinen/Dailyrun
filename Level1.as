@@ -107,6 +107,7 @@ public class Level1 implements GameState
     private function touchEventHandler( event:TouchEvent )
     {
         var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
+        var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
         if( startTouch && !isPlaying)
         {
             isPlaying = true;
@@ -122,7 +123,7 @@ public class Level1 implements GameState
             spawnEnemy();
             setTimer();
         } 
-		else if ( isPlaying && !character.jumping ) 
+		else if ( isPlaying && !character.jumping && touch )
 		{
 			character.jumping = true;
 			character.velocity.y = -100;
