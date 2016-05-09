@@ -54,6 +54,10 @@ public class Level1 implements GameState
         isPlaying = false;
         enemies = new Vector.<Enemy>();
 
+        //Add background
+        var background:Image = new Image( assetManager.getTexture( "sky" ) );
+        game.addChild( background );
+
         //Set and display initial platforms
         for( var i:int = 0; i < platformHeight; i++ ) {
             for (var j:int = 0; j < screenWidth + 3; j++) {
@@ -177,7 +181,10 @@ public class Level1 implements GameState
                     enemies[i].x -= Math.floor(150 * deltaTime);
                 }
             }
+
+            game.addChild( character );
         }
+
     }
 }
 }
