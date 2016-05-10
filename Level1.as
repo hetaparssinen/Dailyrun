@@ -8,6 +8,7 @@ import flash.utils.Timer;
 
 import starling.display.Image;
 import starling.display.Quad;
+import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
@@ -207,20 +208,34 @@ public class Level1 implements GameState
                 if( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit )
                 {
                     enemies[i].isHit = true;
-                    trace("collision");
                     if( character.health > 0 ) {
                         character.health -= 1;
                     }
                     healthBar.update( character.health / character.maxHealth );
+
+                    //Check health
+                    if( character.health <= 0 )
+                    {
+                        isPlaying = false;
+                        var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ));
+                        gameOver.alignPivot();
+                        gameOver.x = game.stage.stageWidth / 2;
+                        gameOver.y = game.stage.stageHeight / 2;
+                        game.addChild( gameOver );
+                        game.addChild( timerDelay );
+                        break;
+                    }
                 }
             }
+        }
 
+        if( isPlaying )
+        {
             //move healthbar
             healthBar.y = character.y - ( character.height / 2 ) - 10;
 
             game.addChild( character );
             timerDelay.text = String( Math.floor( timer.delay ) );
-            trace( timerDelay.y );
         }
 
     }
