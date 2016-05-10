@@ -11,6 +11,7 @@ import starling.display.Quad;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
+import starling.text.TextField;
 import starling.utils.AssetManager;
 
 public class Level1 implements GameState
@@ -30,6 +31,7 @@ public class Level1 implements GameState
     private var timer:Timer;
     private var enemies:Vector.<Enemy>;
     private var healthBar:HealthBar;
+    private var timerDelay:TextField;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -131,6 +133,13 @@ public class Level1 implements GameState
             //start the timer and spawn first enemy
             spawnEnemy();
             setTimer();
+
+            //Display timer delay on screen (testing purpose)
+            timerDelay = new TextField( 50, 30, String( timer.delay ) );
+            timerDelay.alignPivot( "right", "top" );
+            timerDelay.x = game.stage.stageWidth;
+            game.addChild( timerDelay );
+
         } 
 		else if ( isPlaying && !character.jumping && touch )
 		{
@@ -210,6 +219,8 @@ public class Level1 implements GameState
             healthBar.y = character.y - ( character.height / 2 ) - 10;
 
             game.addChild( character );
+            timerDelay.text = String( Math.floor( timer.delay ) );
+            trace( timerDelay.y );
         }
 
     }
