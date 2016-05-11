@@ -57,9 +57,9 @@
 
 		public function update( deltaTime:Number ) {
 			if (jumping) {
-				this.y += this.velocity.y * deltaTime;
+				this.y += this.velocity.y * deltaTime * 2;
 			
-				this.velocity.y += 5;
+				this.velocity.y += 7;
 				
 				if ( this.y >= platformHeight - this.height / 2 ) {
 					jumping = false;
