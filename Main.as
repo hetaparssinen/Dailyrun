@@ -15,10 +15,15 @@ import starling.core.Starling;
 		
 		public function Main():void
 		{
-			var _starling:Starling = new Starling( DailyRun, this.stage, new flash.geom.Rectangle(0, 0, 480, 320 ) );
+			var screenWidth:int = stage.fullScreenWidth;
+			var screenHeight:int = stage.fullScreenHeight;
+			var viewPort:Rectangle = new flash.geom.Rectangle( 0, 0, screenWidth, screenHeight );
+
+			var _starling:Starling = new Starling( DailyRun, this.stage, viewPort );
+			_starling.stage.stageWidth = 480;
+			_starling.stage.stageHeight = 320;
 			_starling.start();
 			Starling.current.nativeStage.frameRate = 30;
 		}
-	}
-	
+	}	
 }
