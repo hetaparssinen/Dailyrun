@@ -33,6 +33,7 @@ public class Level1 implements GameState
     private var goodGuyTimer:Timer;
     private var enemies:Vector.<Enemy>;
     private var goodGuys:Vector.<GoodGuy>;
+	private var collectedGoodGuys:Array;
     private var healthBar:HealthBar;
     private var timerDelay:TextField;
     
@@ -60,6 +61,7 @@ public class Level1 implements GameState
         isPlaying = false;
         enemies = new Vector.<Enemy>();
         goodGuys = new Vector.<GoodGuy>();
+        collectedGoodGuys = new Array();
 
         //Add background
         var background:Image = new Image( assetManager.getTexture( "sky" ) );
@@ -112,7 +114,11 @@ public class Level1 implements GameState
 
 	private function goodGuyTimerHandler( e:TimerEvent ):void
 	{
-		spawnGoodGuy();
+		var goodGuy:GoodGuy = new GoodGuy( assetManager.getTexture( "goodGuy" ) );
+		goodGuy.x = game.stage.stageWidth;
+		goodGuy.y = game.stage.stageHeight - (platformHeight * tileWidth) - tileWidth;
+		game.addChild( goodGuy );
+		goodGuys.push( goodGuy );
 	}
 
     private function spawnEnemy():void
@@ -123,15 +129,6 @@ public class Level1 implements GameState
         game.addChild( enemy );
         enemies.push( enemy );
     }
-
-	private function spawnGoodGuy():void 
-	{
-		var goodGuy:GoodGuy = new GoodGuy( assetManager.getTexture( "goodGuy" ) );
-		goodGuy.x = game.stage.stageWidth;
-		goodGuy.y = game.stage.stageHeight - (platformHeight * tileWidth) - tileWidth;
-		game.addChild( goodGuy );
-		goodGuys.push( goodGuy );
-	}
 
     private function touchEventHandler( event:TouchEvent )
     {
@@ -265,6 +262,20 @@ public class Level1 implements GameState
                     }
                 }
             }
+
+			//check collision with good guys
+            for ( var i:int = 0; i < goodGuys.length; i++ )
+			{
+				if( character.bounds.intersects( goodGuys[i].bounds ) && !goodGuys[i].isHit )
+				{
+					goodGuys[i].isHit = true;
+					var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodGuy" ) );
+					collectedGoodGuys.push( hittedGoodGuy );
+					hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
+					hittedGoodGuy.y = 30;
+					game.addChild( hittedGoodGuy );
+				}
+			}
         }
 
         if( isPlaying )

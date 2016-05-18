@@ -7,6 +7,7 @@
 	public class GoodGuy extends Sprite {
 
 	    private var texture:Texture;
+		public var isHit:Boolean;
 		
 		public function GoodGuy( texture:Texture ) {
 			this.texture = texture;
@@ -15,7 +16,6 @@
 		
 		private function initialize()
 		{
-			trace("Adding goodguy");
 			var guy:Image = new Image( texture );
 			addChild( guy );
 		}

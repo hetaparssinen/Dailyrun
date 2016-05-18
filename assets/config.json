@@ -15,7 +15,7 @@
 	{
 		"initialValue": 3000,
 		"decreaseRate": 0.95,
-		"goodGuyInitial": 5000
+		"goodGuyInitial": 10000
 	},
 	"character":
 	{
