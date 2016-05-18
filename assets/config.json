@@ -14,7 +14,8 @@
 	"timer":
 	{
 		"initialValue": 3000,
-		"decreaseRate": 0.95
+		"decreaseRate": 0.95,
+		"goodGuyInitial": 5000
 	},
 	"character":
 	{
