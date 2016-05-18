@@ -30,7 +30,10 @@ public class Level1 implements GameState
     private var levelStart:LevelStart;
 	private var character:Character;
     private var timer:Timer;
+    private var goodGuyTimer:Timer;
     private var enemies:Vector.<Enemy>;
+    private var goodGuys:Vector.<GoodGuy>;
+	private var collectedGoodGuys:Array;
     private var healthBar:HealthBar;
     private var timerDelay:TextField;
     
@@ -57,6 +60,8 @@ public class Level1 implements GameState
         stageWidth = game.stage.stageWidth;
         isPlaying = false;
         enemies = new Vector.<Enemy>();
+        goodGuys = new Vector.<GoodGuy>();
+        collectedGoodGuys = new Array();
 
         //Add background
         var background:Image = new Image( assetManager.getTexture( "sky" ) );
@@ -91,6 +96,14 @@ public class Level1 implements GameState
         timer.addEventListener( TimerEvent.TIMER, timerHandler );
     }
 
+	private function setGoodGuyTimer():void
+	{
+		// Limit good guys to three
+		goodGuyTimer = new Timer( config.timer.goodGuyInitial, 3 );
+		goodGuyTimer.start();
+		goodGuyTimer.addEventListener( TimerEvent.TIMER, goodGuyTimerHandler );
+	}
+
     private function timerHandler( e:TimerEvent ):void
     {
         timer.delay = timer.delay * config.timer.decreaseRate;
@@ -98,6 +111,15 @@ public class Level1 implements GameState
         timer.start();
         spawnEnemy();
     }
+
+	private function goodGuyTimerHandler( e:TimerEvent ):void
+	{
+		var goodGuy:GoodGuy = new GoodGuy( assetManager.getTexture( "goodGuy" ) );
+		goodGuy.x = game.stage.stageWidth;
+		goodGuy.y = game.stage.stageHeight - (platformHeight * tileWidth) - tileWidth;
+		game.addChild( goodGuy );
+		goodGuys.push( goodGuy );
+	}
 
     private function spawnEnemy():void
     {
@@ -134,6 +156,7 @@ public class Level1 implements GameState
             //start the timer and spawn first enemy
             spawnEnemy();
             setTimer();
+			setGoodGuyTimer();
 
             //Display timer delay on screen (testing purpose)
             timerDelay = new TextField( 50, 30, String( timer.delay ) );
@@ -202,6 +225,18 @@ public class Level1 implements GameState
                 }
             }
 
+            //Move goodGuys and remove them if they left the screen
+            for (var i:int = 0; i < goodGuys.length; i++) {
+                if( goodGuys[i].x < -tileWidth )
+                {
+                    game.removeChild( goodGuys[i] );
+                    goodGuys.splice( i, 1 );
+                }
+                else {
+                    goodGuys[i].x -= Math.floor(150 * deltaTime);
+                }
+            }
+
             //check collision with enemies
             for ( var i:int = enemies.length -1; i > 0; i-- )
             {
@@ -227,6 +262,20 @@ public class Level1 implements GameState
                     }
                 }
             }
+
+			//check collision with good guys
+            for ( var i:int = 0; i < goodGuys.length; i++ )
+			{
+				if( character.bounds.intersects( goodGuys[i].bounds ) && !goodGuys[i].isHit )
+				{
+					goodGuys[i].isHit = true;
+					var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodGuy" ) );
+					collectedGoodGuys.push( hittedGoodGuy );
+					hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
+					hittedGoodGuy.y = 30;
+					game.addChild( hittedGoodGuy );
+				}
+			}
         }
 
         if( isPlaying )
