@@ -96,7 +96,8 @@ public class Level1 implements GameState
 
 	private function setGoodGuyTimer():void
 	{
-		goodGuyTimer = new Timer( config.timer.goodGuyInitial, 1 );
+		// Limit good guys to three
+		goodGuyTimer = new Timer( config.timer.goodGuyInitial, 3 );
 		goodGuyTimer.start();
 		goodGuyTimer.addEventListener( TimerEvent.TIMER, goodGuyTimerHandler );
 	}
@@ -111,8 +112,6 @@ public class Level1 implements GameState
 
 	private function goodGuyTimerHandler( e:TimerEvent ):void
 	{
-		goodGuyTimer.reset();
-		goodGuyTimer.start();
 		spawnGoodGuy();
 	}
 
