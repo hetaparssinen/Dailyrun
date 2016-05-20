@@ -27,10 +27,12 @@ public class Level1 implements GameState
     private var stageHeight:int;
     private var stageWidth:int;
     private var isPlaying:Boolean;
+    private var lastScreen:Boolean;
     private var levelStart:LevelStart;
 	private var character:Character;
     private var timer:Timer;
     private var goodGuyTimer:Timer;
+    private var endGameTimer:Timer;
     private var enemies:Vector.<Enemy>;
     private var goodGuys:Vector.<GoodGuy>;
 	private var collectedGoodGuys:Array;
@@ -59,6 +61,7 @@ public class Level1 implements GameState
         stageHeight = game.stage.stageHeight;
         stageWidth = game.stage.stageWidth;
         isPlaying = false;
+        lastScreen = false;
         enemies = new Vector.<Enemy>();
         goodGuys = new Vector.<GoodGuy>();
         collectedGoodGuys = new Array();
@@ -104,6 +107,13 @@ public class Level1 implements GameState
 		goodGuyTimer.addEventListener( TimerEvent.TIMER, goodGuyTimerHandler );
 	}
 
+	private function setEndGameTimer():void 
+	{
+		endGameTimer = new Timer( config.level1.levelDuration, 1 );
+		endGameTimer.start();
+		endGameTimer.addEventListener( TimerEvent.TIMER, endGameTimerHandler );
+	}
+
     private function timerHandler( e:TimerEvent ):void
     {
         timer.delay = timer.delay * config.timer.decreaseRate;
@@ -119,6 +129,11 @@ public class Level1 implements GameState
 		goodGuy.y = game.stage.stageHeight - (platformHeight * tileWidth) - tileWidth;
 		game.addChild( goodGuy );
 		goodGuys.push( goodGuy );
+	}
+
+	private function endGameTimerHandler ( e:TimerEvent ):void
+	{
+		lastScreen = true;
 	}
 
     private function spawnEnemy():void
@@ -157,6 +172,7 @@ public class Level1 implements GameState
             spawnEnemy();
             setTimer();
 			setGoodGuyTimer();
+			setEndGameTimer();
 
             //Display timer delay on screen (testing purpose)
             timerDelay = new TextField( 50, 30, String( timer.delay ) );
@@ -179,7 +195,7 @@ public class Level1 implements GameState
         var spawnX:int = 0;
 
         
-        if( isPlaying ) {
+        if( isPlaying && !lastScreen ) {
             //Check if platforms are going off stage and determine the x coordinate for new platforms
             for (var i:int = platforms.length - 1; i > 0; i--) {
                 if (platforms[i].x <= -tileWidth) {
@@ -208,10 +224,7 @@ public class Level1 implements GameState
                 platforms[i].x -= Math.floor(150 * deltaTime);
             }
 			
-			if (character.jumping) {
-				character.platformHeight = game.stage.stageHeight - platformHeight * tileWidth;
-				character.update(deltaTime);
-			}
+			checkCharacterJump( deltaTime );
 
             //Move enemies and remove them if they left the screen
             for (var i:int = enemies.length - 1; i > 0; i--) {
@@ -237,32 +250,6 @@ public class Level1 implements GameState
                 }
             }
 
-            //check collision with enemies
-            for ( var i:int = enemies.length -1; i > 0; i-- )
-            {
-                if( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit )
-                {
-                    enemies[i].isHit = true;
-                    if( character.health > 0 ) {
-                        character.health -= 1;
-                    }
-                    healthBar.update( character.health / character.maxHealth );
-
-                    //Check health
-                    if( character.health <= 0 )
-                    {
-                        isPlaying = false;
-                        var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ));
-                        gameOver.alignPivot();
-                        gameOver.x = game.stage.stageWidth / 2;
-                        gameOver.y = game.stage.stageHeight / 2;
-                        game.addChild( gameOver );
-                        game.addChild( timerDelay );
-                        break;
-                    }
-                }
-            }
-
 			//check collision with good guys
             for ( var i:int = 0; i < goodGuys.length; i++ )
 			{
@@ -278,6 +265,42 @@ public class Level1 implements GameState
 			}
         }
 
+		//check collision with enemies
+		for ( var i:int = enemies.length -1; i > 0; i-- )
+		{
+			if( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit )
+			{
+				enemies[i].isHit = true;
+				if( character.health > 0 ) {
+					character.health -= 1;
+				}
+				healthBar.update( character.health / character.maxHealth );
+
+				//Check health
+				if( character.health <= 0 )
+				{
+					isPlaying = false;
+					var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ));
+					gameOver.alignPivot();
+					gameOver.x = game.stage.stageWidth / 2;
+					gameOver.y = game.stage.stageHeight / 2;
+					game.addChild( gameOver );
+					game.addChild( timerDelay );
+					break;
+				}
+			}
+		}
+
+		if ( lastScreen ) {
+			character.x += Math.floor(150 * deltaTime);
+			if ( character.x >= game.stage.stageWidth - 30 ) {
+				character.x = game.stage.stageWidth - 30;
+				lastScreen = false;
+				isPlaying = false;
+			}
+			checkCharacterJump( deltaTime );
+		}
+
         if( isPlaying )
         {
             //move healthbar
@@ -288,5 +311,13 @@ public class Level1 implements GameState
         }
 
     }
+
+	public function checkCharacterJump( deltaTime:Number ) {
+		trace(character.jumping + " IS JUMPING");
+		if (character.jumping) {
+			character.platformHeight = game.stage.stageHeight - platformHeight * tileWidth;
+			character.update(deltaTime);
+		}
+	}
 }
 }

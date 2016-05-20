@@ -2,7 +2,8 @@
 	"level1":
 	{
 		"platformHeight": 3,
-		"playerX": 30
+		"playerX": 30,
+		"levelDuration": 35000
 	},
 
 	"levelStart":
