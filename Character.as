@@ -28,6 +28,8 @@
 		
 		private var assetManager:AssetManager;
 		
+		private var mainCharacter:MovieClip;
+		
 		public var jumping = false;
 		public var platformHeight:int;
 		
@@ -44,12 +46,9 @@
 
 			config = assetManager.getObject( "config" );
 
-			[Embed(source="assets/character.png")]
-			var Character:Class;
-			var bitmap:Bitmap = new Character();
-			var texture:Texture = Texture.fromEmbeddedAsset(Character);
-			var characterImg:Image = new Image(texture);
-			addChild(characterImg);
+			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			addChild( mainCharacter );
+			Starling.juggler.add( mainCharacter );
 			this.velocity.y = -100;
 			
 			health = maxHealth = config.character.maxHealth;

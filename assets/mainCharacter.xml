@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:ec0cfd8cf64b1cc93bc7bcf05fb28354:d8d8dfca4276eef2a0bf54486441073f:73325745e7b41ea423153ec5698d86d0$ -->
+<TextureAtlas imagePath="mainCharacter.png" width="59" height="280">
+    <SubTexture name="mainCharacter1" x="3" y="3" width="53" height="64"/>
+    <SubTexture name="mainCharacter2" x="3" y="213" width="45" height="64"/>
+    <SubTexture name="mainCharacter3" x="3" y="143" width="46" height="64"/>
+    <SubTexture name="mainCharacter4" x="3" y="73" width="52" height="64"/>
+</TextureAtlas>
