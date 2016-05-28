@@ -132,8 +132,7 @@ public class Level1 implements GameState
                 character.jumping = false;
                 character.y -= character.y % tileWidth
             }
-            else if( ( mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 ||
-                    mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 )  && character.jumping == false )
+            else if( mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 && character.jumping == false )
             {
                 character.jumping = true;
                 character.velocity.y = 0;
@@ -150,7 +149,16 @@ public class Level1 implements GameState
                 }
             }
 
-            trace( mapTMX.layers[0].layerData[tileNum] == 1, mapTMX.layers[0].layerData[tileNum + mapWidth] == 1 )
+            //check if on descending hill
+            if( ( mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 ) )
+            {
+                if( !character.jumping ) {
+                    var groundHeight:int = character.y / tileWidth;
+                    groundHeight *= tileWidth;
+                    var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    character.y = groundHeight + hillHeight;
+                }
+            }
 
         }
 
