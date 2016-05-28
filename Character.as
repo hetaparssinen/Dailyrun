@@ -64,12 +64,6 @@
 				this.y += this.velocity.y * deltaTime * 2;
 			
 				this.velocity.y += 7;
-				
-				if ( this.y >= platformHeight - this.height / 2 ) {
-					jumping = false;
-					this.y = platformHeight - this.height / 2;
-					this.velocity.y = 0;
-				}
 			}
 			
 			

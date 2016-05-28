@@ -3,42 +3,40 @@
  */
 package {
 
-import flash.events.TimerEvent;
-import flash.utils.Timer;
+import flash.display.Bitmap;
 
 import starling.display.Image;
-import starling.display.Quad;
-import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
-import starling.text.TextField;
+import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
 
 public class Level1 implements GameState
 {
+
+    [Embed(source="assets/level1.tmx", mimeType="application/octet-stream")]
+    private static var exampleTMX:Class;
+
+    [Embed(source = "assets/sprites.png")]
+    private static var exampleTileSet:Class;
+
     private var game:GameStateManager;
     private var assetManager:AssetManager;
     private var config:Object;
-    private var platforms:Vector.<Image>;
     private var platformHeight:int;
     private var tileWidth:int;
-    private var screenWidth:int;
-    private var stageHeight:int;
-    private var stageWidth:int;
     private var isPlaying:Boolean;
     private var levelStart:LevelStart;
 	private var character:Character;
-    private var timer:Timer;
-    private var enemies:Vector.<Enemy>;
-    private var healthBar:HealthBar;
-    private var timerDelay:TextField;
+    private var mapTMX:TMXTileMap;
+    private var mapWidth:int;
     
     public function Level1( game:GameStateManager ):void
     {
         this.game = game;
         this.assetManager = this.game.getAssetManager();
-        trace("Level 1")
+        trace("Level 1");
 
         initialize();
     }
@@ -49,28 +47,26 @@ public class Level1 implements GameState
         config = assetManager.getObject( "config" );
 
         //Set initial variables
-        platforms = new Vector.<Image>();
-        platformHeight = config.level1.platformHeight;
-        tileWidth = 32;
-        screenWidth = game.stage.stageWidth / tileWidth;
-        stageHeight = game.stage.stageHeight;
-        stageWidth = game.stage.stageWidth;
         isPlaying = false;
-        enemies = new Vector.<Enemy>();
+        var mapXML:XML = XML(new exampleTMX());
+        var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
+        tilesets.push(Bitmap(new exampleTileSet()));
 
         //Add background
         var background:Image = new Image( assetManager.getTexture( "sky" ) );
         game.addChild( background );
 
-        //Set and display initial platforms
-        for( var i:int = 0; i < platformHeight; i++ ) {
-            for (var j:int = 0; j < screenWidth + 3; j++) {
-                var platform:Image = new Image(assetManager.getTexture("grassDirtBlock"));
-                platform.x = j * tileWidth;
-                platform.y = stageHeight - (i * tileWidth) - 32;
-                this.game.addChild( platform );
-                platforms.push(platform)
-            }
+        //Load and render map
+        tilesets.push(Bitmap(new exampleTileSet()));
+        mapTMX = TMXTileMap.createMap(mapXML, tilesets);
+
+        //Set map values
+        tileWidth = mapTMX.tileWidth;
+        mapWidth = mapTMX.mapWidth;
+
+        for (var i:int = 0; i < mapTMX.layers.length; i++)
+        {
+            game.addChild(mapTMX.layers[i].layerSprite);
         }
 
         //Add eventListener for tapping the screen
@@ -82,30 +78,8 @@ public class Level1 implements GameState
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
         game.addChild( levelStart );
-    }
 
-    private function setTimer():void
-    {
-        timer = new Timer( config.timer.initialValue, 1 );
-        timer.start();
-        timer.addEventListener( TimerEvent.TIMER, timerHandler );
-    }
-
-    private function timerHandler( e:TimerEvent ):void
-    {
-        timer.delay = timer.delay * config.timer.decreaseRate;
-        timer.reset();
-        timer.start();
-        spawnEnemy();
-    }
-
-    private function spawnEnemy():void
-    {
-        var enemy:Enemy = new Enemy( assetManager.getTexture( "enemy" ) );
-        enemy.x = game.stage.stageWidth;
-        enemy.y = game.stage.stageHeight - (platformHeight * tileWidth) - tileWidth;
-        game.addChild( enemy );
-        enemies.push( enemy );
+        trace( mapTMX.layers[0].layerData );
     }
 
     private function touchEventHandler( event:TouchEvent )
@@ -119,29 +93,11 @@ public class Level1 implements GameState
 
             //Draw player
 			character = new Character( assetManager );
-			character.alignPivot();
-			character.x = config.level1.playerX;
-			character.y = game.stage.stageHeight - character.height / 2 - platformHeight * tileWidth;
+            character.alignPivot( "center", "bottom");
+			character.x = 32 * 2;
+			character.y = game.stage.stageHeight - 32 * 4;
 			game.addChild( character );
-
-            //draw healthbar
-            healthBar = new HealthBar();
-            healthBar.alignPivot();
-            healthBar.x = character.x;
-            healthBar.y = character.y - ( character.height / 2 ) - 10;
-            game.addChild( healthBar );
-
-            //start the timer and spawn first enemy
-            spawnEnemy();
-            setTimer();
-
-            //Display timer delay on screen (testing purpose)
-            timerDelay = new TextField( 50, 30, String( timer.delay ) );
-            timerDelay.alignPivot( "right", "top" );
-            timerDelay.x = game.stage.stageWidth;
-            game.addChild( timerDelay );
-
-        } 
+        }
 		else if ( isPlaying && !character.jumping && touch )
 		{
 			character.jumping = true;
@@ -152,90 +108,50 @@ public class Level1 implements GameState
 
     public function update(deltaTime:Number)
     {
-        var newPlatforms:Boolean = false;
-        var spawnX:int = 0;
 
-        
         if( isPlaying ) {
-            //Check if platforms are going off stage and determine the x coordinate for new platforms
-            for (var i:int = platforms.length - 1; i > 0; i--) {
-                if (platforms[i].x <= -tileWidth) {
-                    game.removeChild(platforms[i]);
-                    platforms.splice(i, 1);
-                    newPlatforms = true;
-                }
-                if (platforms[i].x > spawnX - tileWidth) {
-                    spawnX = platforms[i].x + tileWidth;
-                }
+
+            //update character when jumping
+            if (character.jumping) {
+                character.update(deltaTime);
             }
 
-            //Create new platforms if needed
-            if (newPlatforms) {
-                for (var i:int = 0; i < platformHeight; i++) {
-                    var platform:Image = new Image(assetManager.getTexture("grassDirtBlock"));
-                    platform.x = spawnX;
-                    platform.y = stageHeight - (i * tileWidth) - 32;
-                    this.game.addChild(platform);
-                    platforms.push(platform)
-                }
-            }
-
-            //Move all platforms
-            for (var i:int = platforms.length - 1; i > 0; i--) {
-                platforms[i].x -= Math.floor(150 * deltaTime);
-            }
-			
-			if (character.jumping) {
-				character.platformHeight = game.stage.stageHeight - platformHeight * tileWidth;
-				character.update(deltaTime);
-			}
-
-            //Move enemies and remove them if they left the screen
-            for (var i:int = enemies.length - 1; i > 0; i--) {
-                if( enemies[i].x < -tileWidth )
-                {
-                    game.removeChild( enemies[i] );
-                    enemies.splice( i, 1 );
-                }
-                else {
-                    enemies[i].x -= Math.floor(150 * deltaTime);
-                }
-            }
-
-            //check collision with enemies
-            for ( var i:int = enemies.length -1; i > 0; i-- )
+            //move stage
+            for ( var i:int = 0; i < mapTMX.layers.length; i++ )
             {
-                if( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit )
-                {
-                    enemies[i].isHit = true;
-                    if( character.health > 0 ) {
-                        character.health -= 1;
-                    }
-                    healthBar.update( character.health / character.maxHealth );
+                mapTMX.layers[i].layerSprite.x -= 5;
+            }
 
-                    //Check health
-                    if( character.health <= 0 )
-                    {
-                        isPlaying = false;
-                        var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ));
-                        gameOver.alignPivot();
-                        gameOver.x = game.stage.stageWidth / 2;
-                        gameOver.y = game.stage.stageHeight / 2;
-                        game.addChild( gameOver );
-                        game.addChild( timerDelay );
-                        break;
-                    }
+            var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
+            var yLoc:int = ( character.y - 32 ) / tileWidth;
+            var tileNum:int = ( yLoc * mapWidth ) + xLoc;
+
+            //check collision with ground underneath character and adjust character.y
+            if( character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 4 )
+            {
+                character.jumping = false;
+                character.y -= character.y % tileWidth
+            }
+            else if( ( mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 ||
+                    mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 )  && character.jumping == false )
+            {
+                character.jumping = true;
+                character.velocity.y = 0;
+            }
+
+            //check if on ascending hill
+            if( ( mapTMX.layers[0].layerData[tileNum] == 1 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 1 ) )
+            {
+                if( !character.jumping ) {
+                    var groundHeight:int = ( game.stage.stageHeight - character.y ) / tileWidth;
+                    groundHeight *= tileWidth;
+                    var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    character.y = game.stage.stageHeight - groundHeight - hillHeight;
                 }
             }
-        }
 
-        if( isPlaying )
-        {
-            //move healthbar
-            healthBar.y = character.y - ( character.height / 2 ) - 10;
+            trace( mapTMX.layers[0].layerData[tileNum] == 1, mapTMX.layers[0].layerData[tileNum + mapWidth] == 1 )
 
-            game.addChild( character );
-            timerDelay.text = String( Math.floor( timer.delay ) );
         }
 
     }
