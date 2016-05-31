@@ -33,6 +33,8 @@ public class Level1 implements GameState
     private var mapTMX:TMXTileMap;
     private var mapWidth:int;
     private var enemies:Vector.<Enemy>;
+    private var goodGuys:Vector.<GoodGuy>;
+	private var collectedGoodGuys:Array;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -67,6 +69,8 @@ public class Level1 implements GameState
         mapWidth = mapTMX.mapWidth;
 
         enemies = new Vector.<Enemy>();
+		goodGuys = new Vector.<GoodGuy>();
+		collectedGoodGuys = new Array();
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
@@ -76,6 +80,7 @@ public class Level1 implements GameState
             }
         }
         
+		// Add bad boys to the screen
         for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
         {
             if( mapTMX.layers[1].layerData[i] == 1 )
@@ -84,8 +89,22 @@ public class Level1 implements GameState
                 game.addChild( enemy );
                 enemy.scale = 2;
                 enemy.x = ( i % mapWidth ) * tileWidth;
-                enemy.y = ( i / mapWidth ) * tileWidth;
+                enemy.y = int( i / mapWidth ) * tileWidth;
                 enemies.push( enemy );
+            }
+        }
+		
+		// Add good guys to the screen
+		for( var i:int = 0; i < mapTMX.layers[2].layerData.length; i++ )
+        {
+            if( mapTMX.layers[2].layerData[i] == 1 )
+            {
+				// change assets names in some point....
+                var goodGuy:GoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
+                game.addChild( goodGuy );
+                goodGuy.x = ( i % mapWidth ) * tileWidth;
+                goodGuy.y = int( i / mapWidth ) * tileWidth;
+                goodGuys.push( goodGuy );
             }
         }
 
@@ -143,7 +162,7 @@ public class Level1 implements GameState
                 mapTMX.layers[i].layerSprite.x -= 5;
             }
 
-            // Move enemies
+            // Move enemies and remove if off the screen
             for ( var i:int = 0; i < enemies.length; i++ ) 
 			{
 				if ( enemies[i].x <= 0 ) {
@@ -154,12 +173,22 @@ public class Level1 implements GameState
 				}
 			}
 			
+			// Move good boys and remove is off the screen
+			for ( var i:int = 0; i < goodGuys.length; i++ ) 
+			{
+				if ( goodGuys[i].x <= 0 ) {
+					game.removeChild( goodGuys[i] );
+					goodGuys.splice( i, 1 );
+				} else {
+					goodGuys[i].x -= 5;
+				}
+			}
+			
 			// Check collision with enemies
 			for  ( var i:int = 0; i < enemies.length; i++ ) 
 			{
 				if ( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit ) {
 					enemies[i].isHit = true;
-					trace("HIT");
 
 					if ( character.health > 0 ) {
 						character.health -= 1;
@@ -172,6 +201,21 @@ public class Level1 implements GameState
 						game.addChild( gameOver );
 						break;
 					}
+				}
+			}
+			
+			// Check collision with good boys
+			for  ( var i:int = 0; i < goodGuys.length; i++ ) 
+			{
+				if ( character.bounds.intersects( goodGuys[i].bounds ) && !goodGuys[i].isHit ) {
+					goodGuys[i].isHit = true;
+
+					var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
+					hittedGoodGuy.scale = 0.5;
+					collectedGoodGuys.push( hittedGoodGuy );
+					hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
+					hittedGoodGuy.y = 30;
+					game.addChild( hittedGoodGuy );
 				}
 			}
 
