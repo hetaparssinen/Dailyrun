@@ -15,7 +15,7 @@ import starling.utils.AssetManager;
 public class Level1 implements GameState
 {
 
-    [Embed(source="assets/level1.tmx", mimeType="application/octet-stream")]
+    [Embed(source="assets/level1test.tmx", mimeType="application/octet-stream")]
     private static var exampleTMX:Class;
 
     [Embed(source = "assets/sprites.png")]
@@ -66,7 +66,19 @@ public class Level1 implements GameState
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
-            game.addChild(mapTMX.layers[i].layerSprite);
+            if( i != 1)
+            {
+                game.addChild(mapTMX.layers[i].layerSprite);
+            }
+        }
+        
+        for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
+        {
+            if( mapTMX.layers[1].layerData[i] == 1 )
+            {
+                var enemy:Enemy = new Enemy( assetManager.getTexture( "enemy" ));
+                game.addChild( enemy );
+            }
         }
 
         //Add eventListener for tapping the screen
@@ -94,8 +106,9 @@ public class Level1 implements GameState
             //Draw player
 			character = new Character( assetManager );
             character.alignPivot( "center", "bottom");
-			character.x = 32 * 2;
-			character.y = game.stage.stageHeight - 32 * 4;
+			character.x = tileWidth;
+			character.y = game.stage.stageHeight - tileWidth * 2;
+            character.scale = 2;
 			game.addChild( character );
         }
 		else if ( isPlaying && !character.jumping && touch )
