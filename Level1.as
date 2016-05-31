@@ -11,6 +11,7 @@ import starling.events.TouchEvent;
 import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
+import flash.text.engine.SpaceJustifier;
 
 public class Level1 implements GameState
 {
@@ -31,6 +32,7 @@ public class Level1 implements GameState
 	private var character:Character;
     private var mapTMX:TMXTileMap;
     private var mapWidth:int;
+    private var enemies:Vector.<Enemy>;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -64,6 +66,8 @@ public class Level1 implements GameState
         tileWidth = mapTMX.tileWidth;
         mapWidth = mapTMX.mapWidth;
 
+        enemies = new Vector.<Enemy>();
+
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
             if( i != 1)
@@ -81,6 +85,7 @@ public class Level1 implements GameState
                 enemy.scale = 2;
                 enemy.x = ( i % mapWidth ) * tileWidth;
                 enemy.y = ( i / mapWidth ) * tileWidth;
+                enemies.push( enemy );
             }
         }
 
@@ -137,6 +142,26 @@ public class Level1 implements GameState
             {
                 mapTMX.layers[i].layerSprite.x -= 5;
             }
+
+            // Move enemies
+            for ( var i:int = 0; i < enemies.length; i++ ) 
+			{
+				if ( enemies[i].x <= 0 ) {
+					game.removeChild( enemies[i] );
+					enemies.splice( i, 1 );
+				} else {
+					enemies[i].x -= 5;
+				}
+			}
+			
+			// Check collision with enemies
+			for  ( var i:int = 0; i < enemies.length; i++ ) 
+			{
+				if ( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit ) {
+					enemies[i].isHit = true;
+					trace("HIT");
+				}
+			}
 
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
             var yLoc:int = ( character.y - tileWidth ) / tileWidth;

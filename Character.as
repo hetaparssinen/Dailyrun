@@ -61,9 +61,9 @@
 
 		public function update( deltaTime:Number ) {
 			if (jumping) {
-				this.y += this.velocity.y * deltaTime * 2;
+				this.y += this.velocity.y * deltaTime * 3;
 			
-				this.velocity.y += 7;
+				this.velocity.y += 6;
 			}
 			
 			
