@@ -42,7 +42,6 @@
 		{
 			setGameState( Level1 );
 			addEventListener( Event.ENTER_FRAME, update );
-			addEventListener( TouchEvent.TOUCH, touchEventHandler);
 		}
 		
 		/*
@@ -68,11 +67,6 @@
 			currentGameState.update( deltaTime );
 			
 			lastUpdate = currentTime;
-		}
-		
-		private function touchEventHandler():void 
-		{
-			trace("touceg");
 		}
 
 	}
