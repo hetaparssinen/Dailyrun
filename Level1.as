@@ -160,6 +160,18 @@ public class Level1 implements GameState
 				if ( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit ) {
 					enemies[i].isHit = true;
 					trace("HIT");
+
+					if ( character.health > 0 ) {
+						character.health -= 1;
+					} else if ( character.health <= 0 ) {
+						isPlaying = false;
+						var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ) );
+						gameOver.alignPivot();
+						gameOver.x = game.stage.stageWidth / 2;
+						gameOver.y = game.stage.stageHeight / 2;
+						game.addChild( gameOver );
+						break;
+					}
 				}
 			}
 
