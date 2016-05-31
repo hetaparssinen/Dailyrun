@@ -28,12 +28,9 @@
 		
 		private var assetManager:AssetManager;
 		
-		private var jumpHeight:int = 0;
-		private var defaultJumpSpeed:int = 20;
-		private var jumpSpeed:int = 20;
+		private var mainCharacter:MovieClip;
 		
 		public var jumping = false;
-		public var platformHeight:int;
 		
 		public var velocity:Point = new Point(0, 0);
 		
@@ -48,12 +45,11 @@
 
 			config = assetManager.getObject( "config" );
 
-			[Embed(source="assets/character.png")]
-			var Character:Class;
-			var bitmap:Bitmap = new Character();
-			var texture:Texture = Texture.fromEmbeddedAsset(Character);
-			var characterImg:Image = new Image(texture);
-			addChild(characterImg);
+			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			addChild( mainCharacter );
+			Starling.juggler.add( mainCharacter );
+			// Fix this and use same size of assets
+			this.height = 64;
 			this.velocity.y = -100;
 			
 			health = maxHealth = config.character.maxHealth;
@@ -65,8 +61,21 @@
 			
 				this.velocity.y += 6;
 			}
-			
-			
+		}
+		
+		public function updateCharacter():void {
+			if ( health == 1 ) {
+				removeChild( mainCharacter );
+				Starling.juggler.remove( mainCharacter );
+				mainCharacter = new MovieClip( assetManager.getTextures( "pregnantGirl" ), 12 );
+				addChild( mainCharacter );
+				Starling.juggler.add( mainCharacter );
+				// Fix this and use same size of assets
+				this.height = 64;
+				this.alignPivot( "center", "bottom" );
+			} else if ( health == 0 ) {
+				
+			}
 		}
 
 	}

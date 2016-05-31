@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:1105430b2a0cdfda62c784cb27c2d05b:d46cfb7b4c300010dd224e8a5e67f0a4:db8cd3e73e05f927cfb5a97d6af53eca$ -->
+<TextureAtlas imagePath="pregnantGirl.png" width="49" height="293">
+    <SubTexture name="pregnantGirl1" x="1" y="246" width="47" height="46" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="pregnantGirl2" x="1" y="1" width="47" height="47" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="pregnantGirl3" x="1" y="50" width="47" height="47" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="pregnantGirl4" x="1" y="99" width="47" height="47" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="pregnantGirl5" x="1" y="148" width="47" height="47" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="pregnantGirl6" x="1" y="197" width="47" height="47" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+</TextureAtlas>

@@ -135,7 +135,7 @@ public class Level1 implements GameState
             character.alignPivot( "center", "bottom");
 			character.x = tileWidth;
 			character.y = game.stage.stageHeight - tileWidth * 2;
-            character.scale = 2;
+            //character.scale = 2;
 			game.addChild( character );
         }
 		else if ( isPlaying && !character.jumping && touch )
@@ -192,6 +192,7 @@ public class Level1 implements GameState
 
 					if ( character.health > 0 ) {
 						character.health -= 1;
+						character.updateCharacter();
 					} else if ( character.health <= 0 ) {
 						isPlaying = false;
 						var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ) );
