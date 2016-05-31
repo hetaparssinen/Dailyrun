@@ -78,6 +78,9 @@ public class Level1 implements GameState
             {
                 var enemy:Enemy = new Enemy( assetManager.getTexture( "enemy" ));
                 game.addChild( enemy );
+                enemy.scale = 2;
+                enemy.x = ( i % mapWidth ) * tileWidth;
+                enemy.y = ( i / mapWidth ) * tileWidth;
             }
         }
 
