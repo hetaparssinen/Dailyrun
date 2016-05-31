@@ -139,11 +139,11 @@ public class Level1 implements GameState
             }
 
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
-            var yLoc:int = ( character.y - 32 ) / tileWidth;
+            var yLoc:int = ( character.y - tileWidth ) / tileWidth;
             var tileNum:int = ( yLoc * mapWidth ) + xLoc;
 
             //check collision with ground underneath character and adjust character.y
-            if( character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 4 )
+            if( character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1 )
             {
                 character.jumping = false;
                 character.y -= character.y % tileWidth
@@ -155,7 +155,7 @@ public class Level1 implements GameState
             }
 
             //check if on ascending hill
-            if( ( mapTMX.layers[0].layerData[tileNum] == 1 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 1 ) )
+            if( ( mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3 ) )
             {
                 if( !character.jumping ) {
                     var groundHeight:int = ( game.stage.stageHeight - character.y ) / tileWidth;
