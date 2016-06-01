@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by Lourens on 09/05/16.
  */
 package {
@@ -9,7 +9,7 @@ import starling.textures.Texture;
 
 public class Enemy extends Sprite
 {
-    
+    // HOLA
     private var texture:Texture;
     public var isHit:Boolean;
 
