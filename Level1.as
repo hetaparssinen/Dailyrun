@@ -35,6 +35,7 @@ public class Level1 implements GameState
     private var enemies:Vector.<Enemy>;
     private var goodGuys:Vector.<GoodGuy>;
 	private var collectedGoodGuys:Array;
+	private var friendsBubble:FriendsBubble;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -105,6 +106,18 @@ public class Level1 implements GameState
                 goodGuy.x = ( i % mapWidth ) * tileWidth;
                 goodGuy.y = int( i / mapWidth ) * tileWidth;
                 goodGuys.push( goodGuy );
+            }
+        }
+		
+		// Add friends bubble to the screen
+		for( var i:int = 0; i < mapTMX.layers[3].layerData.length; i++ )
+        {
+            if( mapTMX.layers[3].layerData[i] == 1 )
+            {
+                friendsBubble = new FriendsBubble( assetManager.getTexture( "friendsBubble" ) );
+                game.addChild( friendsBubble );
+                friendsBubble.x = ( i % mapWidth ) * tileWidth;
+                friendsBubble.y = int( i / mapWidth ) * tileWidth;
             }
         }
 
@@ -182,6 +195,13 @@ public class Level1 implements GameState
 				} else {
 					goodGuys[i].x -= 5;
 				}
+			}
+			
+			// Move friends bubble and remove if off the screen
+			if ( friendsBubble.x <= 0 ) {
+				game.removeChild( friendsBubble );
+			} else {
+				friendsBubble.x -= 5;
 			}
 			
 			// Check collision with enemies
