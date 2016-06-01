@@ -75,7 +75,7 @@ public class Level1 implements GameState
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
-            if( i != 1)
+            if( i == 0)
             {
                 game.addChild(mapTMX.layers[i].layerSprite);
             }
