@@ -50,7 +50,7 @@
 
 			config = assetManager.getObject( "config" );
 
-			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			mainCharacter = new MovieClip( assetManager.getTextures( "yellowCharacter" ), 12 );
 			addChild( mainCharacter );
 			Starling.juggler.add( mainCharacter );
 			// Fix this and use same size of assets
@@ -111,7 +111,7 @@
 			protectionTimer.stop();
 			removeChild( mainCharacter );
 			Starling.juggler.remove( mainCharacter );
-			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			mainCharacter = new MovieClip( assetManager.getTextures( "yellowCharacter" ), 12 );
 			addChild( mainCharacter );
 			Starling.juggler.add( mainCharacter );
 		}
