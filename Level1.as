@@ -203,6 +203,12 @@ public class Level1 implements GameState
 			} else {
 				friendsBubble.x -= 5;
 			}
+			// Quick fix because it fucks up other way..... fix this later
+			// (after passing the friends bubble it adds protection after first 
+			// jump, even the character didn't touch the protection bubble)
+			if ( ( friendsBubble.x + friendsBubble.width / 2 ) <= ( character.x - character.width / 2 ) && !friendsBubble.isHit ) {
+				friendsBubble.block = true;
+			}
 			
 			// Check collision with enemies
 			for  ( var i:int = 0; i < enemies.length; i++ ) 
@@ -241,7 +247,7 @@ public class Level1 implements GameState
 			}
 			
 			// Check collision with friends bubble
-			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit ) {
+			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit && !friendsBubble.block ) {
 				friendsBubble.isHit = true;
 				
 				game.removeChild( friendsBubble );

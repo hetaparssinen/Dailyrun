@@ -8,6 +8,7 @@
 		
 		private var texture:Texture;
 		public var isHit:Boolean;
+		public var block:Boolean = false;
 
 		public function FriendsBubble( texture:Texture ) {
 			this.texture = texture;
