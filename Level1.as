@@ -114,7 +114,7 @@ public class Level1 implements GameState
         {
             if( mapTMX.layers[3].layerData[i] == 1 )
             {
-                friendsBubble = new FriendsBubble( assetManager.getTexture( "friendsBubble" ) );
+				friendsBubble = new FriendsBubble( assetManager.getTexture( "friendsBubble" ) );
                 game.addChild( friendsBubble );
                 friendsBubble.x = ( i % mapWidth ) * tileWidth;
                 friendsBubble.y = int( i / mapWidth ) * tileWidth;
@@ -211,7 +211,7 @@ public class Level1 implements GameState
 					enemies[i].isHit = true;
 
 					if ( character.health > 0 ) {
-						character.health -= 1;
+						character.decreaseHealth();
 						character.updateCharacter();
 					} else if ( character.health <= 0 ) {
 						isPlaying = false;
@@ -238,6 +238,14 @@ public class Level1 implements GameState
 					hittedGoodGuy.y = 30;
 					game.addChild( hittedGoodGuy );
 				}
+			}
+			
+			// Check collision with friends bubble
+			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit ) {
+				friendsBubble.isHit = true;
+				
+				game.removeChild( friendsBubble );
+				character.addProtection();
 			}
 
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;

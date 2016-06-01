@@ -22,6 +22,8 @@
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.Timer;
+	import flash.events.TimerEvent;
 
 	
 	public class Character extends Sprite {
@@ -36,8 +38,11 @@
 		
 		public var health:Number;
 		public var maxHealth:Number;
+		private var protection:Boolean = false;
 
 		private var config:Object;
+		
+		private var protectionTimer:Timer;
 
 		public function Character( assetManager:AssetManager )
 		{
@@ -59,23 +64,56 @@
 			if (jumping) {
 				this.y += this.velocity.y * deltaTime * 3;
 			
-				this.velocity.y += 6;
+				this.velocity.y += 5;
+			}
+		}
+		
+		public function decreaseHealth() {
+			if ( !protection ) {
+				this.health -= 1;
 			}
 		}
 		
 		public function updateCharacter():void {
-			if ( health == 1 ) {
-				removeChild( mainCharacter );
-				Starling.juggler.remove( mainCharacter );
-				mainCharacter = new MovieClip( assetManager.getTextures( "pregnantGirl" ), 12 );
-				addChild( mainCharacter );
-				Starling.juggler.add( mainCharacter );
-				// Fix this and use same size of assets
-				this.height = 64;
-				this.alignPivot( "center", "bottom" );
-			} else if ( health == 0 ) {
-				
+			if ( !protection ) {
+				if ( health == 1 ) {
+					trace(" health 1 ");
+					removeChild( mainCharacter );
+					Starling.juggler.remove( mainCharacter );
+					mainCharacter = new MovieClip( assetManager.getTextures( "pregnantGirl" ), 12 );
+					addChild( mainCharacter );
+					Starling.juggler.add( mainCharacter );
+					// Fix this and use same size of assets
+					this.height = 64;
+					this.alignPivot( "center", "bottom" );
+				} else if ( health == 0 ) {
+					
+				}
 			}
+		}
+		
+		public function addProtection():void {
+			trace( "ADD PROTECTION" );
+			protection = true;
+			protectionTimer = new Timer( config.character.protectionTime );
+			protectionTimer.start();
+			protectionTimer.addEventListener( TimerEvent.TIMER, protectionTimerHandler );
+			removeChild( mainCharacter );
+			Starling.juggler.remove( mainCharacter );
+			mainCharacter = new MovieClip( assetManager.getTextures( "friendsBubble" ), 12 );
+			addChild( mainCharacter );
+			Starling.juggler.add( mainCharacter );
+		}
+		
+		private function protectionTimerHandler( e:TimerEvent ):void {
+			trace(" TIMER HANDLER ");
+			protection = false;
+			protectionTimer.stop();
+			removeChild( mainCharacter );
+			Starling.juggler.remove( mainCharacter );
+			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			addChild( mainCharacter );
+			Starling.juggler.add( mainCharacter );
 		}
 
 	}

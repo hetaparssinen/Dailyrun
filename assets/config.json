@@ -18,6 +18,7 @@
 	},
 	"character":
 	{
-		"maxHealth": 2
+		"maxHealth": 2,
+		"protectionTime": 5000
 	}
 }
