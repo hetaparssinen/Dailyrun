@@ -8,12 +8,19 @@ import starling.events.Event;
 import starling.text.TextField;
 import starling.text.TextFieldAutoSize;
 import starling.utils.AssetManager;
+import starling.events.Touch;
+import starling.events.TouchEvent;
+import starling.events.TouchPhase;
+import starling.display.Image;
 
 public class LevelStart extends Sprite
 {
 
     private var assetManager:AssetManager;
     private var config:Object;
+	
+	private var characterYellow:Image;
+	
 
     public function LevelStart( assetManager:AssetManager )
     {
@@ -41,6 +48,17 @@ public class LevelStart extends Sprite
         text.x = box.width / 2 + config.levelStart.borderThickness / 2;
         text.y = box.height / 2 + config.levelStart.borderThickness / 2;
         addChild( text );
+		
+		characterYellow = new Image( assetManager.getTexture( "yellowCharacter_static" ) );
+		addChild( characterYellow );
     }
+	
+	public function handleTouch( event:TouchEvent ):void {
+		var clickYellow:Touch= event.getTouch( characterYellow, TouchPhase.BEGAN );
+		
+		if (clickYellow) {
+			trace("HUHUHUUUUUUUUUUUU you cliked the yellow woop woop");
+		}
+	}
 }
 }

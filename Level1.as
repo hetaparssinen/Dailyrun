@@ -154,7 +154,9 @@ public class Level1 implements GameState
 
     private function touchEventHandler( event:TouchEvent )
     {
-        var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
+		levelStart.handleTouch( event );
+		var startTouch:Touch;
+		//var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
         var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
         if( startTouch && !isPlaying)
         {
