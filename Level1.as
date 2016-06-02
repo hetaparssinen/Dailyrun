@@ -12,6 +12,9 @@ import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
 import flash.text.engine.SpaceJustifier;
+import flash.net.drm.AddToDeviceGroupSetting;
+import flash.utils.Timer;
+import flash.events.TimerEvent;
 
 public class Level1 implements GameState
 {
@@ -38,6 +41,7 @@ public class Level1 implements GameState
 	private var friendsBubble:FriendsBubble;
     private var finish:Image;
     private var gameSpeed:int;
+	private var tapToJumpImg:Image;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -168,6 +172,14 @@ public class Level1 implements GameState
 			character.y = game.stage.stageHeight - tileWidth * 2;
             //character.scale = 2;
 			game.addChild( character );
+			
+			tapToJumpImg = new Image( assetManager.getTexture( "tapToJump" ) );
+			tapToJumpImg.x = 140;
+			tapToJumpImg.y = 20;
+			game.addChild( tapToJumpImg );
+			var tapToJumpTimer:Timer = new Timer( 2000 );
+			tapToJumpTimer.addEventListener( TimerEvent.TIMER, removeTapToJump );
+			tapToJumpTimer.start();
         }
 		else if ( isPlaying && !character.jumping && touch )
 		{
@@ -176,6 +188,10 @@ public class Level1 implements GameState
 		}
 
     }
+	
+	public function removeTapToJump( e:TimerEvent ):void {
+		game.removeChild( tapToJumpImg );
+	}
 
     public function update(deltaTime:Number)
     {
