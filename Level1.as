@@ -4,14 +4,12 @@
 package {
 
 import flash.display.Bitmap;
-
 import starling.display.Image;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
-import flash.text.engine.SpaceJustifier;
 
 public class Level1 implements GameState
 {
@@ -25,7 +23,6 @@ public class Level1 implements GameState
     private var game:GameStateManager;
     private var assetManager:AssetManager;
     private var config:Object;
-    private var platformHeight:int;
     private var tileWidth:int;
     private var isPlaying:Boolean;
     private var levelStart:LevelStart;
@@ -38,6 +35,7 @@ public class Level1 implements GameState
 	private var friendsBubble:FriendsBubble;
     private var finish:Image;
     private var gameSpeed:int;
+    private var background:Background;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -60,10 +58,6 @@ public class Level1 implements GameState
         tilesets.push(Bitmap(new exampleTileSet()));
         gameSpeed = 5;
 
-        //Add background
-        var background:Image = new Image( assetManager.getTexture( "sky" ) );
-        game.addChild( background );
-
         //Load and render map
         tilesets.push(Bitmap(new exampleTileSet()));
         mapTMX = TMXTileMap.createMap(mapXML, tilesets);
@@ -76,6 +70,9 @@ public class Level1 implements GameState
 		goodGuys = new Vector.<GoodGuy>();
 		collectedGoodGuys = new Array();
 
+        //Add background
+        background = new Background( assetManager.getTexture( "landscape_size ok"), game.stage.stageWidth );
+        game.addChild( background );
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
@@ -182,6 +179,9 @@ public class Level1 implements GameState
 
         if( isPlaying ) {
 
+            //update background
+            background.update();
+            
             //update character when jumping
             if (character.jumping) {
                 character.update(deltaTime);
