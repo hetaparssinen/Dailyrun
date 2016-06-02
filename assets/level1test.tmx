@@ -13,7 +13,7 @@
    eJxjYBgFo4C2gHGA9A5FMNL8S09A67Ad7HGHy33o4oPdH6MANwAAIYAACQ==
   </data>
  </layer>
- <layer name="GoodBoys" width="100" height="5" visible="0">
+ <layer name="GoodBoys" width="100" height="5">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2DwA8aBdsAoGAUkgqGQZoeCG0cB8QAAETwABA==
   </data>
@@ -21,6 +21,11 @@
  <layer name="FriendsBubble" width="100" height="5">
   <data encoding="base64" compression="zlib">
    eJxjYKAuYKSyeaNgFIyCUTAKRsEoIAwAD1AAAg==
+  </data>
+ </layer>
+ <layer name="Finish" width="100" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjILBCRgH2gGjYBQMIQAACwAAAg==
   </data>
  </layer>
 </map>

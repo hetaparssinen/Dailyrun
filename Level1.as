@@ -36,6 +36,8 @@ public class Level1 implements GameState
     private var goodGuys:Vector.<GoodGuy>;
 	private var collectedGoodGuys:Array;
 	private var friendsBubble:FriendsBubble;
+    private var finish:Image;
+    private var gameSpeed:int;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -56,6 +58,7 @@ public class Level1 implements GameState
         var mapXML:XML = XML(new exampleTMX());
         var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
         tilesets.push(Bitmap(new exampleTileSet()));
+        gameSpeed = 5;
 
         //Add background
         var background:Image = new Image( assetManager.getTexture( "sky" ) );
@@ -72,6 +75,7 @@ public class Level1 implements GameState
         enemies = new Vector.<Enemy>();
 		goodGuys = new Vector.<GoodGuy>();
 		collectedGoodGuys = new Array();
+
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
@@ -120,6 +124,23 @@ public class Level1 implements GameState
             }
         }
 
+        //add finish
+        for( var i:int = 0; i < mapTMX.layers[4].layerData.length; i++ )
+        {
+            if( mapTMX.layers[4].layerData[i] == 1 )
+            {
+                finish = new Image( assetManager.getTexture( "School") );
+
+                finish.scale = 128 / finish.height;
+
+                finish.alignPivot("left", "bottom");
+                finish.x = ( i % mapWidth ) * tileWidth;
+                finish.y = int( i / mapWidth ) * tileWidth + tileWidth;
+
+                game.addChild( finish );
+            }
+        }
+
         //Add eventListener for tapping the screen
         game.addEventListener( TouchEvent.TOUCH, touchEventHandler);
 
@@ -129,8 +150,6 @@ public class Level1 implements GameState
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
         game.addChild( levelStart );
-
-        trace( mapTMX.layers[0].layerData );
     }
 
     private function touchEventHandler( event:TouchEvent )
@@ -171,7 +190,7 @@ public class Level1 implements GameState
             //move stage
             for ( var i:int = 0; i < mapTMX.layers.length; i++ )
             {
-                mapTMX.layers[i].layerSprite.x -= 5;
+                mapTMX.layers[i].layerSprite.x -= gameSpeed;
             }
 
             // Move enemies and remove if off the screen
@@ -181,7 +200,7 @@ public class Level1 implements GameState
 					game.removeChild( enemies[i] );
 					enemies.splice( i, 1 );
 				} else {
-					enemies[i].x -= 5;
+					enemies[i].x -= gameSpeed;
 				}
 			}
 			
@@ -192,7 +211,7 @@ public class Level1 implements GameState
 					game.removeChild( goodGuys[i] );
 					goodGuys.splice( i, 1 );
 				} else {
-					goodGuys[i].x -= 5;
+					goodGuys[i].x -= gameSpeed;
 				}
 			}
 			
@@ -200,7 +219,7 @@ public class Level1 implements GameState
 			if ( friendsBubble.x <= 0 ) {
 				game.removeChild( friendsBubble );
 			} else {
-				friendsBubble.x -= 5;
+				friendsBubble.x -= gameSpeed;
 			}
 			// Quick fix because it fucks up other way..... fix this later
 			// (after passing the friends bubble it adds protection after first 
@@ -208,6 +227,9 @@ public class Level1 implements GameState
 			if ( ( friendsBubble.x + friendsBubble.width / 2 ) <= ( character.x - character.width / 2 ) && !friendsBubble.isHit ) {
 				friendsBubble.block = true;
 			}
+
+            // Move finish
+            finish.x -= gameSpeed;
 			
 			// Check collision with enemies
 			for  ( var i:int = 0; i < enemies.length; i++ ) 
