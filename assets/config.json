@@ -20,6 +20,7 @@
 	},
 	"character":
 	{
-		"maxHealth": 3
+		"maxHealth": 2,
+		"protectionTime": 5000
 	}
 }
