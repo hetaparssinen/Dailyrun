@@ -113,7 +113,7 @@ public class Level1 implements GameState
         {
             if( mapTMX.layers[3].layerData[i] == 1 )
             {
-				friendsBubble = new FriendsBubble( assetManager.getTexture( "friendsBubble" ) );
+				friendsBubble = new FriendsBubble( assetManager );
                 game.addChild( friendsBubble );
                 friendsBubble.x = ( i % mapWidth ) * tileWidth;
                 friendsBubble.y = int( i / mapWidth ) * tileWidth;
