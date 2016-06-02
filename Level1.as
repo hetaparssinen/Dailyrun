@@ -86,11 +86,10 @@ public class Level1 implements GameState
         {
             if( mapTMX.layers[1].layerData[i] == 1 )
             {
-                var enemy:Enemy = new Enemy( assetManager.getTexture( "enemy" ));
+                var enemy:Enemy = new Enemy( assetManager.getTexture( "badBoy" ));
                 game.addChild( enemy );
-                enemy.scale = 2;
                 enemy.x = ( i % mapWidth ) * tileWidth;
-                enemy.y = int( i / mapWidth ) * tileWidth;
+                enemy.y = int( i / mapWidth ) * tileWidth + 5;
                 enemies.push( enemy );
             }
         }
