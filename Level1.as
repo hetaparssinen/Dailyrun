@@ -368,6 +368,13 @@ public class Level1 implements GameState
                 }
             }
 
+            //Check if finished
+            if( character.bounds.intersects( finish.bounds ) )
+            {
+                trace( "FINISH" );
+                game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
+            }
+
         }
     }
 }
