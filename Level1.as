@@ -69,6 +69,7 @@ public class Level1 implements GameState
         var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
         tilesets.push(Bitmap(new exampleTileSet()));
         gameSpeed = 5;
+        //score = 0;
 
         //Load and render map
         tilesets.push(Bitmap(new exampleTileSet()));
@@ -93,6 +94,10 @@ public class Level1 implements GameState
                 game.addChild(mapTMX.layers[i].layerSprite);
             }
         }
+
+        //add score indicator
+        scoreText = new TextField( 150, 50, "Score: " + score);
+        game.addChild(scoreText);
         
 		// Add bad boys to the screen
         for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
@@ -282,7 +287,7 @@ public class Level1 implements GameState
 					goodGuys[i].isHit = true;
 					
 					score += 10;
-					trace (score);
+                    scoreText.text = "Score: " + score;
 					
 					var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
 					hittedGoodGuy.scale = 0.5;
@@ -298,23 +303,12 @@ public class Level1 implements GameState
 			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit && !friendsBubble.block ) {
 				friendsBubble.isHit = true;
 				score += 20;
-				trace (score);
+                scoreText.text = "Score: " + score;
 				
 				game.removeChild( friendsBubble );
 				character.addProtection();
 				
 			}
-			
-			
-				scoreText = new TextField(150, 60, "" + score);	
-				
-
-			
-				scoreText.x = 10 ;
-				trace(scoreText.text);
-				
-				game.addEventListener( Event.ADDED_TO_STAGE, update);
-			game.addChild(scoreText);
 			
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
             var yLoc:int = ( character.y - tileWidth ) / tileWidth;
