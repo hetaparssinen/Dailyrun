@@ -39,19 +39,19 @@ public class Background extends Sprite{
         for( var i:int = backgrounds.length - 1; i >= 0; i-- )
         {
             backgrounds[i].x -= speed;
+        }
 
-            if( backgrounds[i].x + backgrounds[i].width < stageWidth )
-            {
-                var background:Image = new Image( texture );
-                background.x = backgrounds[i].x + backgrounds[i].width;
-                addChild( background );
-                backgrounds.push( background );
-            }
-            if( backgrounds[i].x + backgrounds[i].width < 0 )
-            {
-                removeChild( backgrounds[i] );
-                backgrounds.splice( i, 1 );
-            }
+        if( backgrounds[ backgrounds.length - 1 ].x + backgrounds[ backgrounds.length - 1 ].width <= stageWidth )
+        {
+            var background:Image = new Image( texture );
+            background.x = backgrounds[backgrounds.length - 1].x + backgrounds[backgrounds.length - 1].width;
+            addChild( background );
+            backgrounds.push( background );
+        }
+        if( backgrounds[0].x + backgrounds[0].width <= 0 )
+        {
+            removeChild( backgrounds[0] );
+            backgrounds.splice( 0, 1 );
         }
     }
 }
