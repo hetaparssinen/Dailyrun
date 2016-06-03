@@ -1,6 +1,7 @@
-﻿package  {
-	
-	import flash.display.MovieClip;
+﻿package  
+{
+
+import flash.display.MovieClip;
 import flash.geom.Rectangle;
 
 import starling.core.Starling;

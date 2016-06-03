@@ -12,9 +12,16 @@ import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
 import flash.text.engine.SpaceJustifier;
+import starling.text.TextField;
+import flash.display.Sprite;
+	import starling.events.Event;
+	import starling.display.Image;
+import starling.display.Sprite;
+import starling.events.Event;
+import starling.textures.Texture;
 
 public class Level1 implements GameState
-{
+{//rd
 
     [Embed(source="assets/level1test.tmx", mimeType="application/octet-stream")]
     private static var exampleTMX:Class;
@@ -36,6 +43,8 @@ public class Level1 implements GameState
     private var goodGuys:Vector.<GoodGuy>;
 	private var collectedGoodGuys:Array;
 	private var friendsBubble:FriendsBubble;
+	private var score:int;
+	private var scoreText:TextField;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -230,24 +239,42 @@ public class Level1 implements GameState
 			{
 				if ( character.bounds.intersects( goodGuys[i].bounds ) && !goodGuys[i].isHit ) {
 					goodGuys[i].isHit = true;
-
+					
+					score += 10;
+					trace (score);
+					
 					var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
 					hittedGoodGuy.scale = 0.5;
 					collectedGoodGuys.push( hittedGoodGuy );
 					hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
 					hittedGoodGuy.y = 30;
 					game.addChild( hittedGoodGuy );
+					
 				}
 			}
 			
 			// Check collision with friends bubble
 			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit ) {
 				friendsBubble.isHit = true;
+				score += 20;
+				trace (score);
 				
 				game.removeChild( friendsBubble );
 				character.addProtection();
+				
 			}
+			
+			
+				scoreText = new TextField(150, 60, "" + score);	
+				
 
+			
+				scoreText.x = 10 ;
+				trace(scoreText.text);
+				
+				game.addEventListener( Event.ADDED_TO_STAGE, update);
+			game.addChild(scoreText);
+			
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
             var yLoc:int = ( character.y - tileWidth ) / tileWidth;
             var tileNum:int = ( yLoc * mapWidth ) + xLoc;
