@@ -34,7 +34,6 @@ public class Background extends Sprite{
     
     public function update()
     {
-        trace(backgrounds.length);
 
         for( var i:int = backgrounds.length - 1; i >= 0; i-- )
         {

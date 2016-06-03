@@ -308,22 +308,42 @@ public class Level1 implements GameState
             //check if on ascending hill
             if( ( mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3 ) )
             {
-                if( !character.jumping ) {
+
+                if( !character.jumping )
+                {
                     var groundHeight:int = ( game.stage.stageHeight - character.y ) / tileWidth;
                     groundHeight *= tileWidth;
                     var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
                     character.y = game.stage.stageHeight - groundHeight - hillHeight;
+                }
+                else if( character.jumping )
+                {
+                    var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
+
+                    if( charTileY < charTileX )
+                            character.jumping = false;
+
                 }
             }
 
             //check if on descending hill
             if( ( mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 ) )
             {
-                if( !character.jumping ) {
+                if( !character.jumping )
+                {
                     var groundHeight:int = character.y / tileWidth;
                     groundHeight *= tileWidth;
                     var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
                     character.y = groundHeight + hillHeight;
+                }
+                else if( character.jumping )
+                {
+                    var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
+
+                    if( charTileY < charTileX )
+                        character.jumping = false;
                 }
             }
 
