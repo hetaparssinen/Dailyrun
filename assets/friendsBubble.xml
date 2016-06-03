@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:557b4645931cbf045f17df7ac744aa59:88c025d320d97102ef275849cd7de567:db8cd3e73e05f927cfb5a97d6af53eca$ -->
+<TextureAtlas imagePath="friendsBubble.png" width="64" height="132">
+    <SubTexture name="friendsBubble1" x="1" y="1" width="62" height="64"/>
+    <SubTexture name="friendsBubble2" x="1" y="67" width="62" height="64"/>
+</TextureAtlas>

@@ -50,7 +50,7 @@
 
 			config = assetManager.getObject( "config" );
 
-			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			mainCharacter = new MovieClip( assetManager.getTextures( "yellowCharacter" ), 12 );
 			addChild( mainCharacter );
 			Starling.juggler.add( mainCharacter );
 			// Fix this and use same size of assets
@@ -77,17 +77,19 @@
 		public function updateCharacter():void {
 			if ( !protection ) {
 				if ( health == 1 ) {
-					trace(" health 1 ");
+					removeChild( mainCharacter );
+					Starling.juggler.remove( mainCharacter );
+					mainCharacter = new MovieClip( assetManager.getTextures( "illGirl" ), 12 );
+					addChild( mainCharacter );
+					Starling.juggler.add( mainCharacter );
+					this.alignPivot( "center", "bottom" );
+				} else if ( health == 0 ) {
 					removeChild( mainCharacter );
 					Starling.juggler.remove( mainCharacter );
 					mainCharacter = new MovieClip( assetManager.getTextures( "pregnantGirl" ), 12 );
 					addChild( mainCharacter );
 					Starling.juggler.add( mainCharacter );
-					// Fix this and use same size of assets
-					this.height = 64;
 					this.alignPivot( "center", "bottom" );
-				} else if ( health == 0 ) {
-					
 				}
 			}
 		}
@@ -111,7 +113,7 @@
 			protectionTimer.stop();
 			removeChild( mainCharacter );
 			Starling.juggler.remove( mainCharacter );
-			mainCharacter = new MovieClip( assetManager.getTextures( "mainCharacter" ), 12 );
+			mainCharacter = new MovieClip( assetManager.getTextures( "yellowCharacter" ), 12 );
 			addChild( mainCharacter );
 			Starling.juggler.add( mainCharacter );
 		}

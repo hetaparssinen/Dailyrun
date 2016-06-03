@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:a5d28b5304b365d3b8614e921f5680aa:c3e101d72627de6342a5277837dc5527:1562d9cd11897fbd118a5563f13e08d7$ -->
+<TextureAtlas imagePath="illGirl.png" width="46" height="384">
+    <SubTexture name="illGirl1" x="3" y="3" width="40" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="illGirl2" x="3" y="66" width="36" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="illGirl3" x="3" y="129" width="35" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="illGirl4" x="3" y="192" width="39" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="illGirl5" x="3" y="255" width="35" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="illGirl6" x="3" y="318" width="36" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+</TextureAtlas>

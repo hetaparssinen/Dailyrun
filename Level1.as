@@ -4,24 +4,24 @@
 package {
 
 import flash.display.Bitmap;
-
 import starling.display.Image;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
-import flash.text.engine.SpaceJustifier;
 import starling.text.TextField;
 import flash.display.Sprite;
-	import starling.events.Event;
-	import starling.display.Image;
+import starling.events.Event;
+import starling.display.Image;
 import starling.display.Sprite;
 import starling.events.Event;
 import starling.textures.Texture;
+import flash.utils.Timer;
+import flash.events.TimerEvent;
 
 public class Level1 implements GameState
-{//rd
+{
 
     [Embed(source="assets/level1test.tmx", mimeType="application/octet-stream")]
     private static var exampleTMX:Class;
@@ -29,22 +29,25 @@ public class Level1 implements GameState
     [Embed(source = "assets/sprites.png")]
     private static var exampleTileSet:Class;
 
-    private var game:GameStateManager;
-    private var assetManager:AssetManager;
-    private var config:Object;
-    private var platformHeight:int;
-    private var tileWidth:int;
-    private var isPlaying:Boolean;
-    private var levelStart:LevelStart;
+	private var game:GameStateManager;
+	private var assetManager:AssetManager;
+	private var config:Object;
+	private var tileWidth:int;
+	private var isPlaying:Boolean;
+	private var levelStart:LevelStart;
 	private var character:Character;
-    private var mapTMX:TMXTileMap;
-    private var mapWidth:int;
-    private var enemies:Vector.<Enemy>;
-    private var goodGuys:Vector.<GoodGuy>;
+	private var mapTMX:TMXTileMap;
+	private var mapWidth:int;
+	private var enemies:Vector.<Enemy>;
+	private var goodGuys:Vector.<GoodGuy>;
 	private var collectedGoodGuys:Array;
 	private var friendsBubble:FriendsBubble;
 	private var score:int;
 	private var scoreText:TextField;
+	private var finish:Image;
+	private var gameSpeed:int;
+	private var background:Background;
+	private var tapToJumpImg:Image;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -65,10 +68,7 @@ public class Level1 implements GameState
         var mapXML:XML = XML(new exampleTMX());
         var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
         tilesets.push(Bitmap(new exampleTileSet()));
-
-        //Add background
-        var background:Image = new Image( assetManager.getTexture( "sky" ) );
-        game.addChild( background );
+        gameSpeed = 5;
 
         //Load and render map
         tilesets.push(Bitmap(new exampleTileSet()));
@@ -78,9 +78,13 @@ public class Level1 implements GameState
         tileWidth = mapTMX.tileWidth;
         mapWidth = mapTMX.mapWidth;
 
-        enemies = new Vector.<Enemy>();
+		enemies = new Vector.<Enemy>();
 		goodGuys = new Vector.<GoodGuy>();
 		collectedGoodGuys = new Array();
+
+        //Add background
+        background = new Background( assetManager.getTexture( "landscape_size ok"), game.stage.stageWidth );
+        game.addChild( background );
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
         {
@@ -95,11 +99,10 @@ public class Level1 implements GameState
         {
             if( mapTMX.layers[1].layerData[i] == 1 )
             {
-                var enemy:Enemy = new Enemy( assetManager.getTexture( "enemy" ));
+                var enemy:Enemy = new Enemy( assetManager.getTexture( "badBoy" ));
                 game.addChild( enemy );
-                enemy.scale = 2;
                 enemy.x = ( i % mapWidth ) * tileWidth;
-                enemy.y = int( i / mapWidth ) * tileWidth;
+                enemy.y = int( i / mapWidth ) * tileWidth + 5;
                 enemies.push( enemy );
             }
         }
@@ -123,10 +126,27 @@ public class Level1 implements GameState
         {
             if( mapTMX.layers[3].layerData[i] == 1 )
             {
-				friendsBubble = new FriendsBubble( assetManager.getTexture( "friendsBubble" ) );
+				friendsBubble = new FriendsBubble( assetManager );
                 game.addChild( friendsBubble );
                 friendsBubble.x = ( i % mapWidth ) * tileWidth;
                 friendsBubble.y = int( i / mapWidth ) * tileWidth;
+            }
+        }
+
+        //add finish
+        for( var i:int = 0; i < mapTMX.layers[4].layerData.length; i++ )
+        {
+            if( mapTMX.layers[4].layerData[i] == 1 )
+            {
+                finish = new Image( assetManager.getTexture( "School") );
+
+                finish.scale = 128 / finish.height;
+
+                finish.alignPivot("left", "bottom");
+                finish.x = ( i % mapWidth ) * tileWidth;
+                finish.y = int( i / mapWidth ) * tileWidth + tileWidth;
+
+                game.addChild( finish );
             }
         }
 
@@ -139,8 +159,6 @@ public class Level1 implements GameState
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
         game.addChild( levelStart );
-
-        trace( mapTMX.layers[0].layerData );
     }
 
     private function touchEventHandler( event:TouchEvent )
@@ -149,16 +167,24 @@ public class Level1 implements GameState
         var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
         if( startTouch && !isPlaying)
         {
-            isPlaying = true;
-            game.removeChild( levelStart );
+			isPlaying = true;
+			game.removeChild( levelStart );
 
-            //Draw player
+			//Draw player
 			character = new Character( assetManager );
-            character.alignPivot( "center", "bottom");
+			character.alignPivot( "center", "bottom");
 			character.x = tileWidth;
 			character.y = game.stage.stageHeight - tileWidth * 2;
-            //character.scale = 2;
+			//character.scale = 2;
 			game.addChild( character );
+
+			tapToJumpImg = new Image( assetManager.getTexture( "tapToJump" ) );
+			tapToJumpImg.x = 140;
+			tapToJumpImg.y = 20;
+			game.addChild( tapToJumpImg );
+			var tapToJumpTimer:Timer = new Timer( 2000 );
+			tapToJumpTimer.addEventListener( TimerEvent.TIMER, removeTapToJump );
+			tapToJumpTimer.start();
         }
 		else if ( isPlaying && !character.jumping && touch )
 		{
@@ -167,12 +193,18 @@ public class Level1 implements GameState
 		}
 
     }
+	
+	public function removeTapToJump( e:TimerEvent ):void {
+		game.removeChild( tapToJumpImg );
+	}
 
     public function update(deltaTime:Number)
     {
-
         if( isPlaying ) {
 
+            //update background
+            background.update();
+            
             //update character when jumping
             if (character.jumping) {
                 character.update(deltaTime);
@@ -181,7 +213,7 @@ public class Level1 implements GameState
             //move stage
             for ( var i:int = 0; i < mapTMX.layers.length; i++ )
             {
-                mapTMX.layers[i].layerSprite.x -= 5;
+                mapTMX.layers[i].layerSprite.x -= gameSpeed;
             }
 
             // Move enemies and remove if off the screen
@@ -191,7 +223,7 @@ public class Level1 implements GameState
 					game.removeChild( enemies[i] );
 					enemies.splice( i, 1 );
 				} else {
-					enemies[i].x -= 5;
+					enemies[i].x -= gameSpeed;
 				}
 			}
 			
@@ -202,7 +234,7 @@ public class Level1 implements GameState
 					game.removeChild( goodGuys[i] );
 					goodGuys.splice( i, 1 );
 				} else {
-					goodGuys[i].x -= 5;
+					goodGuys[i].x -= gameSpeed;
 				}
 			}
 			
@@ -210,8 +242,17 @@ public class Level1 implements GameState
 			if ( friendsBubble.x <= 0 ) {
 				game.removeChild( friendsBubble );
 			} else {
-				friendsBubble.x -= 5;
+				friendsBubble.x -= gameSpeed;
 			}
+			// Quick fix because it fucks up other way..... fix this later
+			// (after passing the friends bubble it adds protection after first 
+			// jump, even the character didn't touch the protection bubble)
+			if ( ( friendsBubble.x + friendsBubble.width / 2 ) <= ( character.x - character.width / 2 ) && !friendsBubble.isHit ) {
+				friendsBubble.block = true;
+			}
+
+            // Move finish
+            finish.x -= gameSpeed;
 			
 			// Check collision with enemies
 			for  ( var i:int = 0; i < enemies.length; i++ ) 
@@ -254,7 +295,7 @@ public class Level1 implements GameState
 			}
 			
 			// Check collision with friends bubble
-			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit ) {
+			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit && !friendsBubble.block ) {
 				friendsBubble.isHit = true;
 				score += 20;
 				trace (score);
@@ -294,27 +335,46 @@ public class Level1 implements GameState
             //check if on ascending hill
             if( ( mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3 ) )
             {
-                if( !character.jumping ) {
+
+                if( !character.jumping )
+                {
                     var groundHeight:int = ( game.stage.stageHeight - character.y ) / tileWidth;
                     groundHeight *= tileWidth;
                     var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
                     character.y = game.stage.stageHeight - groundHeight - hillHeight;
+                }
+                else if( character.jumping )
+                {
+                    var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
+
+                    if( charTileY < charTileX )
+                            character.jumping = false;
+
                 }
             }
 
             //check if on descending hill
             if( ( mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 ) )
             {
-                if( !character.jumping ) {
+                if( !character.jumping )
+                {
                     var groundHeight:int = character.y / tileWidth;
                     groundHeight *= tileWidth;
                     var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
                     character.y = groundHeight + hillHeight;
                 }
+                else if( character.jumping )
+                {
+                    var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
+
+                    if( charTileY < charTileX )
+                        character.jumping = false;
+                }
             }
 
         }
-
     }
 }
 }
