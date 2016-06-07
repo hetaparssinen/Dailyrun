@@ -19,6 +19,9 @@ import starling.events.Event;
 import starling.textures.Texture;
 import flash.utils.Timer;
 import flash.events.TimerEvent;
+import starling.display.Button;
+	
+	
 
 public class Level1 implements GameState
 {
@@ -48,6 +51,12 @@ public class Level1 implements GameState
 	private var gameSpeed:int;
 	private var background:Background;
 	private var tapToJumpImg:Image;
+	
+	
+	var object1:Button;
+		var object2:Button;
+		var object3:Button;
+		var object4:Button;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -371,9 +380,79 @@ public class Level1 implements GameState
             //Check if finished
             if( character.bounds.intersects( finish.bounds ) )
             {
+				isPlaying = false;
+				var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ) );
+				
+				gameOver.alignPivot();
+				gameOver.x = game.stage.stageWidth / 2;
+				gameOver.y = game.stage.stageHeight / 2;
+				game.addChild( gameOver );
+				ScoreMenu();
+				
                 trace( "FINISH" );
+				
                 game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
             }
+			
+		function ScoreMenu()
+		{
+			//super();
+			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, Add);		
+		}
+		function Add(event:Event):void {
+			draw();
+		}
+		
+		function draw():void {
+			
+			object1 = new Button(assetManager.getTexture("object1"));
+			object1.x = 300;
+			object1.y = 25;
+			this.addChild(object1);
+			
+			object2 = new Button(assetManager.getTexture("object1"));
+			object2.x = 300;
+			object2.y = 100;
+			this.addChild(object1);
+			
+			object3 = new Button(assetManager.getTexture("object1"));
+			object3.x = 300;
+			object3.y = 175;
+			this.addChild(object1);
+			
+			object4 = new Button(assetManager.getTexture("objetc1"));
+			object4.x = 300;
+			object4.y = 250;
+			this.addChild(object1);
+			
+			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
+		}
+		function onMainMenuClick(event:Event):void
+		{
+			
+			var buttonClicked:Button = event.target as Button;
+			if((buttonClicked as Button) == object1) {
+				
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id: "none1"}, true));
+			}
+			
+			if ((buttonClicked as Button ) == object2){
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id:"none2"}, true));
+			}
+			
+			if ((buttonClicked as Button) == object3){
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id:"none3"}, true));
+			}
+			if ((buttonClicked as Button) == object4){
+				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id:"none4"}, true));
+			}
+			
+		}
+
+		function disposeTemporarily():void 
+		{
+			this.visible = false;
+		}
 
         }
     }
