@@ -40,7 +40,7 @@
 		*/
 		private function initialize():void
 		{
-			setGameState( Level1 );
+			setGameState( GoodLifeLevel );
 			addEventListener( Event.ENTER_FRAME, update );
 		}
 		
