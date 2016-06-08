@@ -38,6 +38,7 @@ public class Level1 implements GameState
 	private var friendsBubble:FriendsBubble;
     private var finish:Image;
     private var gameSpeed:int;
+	private var characterChosen:Boolean;
     
     public function Level1( game:GameStateManager ):void
     {
@@ -145,20 +146,26 @@ public class Level1 implements GameState
         game.addEventListener( TouchEvent.TOUCH, touchEventHandler);
 
         //Place start screen
-        levelStart = new LevelStart( assetManager );
+        levelStart = new LevelStart( assetManager, this );
         levelStart.alignPivot();
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
         game.addChild( levelStart );
     }
+	
+	public function startPlaying()
+	{
+		characterChosen = true;
+		isPlaying = true;
+	}
 
     private function touchEventHandler( event:TouchEvent )
     {
 		levelStart.handleTouch( event );
-		var startTouch:Touch;
-		//var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
+		//var startTouch:Touch;
+		var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
         var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
-        if( startTouch && !isPlaying)
+        if( characterChosen )
         {
             isPlaying = true;
             game.removeChild( levelStart );
@@ -170,6 +177,7 @@ public class Level1 implements GameState
 			character.y = game.stage.stageHeight - tileWidth * 2;
             //character.scale = 2;
 			game.addChild( character );
+			characterChosen = false;
         }
 		else if ( isPlaying && !character.jumping && touch )
 		{
