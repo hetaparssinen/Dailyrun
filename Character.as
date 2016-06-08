@@ -45,6 +45,8 @@
 		private var config: Object;
 
 		private var protectionTimer: Timer;
+		
+		private var color:String;
 
 		//var levelStart: LevelStart();
 
@@ -53,28 +55,10 @@
 			this.assetManager = assetManager;
 
 			config = assetManager.getObject("config");
-			trace(color);
+			this.color = color;
+			
+			mainCharacter = new MovieClip(assetManager.getTextures(color + "Character"), 12);
 
-			if (color == "yellow")
-			{
-				mainCharacter = new MovieClip(assetManager.getTextures("yellowCharacter"), 12);
-
-			}
-			else
-			if (color == "blue")
-			{
-				mainCharacter = new MovieClip(assetManager.getTextures("blueCharacter"), 12);
-			}
-			else
-			if (color == "green")
-			{
-				mainCharacter = new MovieClip(assetManager.getTextures("greenCharacter"), 12);
-			}
-			else
-			if (color == "pink")
-			{
-				mainCharacter = new MovieClip(assetManager.getTextures("pinkCharacter"), 12);
-			}
 			addChild(mainCharacter);
 			Starling.juggler.add(mainCharacter);
 			// Fix this and use same size of assets
@@ -148,7 +132,7 @@
 			protectionTimer.stop();
 			removeChild(mainCharacter);
 			Starling.juggler.remove(mainCharacter);
-			mainCharacter = new MovieClip(assetManager.getTextures("yellowCharacter"), 12);
+			mainCharacter = new MovieClip(assetManager.getTextures(color + "Character"), 12);
 			addChild(mainCharacter);
 			Starling.juggler.add(mainCharacter);
 		}
