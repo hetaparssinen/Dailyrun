@@ -41,10 +41,6 @@ public class GoodLifeLevel implements GameState
     private var character:Character;
     private var mapTMX:TMXTileMap;
     private var mapWidth:int;
-    private var enemies:Vector.<Enemy>;
-    private var goodGuys:Vector.<GoodGuy>;
-    private var collectedGoodGuys:Array;
-    private var friendsBubble:FriendsBubble;
     private var goodLifeItems:Vector.<Image>;
     private var score:int;
     private var scoreText:TextField;
@@ -82,9 +78,6 @@ public class GoodLifeLevel implements GameState
         tileWidth = mapTMX.tileWidth;
         mapWidth = mapTMX.mapWidth;
 
-        enemies = new Vector.<Enemy>();
-        goodGuys = new Vector.<GoodGuy>();
-        collectedGoodGuys = new Array();
         goodLifeItems = new Vector.<Image>();
 
         //Add background
@@ -117,48 +110,6 @@ public class GoodLifeLevel implements GameState
                 goodLifeItems.push( item );
             }
         }
-
-        /*
-        // Add bad boys to the screen
-        for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
-        {
-            if( mapTMX.layers[1].layerData[i] == 1 )
-            {
-                var enemy:Enemy = new Enemy( assetManager.getTexture( "badBoy" ));
-                game.addChild( enemy );
-                enemy.x = ( i % mapWidth ) * tileWidth;
-                enemy.y = int( i / mapWidth ) * tileWidth + 5;
-                enemies.push( enemy );
-            }
-        }
-
-        // Add good guys to the screen
-        for( var i:int = 0; i < mapTMX.layers[2].layerData.length; i++ )
-        {
-            if( mapTMX.layers[2].layerData[i] == 1 )
-            {
-                // change assets names in some point....
-                var goodGuy:GoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
-                game.addChild( goodGuy );
-                goodGuy.x = ( i % mapWidth ) * tileWidth;
-                goodGuy.y = int( i / mapWidth ) * tileWidth;
-                goodGuys.push( goodGuy );
-            }
-        }
-
-        // Add friends bubble to the screen
-        for( var i:int = 0; i < mapTMX.layers[3].layerData.length; i++ )
-        {
-            if( mapTMX.layers[3].layerData[i] == 1 )
-            {
-                friendsBubble = new FriendsBubble( assetManager );
-                game.addChild( friendsBubble );
-                friendsBubble.x = ( i % mapWidth ) * tileWidth;
-                friendsBubble.y = int( i / mapWidth ) * tileWidth;
-            }
-
-        }
-        */
 
         //add finish
         for( var i:int = 0; i < mapTMX.layers[2].layerData.length; i++ )
@@ -250,100 +201,8 @@ public class GoodLifeLevel implements GameState
                 goodLifeItems[i].x -= gameSpeed;
             }
 
-            /*
-            // Move enemies and remove if off the screen
-            for ( var i:int = 0; i < enemies.length; i++ )
-            {
-                if ( enemies[i].x <= 0 ) {
-                    game.removeChild( enemies[i] );
-                    enemies.splice( i, 1 );
-                } else {
-                    enemies[i].x -= gameSpeed;
-                }
-            }
-
-            // Move good boys and remove is off the screen
-            for ( var i:int = 0; i < goodGuys.length; i++ )
-            {
-                if ( goodGuys[i].x <= 0 ) {
-                    game.removeChild( goodGuys[i] );
-                    goodGuys.splice( i, 1 );
-                } else {
-                    goodGuys[i].x -= gameSpeed;
-                }
-            }
-
-
-            // Move friends bubble and remove if off the screen
-            if ( friendsBubble.x <= 0 ) {
-                game.removeChild( friendsBubble );
-            } else {
-                friendsBubble.x -= gameSpeed;
-            }
-            // Quick fix because it fucks up other way..... fix this later
-            // (after passing the friends bubble it adds protection after first 
-            // jump, even the character didn't touch the protection bubble)
-            if ( ( friendsBubble.x + friendsBubble.width / 2 ) <= ( character.x - character.width / 2 ) && !friendsBubble.isHit ) {
-                friendsBubble.block = true;
-            }
-            */
-
             // Move finish
             finish.x -= gameSpeed;
-
-            /*
-            // Check collision with enemies
-            for  ( var i:int = 0; i < enemies.length; i++ )
-            {
-                if ( character.bounds.intersects( enemies[i].bounds ) && !enemies[i].isHit ) {
-                    enemies[i].isHit = true;
-
-                    if ( character.health > 0 ) {
-                        character.decreaseHealth();
-                        character.updateCharacter();
-                    } else if ( character.health <= 0 ) {
-                        isPlaying = false;
-                        var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ) );
-                        gameOver.alignPivot();
-                        gameOver.x = game.stage.stageWidth / 2;
-                        gameOver.y = game.stage.stageHeight / 2;
-                        game.addChild( gameOver );
-                        break;
-                    }
-                }
-            }
-
-
-            // Check collision with good boys
-            for  ( var i:int = 0; i < goodGuys.length; i++ )
-            {
-                if ( character.bounds.intersects( goodGuys[i].bounds ) && !goodGuys[i].isHit ) {
-                    goodGuys[i].isHit = true;
-
-                    score += 10;
-                    scoreText.text = "Score: " + score;
-
-                    var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
-                    hittedGoodGuy.scale = 0.5;
-                    collectedGoodGuys.push( hittedGoodGuy );
-                    hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
-                    hittedGoodGuy.y = 30;
-                    game.addChild( hittedGoodGuy );
-
-                }
-            }
-
-
-            // Check collision with friends bubble
-            if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit && !friendsBubble.block ) {
-                friendsBubble.isHit = true;
-                score += 20;
-                scoreText.text = "Score: " + score;
-
-                game.removeChild( friendsBubble );
-                character.addProtection();
-            }
-            */
 
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
             var yLoc:int = ( character.y - tileWidth ) / tileWidth;
