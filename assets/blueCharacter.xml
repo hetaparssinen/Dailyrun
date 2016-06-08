@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
-<!-- $TexturePacker:SmartUpdate:f6974809b0bbec2ee47bf42eba470905:f5941d6f0cbd9c691785592e1a81320e:b5290d5e19fa47bc2f3e5ae8ace58647$ -->
-<TextureAtlas imagePath="blueCharacter.png" width="44" height="382">
-    <SubTexture name="blueCharacter1" x="2" y="2" width="40" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
-    <SubTexture name="blueCharacter2" x="2" y="65" width="36" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
-    <SubTexture name="blueCharacter3" x="2" y="128" width="35" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
-    <SubTexture name="blueCharacter4" x="2" y="191" width="39" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
-    <SubTexture name="blueCharacter5" x="2" y="254" width="35" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
-    <SubTexture name="blueCharacter6" x="2" y="317" width="36" height="63" frameX="-11" frameY="0" frameWidth="64" frameHeight="47"/>
+<!-- $TexturePacker:SmartUpdate:a760b3800fcfeda553e14af02db8ca8d:bbf7c2825f8ce32f02896e39ffcbd7df:388a36c565c412ed224e6a1bf2ca02c8$ -->
+<TextureAtlas imagePath="blueCharacter.png" width="52" height="366">
+    <SubTexture name="blueCharacter1" x="3" y="3" width="46" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter2" x="3" y="63" width="42" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter3" x="3" y="123" width="41" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter4" x="3" y="183" width="45" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter5" x="3" y="243" width="41" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter6" x="3" y="303" width="42" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
 </TextureAtlas>
