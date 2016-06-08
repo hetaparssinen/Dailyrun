@@ -173,6 +173,7 @@ public class Level1 implements GameState
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
         game.addChild( levelStart );
+        
     }
 
     private function touchEventHandler( event:TouchEvent )
@@ -381,22 +382,15 @@ public class Level1 implements GameState
             if( character.bounds.intersects( finish.bounds ) )
             {
 				isPlaying = false;
-				//var gameOver:GameOver = new GameOver( assetManager.getTexture( "gameOver" ) );
-				
-				//gameOver.alignPivot();
-				//gameOver.x = game.stage.stageWidth / 2;
-				//gameOver.y = game.stage.stageHeight / 2;
-				//game.addChild( gameOver );
-				//ScoreMenu();
 
-				var scoreScreen:ScoreMenu = new ScoreMenu( assetManager );
+				var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
 				game.addChild( scoreScreen );
 				
                 trace( "FINISH" );
 				
                 game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
             }
-
+            
         }
     }
 }
