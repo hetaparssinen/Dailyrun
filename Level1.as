@@ -401,18 +401,23 @@ package
 				}
 
 				 if( character.bounds.intersects( finish.bounds ) )
-            {
-				isPlaying = false;
+				{
+					isPlaying = false;
 
-				var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
-				game.addChild( scoreScreen );
-				
-                trace( "FINISH" );
-				
-                game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
-            }
+					var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
+					game.addChild( scoreScreen );
+					
+					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
+						game.saveDataObject.data.level1HighScore = score;
+						game.saveDataObject.flush();
+					}
+
+					trace( "FINISH" );
+					
+					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
+				}
             
-        			}
+			}
 		}
 	}
 }
