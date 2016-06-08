@@ -55,26 +55,30 @@ public class ScoreMenu extends Sprite
 			explanation.y = 175;
 			addChild( explanation );
 
-			object1 = new Button(assetManager.getTexture("badBoy"));
+			object1 = new Button(assetManager.getTexture("Bike"));
 			object1.alignPivot();
+			object1.scale = 0.2;
 			object1.x = 96;
 			object1.y = 250;
 			this.addChild(object1);
 			
-			object2 = new Button(assetManager.getTexture("badBoy"));
+			object2 = new Button(assetManager.getTexture("Guitar"));
 			object2.alignPivot();
+			object2.scale = 0.2;
 			object2.x = 192;
 			object2.y = 250;
 			this.addChild(object2);
 			
-			object3 = new Button(assetManager.getTexture("badBoy"));
+			object3 = new Button(assetManager.getTexture("Djembe"));
 			object3.alignPivot();
+			object3.scale = 0.2;
 			object3.x = 288;
 			object3.y = 250;
 			this.addChild(object3);
 			
-			object4 = new Button(assetManager.getTexture("badBoy"));
+			object4 = new Button(assetManager.getTexture("laptop"));
 			object4.alignPivot();
+			object4.scale = 0.2;
 			object4.x = 384;
 			object4.y = 250;
 			this.addChild(object4);
@@ -85,22 +89,22 @@ public class ScoreMenu extends Sprite
 		private function onMainMenuClick(event:Event):void
 		{
 			
-			var buttonClicked:Button = event.target as Button;
-			if((buttonClicked as Button) == object1) {
+			var buttonPress:Button = event.target as Button;
+			if((buttonPress as Button) == object1) {
 				
-				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id: "none1"}, true));
+				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id: "none1"}, true));
 				
 			}
 			
-			if ((buttonClicked as Button ) == object2){
-				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id:"none2"}, true));
+			if ((buttonPress as Button ) == object2){
+				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none2"}, true));
 			}
 			
-			if ((buttonClicked as Button) == object3){
-				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id:"none3"}, true));
+			if ((buttonPress as Button) == object3){
+				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none3"}, true));
 			}
-			if ((buttonClicked as Button) == object4){
-				this.dispatchEvent(new NavigationEvent(NavigationEvent.CHANGE_SCREEN, {id:"none4"}, true));
+			if ((buttonPress as Button) == object4){
+				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none4"}, true));
 			}
 			
 		}

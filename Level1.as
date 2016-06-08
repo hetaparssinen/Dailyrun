@@ -145,6 +145,7 @@ public class Level1 implements GameState
                 friendsBubble.x = ( i % mapWidth ) * tileWidth;
                 friendsBubble.y = int( i / mapWidth ) * tileWidth;
             }
+			
         }
 
         //add finish
