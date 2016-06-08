@@ -55,7 +55,7 @@ public class Screen2 extends Sprite
 
 			object1 = new Button(assetManager.getTexture("Guitar"));
 			object1.alignPivot();
-			object1.scale = 0.4;
+			object1.scale = 0.3;
 			object1.x = 240;
 			object1.y = 250;
 			this.addChild(object1);
