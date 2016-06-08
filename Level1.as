@@ -1,3 +1,4 @@
+﻿<<<<<<< HEAD
 ﻿/**
  * Created by Lourens on 5-5-2016.
 */
@@ -400,14 +401,19 @@ package
 					}
 				}
 
-				//Check if finished
-				if (character.bounds.intersects(finish.bounds))
-				{
-					trace("FINISH");
-					game.removeEventListener(Event.ENTER_FRAME, update); //Doesn't work???
-				}
+				 if( character.bounds.intersects( finish.bounds ) )
+            {
+				isPlaying = false;
 
-			}
+				var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
+				game.addChild( scoreScreen );
+				
+                trace( "FINISH" );
+				
+                game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
+            }
+            
+        			}
 		}
 	}
 }
