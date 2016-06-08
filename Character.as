@@ -45,6 +45,7 @@
 		private var config: Object;
 
 		private var protectionTimer: Timer;
+		private var protectionBubble:Image;
 		
 		private var color:String;
 
@@ -113,28 +114,23 @@
 
 		public function addProtection(): void
 		{
-			trace("ADD PROTECTION");
 			protection = true;
 			protectionTimer = new Timer(config.character.protectionTime);
 			protectionTimer.start();
 			protectionTimer.addEventListener(TimerEvent.TIMER, protectionTimerHandler);
-			removeChild(mainCharacter);
-			Starling.juggler.remove(mainCharacter);
-			mainCharacter = new MovieClip(assetManager.getTextures("friendsBubble"), 12);
-			addChild(mainCharacter);
-			Starling.juggler.add(mainCharacter);
+			protectionBubble = new Image( assetManager.getTexture( "protectionBubble" ) );
+			protectionBubble.alignPivot();
+			protectionBubble.x = mainCharacter.x + mainCharacter.width / 2;
+			protectionBubble.y = mainCharacter.y + mainCharacter.height / 2;
+			addChild( protectionBubble );
+			
 		}
 
 		private function protectionTimerHandler(e: TimerEvent): void
 		{
-			trace(" TIMER HANDLER ");
 			protection = false;
 			protectionTimer.stop();
-			removeChild(mainCharacter);
-			Starling.juggler.remove(mainCharacter);
-			mainCharacter = new MovieClip(assetManager.getTextures(color + "Character"), 12);
-			addChild(mainCharacter);
-			Starling.juggler.add(mainCharacter);
+			removeChild( protectionBubble );
 		}
 
 	}
