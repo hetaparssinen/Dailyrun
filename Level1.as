@@ -1,6 +1,6 @@
 ﻿/**
  * Created by Lourens on 5-5-2016.
- */
+*/
 package
 {
 
@@ -39,8 +39,8 @@ package
 		private var character: Character;
 		private var mapTMX: TMXTileMap;
 		private var mapWidth: int;
-		private var enemies: Vector. < Enemy > ;
-		private var goodGuys: Vector. < GoodGuy > ;
+		private var enemies: Vector.< Enemy >;
+		private var goodGuys: Vector.< GoodGuy >;
 		private var collectedGoodGuys: Array;
 		private var friendsBubble: FriendsBubble;
 		private var characterChosen: Boolean;
@@ -68,7 +68,7 @@ package
 			//Set initial variables
 			isPlaying = false;
 			var mapXML: XML = XML(new exampleTMX());
-			var tilesets: Vector. < Bitmap > = new Vector. < Bitmap > ();
+			var tilesets: Vector.< Bitmap > = new Vector.< Bitmap > ();
 			tilesets.push(Bitmap(new exampleTileSet()));
 			gameSpeed = 5;
 			//score = 0;
@@ -81,8 +81,8 @@ package
 			tileWidth = mapTMX.tileWidth;
 			mapWidth = mapTMX.mapWidth;
 
-			enemies = new Vector. < Enemy > ();
-			goodGuys = new Vector. < GoodGuy > ();
+			enemies = new Vector.< Enemy > ();
+			goodGuys = new Vector.< GoodGuy > ();
 			collectedGoodGuys = new Array();
 
 			//Add background
@@ -191,8 +191,8 @@ package
 				character.x = tileWidth;
 				character.y = game.stage.stageHeight - tileWidth * 2;
 				//character.scale = 2;
-				game.addChild(character); << << << < HEAD
-				characterChosen = false; === === =
+				game.addChild(character); 
+				characterChosen = false; 
 
 				tapToJumpImg = new Image(assetManager.getTexture("tapToJump"));
 				tapToJumpImg.x = 140;
@@ -200,7 +200,7 @@ package
 				game.addChild(tapToJumpImg);
 				var tapToJumpTimer: Timer = new Timer(2000);
 				tapToJumpTimer.addEventListener(TimerEvent.TIMER, removeTapToJump);
-				tapToJumpTimer.start(); >>> >>> > tiledMap
+				tapToJumpTimer.start(); 
 			}
 			else if (isPlaying && !character.jumping && touch)
 			{
