@@ -10,6 +10,13 @@ import starling.events.TouchEvent;
 import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
+import starling.text.TextField;
+import flash.display.Sprite;
+import starling.events.Event;
+import starling.display.Image;
+import starling.display.Sprite;
+import starling.events.Event;
+import starling.textures.Texture;
 import flash.utils.Timer;
 import flash.events.TimerEvent;
 
@@ -35,6 +42,8 @@ public class Level1 implements GameState
 	private var goodGuys:Vector.<GoodGuy>;
 	private var collectedGoodGuys:Array;
 	private var friendsBubble:FriendsBubble;
+	private var score:int;
+	private var scoreText:TextField;
 	private var finish:Image;
 	private var gameSpeed:int;
 	private var background:Background;
@@ -60,6 +69,7 @@ public class Level1 implements GameState
         var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
         tilesets.push(Bitmap(new exampleTileSet()));
         gameSpeed = 5;
+        //score = 0;
 
         //Load and render map
         tilesets.push(Bitmap(new exampleTileSet()));
@@ -84,6 +94,10 @@ public class Level1 implements GameState
                 game.addChild(mapTMX.layers[i].layerSprite);
             }
         }
+
+        //add score indicator
+        scoreText = new TextField( 150, 50, "Score: " + score);
+        game.addChild(scoreText);
         
 		// Add bad boys to the screen
         for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
@@ -271,24 +285,31 @@ public class Level1 implements GameState
 			{
 				if ( character.bounds.intersects( goodGuys[i].bounds ) && !goodGuys[i].isHit ) {
 					goodGuys[i].isHit = true;
-
+					
+					score += 10;
+                    scoreText.text = "Score: " + score;
+					
 					var hittedGoodGuy = new GoodGuy( assetManager.getTexture( "goodBoy" ) );
 					hittedGoodGuy.scale = 0.5;
 					collectedGoodGuys.push( hittedGoodGuy );
 					hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
 					hittedGoodGuy.y = 30;
 					game.addChild( hittedGoodGuy );
+					
 				}
 			}
 			
 			// Check collision with friends bubble
 			if ( character.bounds.intersects( friendsBubble.bounds ) && !friendsBubble.isHit && !friendsBubble.block ) {
 				friendsBubble.isHit = true;
+				score += 20;
+                scoreText.text = "Score: " + score;
 				
 				game.removeChild( friendsBubble );
 				character.addProtection();
+				
 			}
-
+			
             var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
             var yLoc:int = ( character.y - tileWidth ) / tileWidth;
             var tileNum:int = ( yLoc * mapWidth ) + xLoc;
@@ -308,23 +329,50 @@ public class Level1 implements GameState
             //check if on ascending hill
             if( ( mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3 ) )
             {
-                if( !character.jumping ) {
+
+                if( !character.jumping )
+                {
                     var groundHeight:int = ( game.stage.stageHeight - character.y ) / tileWidth;
                     groundHeight *= tileWidth;
                     var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
                     character.y = game.stage.stageHeight - groundHeight - hillHeight;
+                }
+                else if( character.jumping )
+                {
+                    var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
+
+                    if( charTileY < charTileX )
+                            character.jumping = false;
+
                 }
             }
 
             //check if on descending hill
             if( ( mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 ) )
             {
-                if( !character.jumping ) {
+                if( !character.jumping )
+                {
                     var groundHeight:int = character.y / tileWidth;
                     groundHeight *= tileWidth;
                     var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
                     character.y = groundHeight + hillHeight;
                 }
+                else if( character.jumping )
+                {
+                    var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
+                    var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
+
+                    if( charTileY < charTileX )
+                        character.jumping = false;
+                }
+            }
+
+            //Check if finished
+            if( character.bounds.intersects( finish.bounds ) )
+            {
+                trace( "FINISH" );
+                game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
             }
 
         }
