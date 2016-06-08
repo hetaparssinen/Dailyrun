@@ -72,8 +72,8 @@ public class Screen4 extends Sprite
 			if((buttonPress as Button) == object1) 
 			{
 				trace (score);
-				var scoreScreen:Screen1 = new Screen1( assetManager, score );
-				addChild( scoreScreen );
+				//var scoreScreen:Screen1 = new Screen1( assetManager, score );
+				//addChild( scoreScreen );
 				
 			}
 			
