@@ -174,6 +174,8 @@ public class Level1 implements GameState
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
         game.addChild( levelStart );
+		/*var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
+				game.addChild( scoreScreen );*/
         
     }
 
