@@ -2,7 +2,8 @@
 	"level1":
 	{
 		"platformHeight": 3,
-		"playerX": 30
+		"playerX": 30,
+		"levelDuration": 35000
 	},
 
 	"levelStart":
@@ -14,7 +15,8 @@
 	"timer":
 	{
 		"initialValue": 3000,
-		"decreaseRate": 0.95
+		"decreaseRate": 0.95,
+		"goodGuyInitial": 10000
 	},
 	"character":
 	{

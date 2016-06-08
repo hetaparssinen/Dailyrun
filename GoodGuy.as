@@ -6,14 +6,14 @@
 	
 	public class GoodGuy extends Sprite {
 
-		private var texture:Texture;
+	    private var texture:Texture;
 		public var isHit:Boolean;
-
-		public function GoodGuy( guyTexture:Texture ) {
-			this.texture = guyTexture;
+		
+		public function GoodGuy( texture:Texture ) {
+			this.texture = texture;
 			addEventListener( Event.ADDED_TO_STAGE, initialize );
 		}
-
+		
 		private function initialize()
 		{
 			var guy:Image = new Image( texture );
