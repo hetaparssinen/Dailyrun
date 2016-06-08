@@ -50,6 +50,7 @@ package
 		private var gameSpeed: int;
 		private var background: Background;
 		private var tapToJumpImg: Image;
+		private var color: String;
 
 		public function Level1(game: GameStateManager): void
 		{
@@ -168,10 +169,11 @@ package
 			game.addChild(levelStart);
 		}
 
-		public function startPlaying()
+		public function startPlaying(color: String)
 		{
 			characterChosen = true;
 			isPlaying = true;
+			this.color=color;
 		}
 
 		private function touchEventHandler(event: TouchEvent)
@@ -186,7 +188,7 @@ package
 				game.removeChild(levelStart);
 
 				//Draw player
-				character = new Character(assetManager);
+				character = new Character(assetManager, color);
 				character.alignPivot("center", "bottom");
 				character.x = tileWidth;
 				character.y = game.stage.stageHeight - tileWidth * 2;

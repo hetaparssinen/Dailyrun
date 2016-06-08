@@ -55,7 +55,7 @@ package
 			text.y = 40;
 			addChild(text);
 			
-			//Name
+			
 			
 			
 			//Adding the characters for the choosing screen
@@ -102,27 +102,27 @@ package
 			if (clickYellow)
 			{
 				trace("You touched yellow");
-				level.startPlaying();
+				level.startPlaying("yellow");
 			}
 			else
 				if(clickBlue)
 					
 			{
 				trace("You touched blue");
-				level.startPlaying();
+				level.startPlaying("blue");
 				
 			}
 			else
 				if(clickGreen)
 				{
 					trace("You touched green");
-					level.startPlaying();
+					level.startPlaying("green");
 				}
 			else
 				if(clickPink)
 				{
 					trace("you touched pink");
-					level.startPlaying();
+					level.startPlaying("pink");
 				}
 				
 			
