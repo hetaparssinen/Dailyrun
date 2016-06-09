@@ -45,6 +45,7 @@
 		private var config: Object;
 
 		private var protectionTimer: Timer;
+		private var characterColor: String;
 
 		//var levelStart: LevelStart();
 
@@ -54,6 +55,7 @@
 
 			config = assetManager.getObject("config");
 			trace(color);
+			characterColor = color;
 
 			if (color == "yellow")
 			{
@@ -148,7 +150,26 @@
 			protectionTimer.stop();
 			removeChild(mainCharacter);
 			Starling.juggler.remove(mainCharacter);
-			mainCharacter = new MovieClip(assetManager.getTextures("yellowCharacter"), 12);
+
+			if (characterColor == "yellow")
+			{
+				mainCharacter = new MovieClip(assetManager.getTextures("yellowCharacter"), 12);
+			}
+			else
+			if (characterColor == "pink")
+			{
+				mainCharacter = new MovieClip(assetManager.getTextures("pinkCharacter"), 12);
+			}
+			else
+			if (characterColor == "blue")
+			{
+				mainCharacter = new MovieClip(assetManager.getTextures("blueCharacter"), 12);
+			}
+			else
+			if (characterColor == "green")
+			{
+				mainCharacter = new MovieClip(assetManager.getTextures("greenCharacter"), 12);
+			}
 			addChild(mainCharacter);
 			Starling.juggler.add(mainCharacter);
 		}

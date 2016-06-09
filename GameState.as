@@ -1,4 +1,4 @@
-﻿pakage
+﻿package
 {
 
 	public interface GameState
