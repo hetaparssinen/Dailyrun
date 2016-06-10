@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by Lourens on 5-5-2016.
  */
 package {
@@ -48,6 +48,7 @@ public class GoodLifeLevel implements GameState
     private var gameSpeed:int;
     private var background:Background;
     private var tapToJumpImg:Image;
+	private var color:String;
 
     public function GoodLifeLevel( game:GameStateManager ):void
     {
@@ -132,7 +133,7 @@ public class GoodLifeLevel implements GameState
         game.addEventListener( TouchEvent.TOUCH, touchEventHandler);
 
         //Place start screen
-        levelStart = new LevelStart( assetManager );
+        levelStart = new LevelStart( assetManager, this );
         levelStart.alignPivot();
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
@@ -142,7 +143,8 @@ public class GoodLifeLevel implements GameState
 
     private function touchEventHandler( event:TouchEvent )
     {
-        var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
+		levelStart.handleTouch( event );
+		var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
         var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
         if( startTouch && !isPlaying)
         {
@@ -150,7 +152,7 @@ public class GoodLifeLevel implements GameState
             game.removeChild( levelStart );
 
             //Draw player
-            character = new Character( assetManager );
+            character = new Character( assetManager, this.color );
             character.alignPivot( "center", "bottom");
             character.x = tileWidth;
             character.y = game.stage.stageHeight - tileWidth * 2;
@@ -176,6 +178,10 @@ public class GoodLifeLevel implements GameState
     public function removeTapToJump( e:TimerEvent ):void {
         game.removeChild( tapToJumpImg );
     }
+	
+	public function startPlaying( color:String ) {
+		this.color = color;
+	}
 
     public function update(deltaTime:Number)
     {
