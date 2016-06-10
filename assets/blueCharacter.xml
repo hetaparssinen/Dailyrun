@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker http://www.codeandweb.com/texturepacker-->
+<!-- $TexturePacker:SmartUpdate:a760b3800fcfeda553e14af02db8ca8d:bbf7c2825f8ce32f02896e39ffcbd7df:388a36c565c412ed224e6a1bf2ca02c8$ -->
+<TextureAtlas imagePath="blueCharacter.png" width="52" height="366">
+    <SubTexture name="blueCharacter1" x="3" y="3" width="46" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter2" x="3" y="63" width="42" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter3" x="3" y="123" width="41" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter4" x="3" y="183" width="45" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter5" x="3" y="243" width="41" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+    <SubTexture name="blueCharacter6" x="3" y="303" width="42" height="60" frameX="-8" frameY="0" frameWidth="64" frameHeight="47"/>
+</TextureAtlas>
