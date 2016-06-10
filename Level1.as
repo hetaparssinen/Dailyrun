@@ -217,6 +217,8 @@ package
 			game.removeChild(tapToJumpImg);
 		}
 
+		
+		
 		public function update(deltaTime: Number)
 		{
 			if (isPlaying)
@@ -300,11 +302,18 @@ package
 						else if (character.health <= 0)
 						{
 							isPlaying = false;
-							var gameOver: GameOver = new GameOver(assetManager.getTexture("gameOver"));
+							var gameOver: GameOver = new GameOver(assetManager);
 							gameOver.alignPivot();
 							gameOver.x = game.stage.stageWidth / 2;
 							gameOver.y = game.stage.stageHeight / 2;
+							
+							
 							game.addChild(gameOver);
+							
+							
+							
+							
+							
 							break;
 						}
 					}
@@ -411,8 +420,12 @@ package
 				
                 game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
             }
+			
+		
             
         			}
+					
+			
 		}
 	}
 }
