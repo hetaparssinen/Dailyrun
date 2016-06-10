@@ -50,7 +50,7 @@ package
 		private var gameSpeed: int;
 		private var background: Background;
 		private var tapToJumpImg: Image;
-		private var color: String;
+		private var color:String;
 
 		public function Level1(game: GameStateManager): void
 		{
@@ -178,7 +178,7 @@ package
 
 		private function touchEventHandler(event: TouchEvent)
 		{
-			levelStart.handleTouch(event);
+			levelStart.handleTouch(evenƒt);
 			//var startTouch:Touch;
 			var startTouch: Touch = event.getTouch(levelStart, TouchPhase.BEGAN);
 			var touch: Touch = event.getTouch(game.stage, TouchPhase.BEGAN);

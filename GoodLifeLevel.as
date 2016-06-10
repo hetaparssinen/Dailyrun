@@ -4,6 +4,9 @@
 package {
 
 import flash.display.Bitmap;
+import flash.net.SharedObject;
+import flash.trace.Trace;
+
 import starling.display.Image;
 import starling.events.Touch;
 import starling.events.TouchEvent;
@@ -48,6 +51,9 @@ public class GoodLifeLevel implements GameState
     private var gameSpeed:int;
     private var background:Background;
     private var tapToJumpImg:Image;
+    public var saveDataObject:SharedObject;
+    public var boughtItems:Array;
+    public var foundItems:Vector.<Image>;
 
     public function GoodLifeLevel( game:GameStateManager ):void
     {
@@ -60,6 +66,11 @@ public class GoodLifeLevel implements GameState
 
     private function initialize():void
     {
+        //get bought items from savedata and store them in the boughtItems array
+        saveDataObject = SharedObject.getLocal( "dailyRun" );
+        boughtItems = new Array();
+        boughtItems = saveDataObject.data.boughtItems;
+
         //Get JSON file for settings
         config = assetManager.getObject( "config" );
 
@@ -69,6 +80,7 @@ public class GoodLifeLevel implements GameState
         var tilesets:Vector.<Bitmap> = new Vector.<Bitmap>();
         tilesets.push(Bitmap(new exampleTileSet()));
         gameSpeed = 5;
+        foundItems = new Vector.<Image>;
 
         //Load and render map
         tilesets.push(Bitmap(new exampleTileSet()));
@@ -97,17 +109,19 @@ public class GoodLifeLevel implements GameState
         game.addChild(scoreText);
 
         //add good life items
+        var itemCreationCount:int = 0;
+
         for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
         {
             if( mapTMX.layers[1].layerData[i] == 1 )
             {
-                var item:Image = new Image( assetManager.getTexture( "Guitar") );
-                item.alignPivot( "left", "center");
-                item.x = ( i % mapWidth ) * tileWidth;
-                item.y = ( i / mapWidth ) * tileWidth;
+                var item:Image = new Image( assetManager.getTexture( boughtItems[ itemCreationCount % boughtItems.length ]) );
                 item.scale = ( tileWidth / item.height );
+                item.x = ( i % mapWidth ) * tileWidth;
+                item.y = int( i / mapWidth ) * tileWidth;
                 game.addChild(item);
                 goodLifeItems.push( item );
+                itemCreationCount++;
             }
         }
 
@@ -132,7 +146,7 @@ public class GoodLifeLevel implements GameState
         game.addEventListener( TouchEvent.TOUCH, touchEventHandler);
 
         //Place start screen
-        levelStart = new LevelStart( assetManager );
+        levelStart = new LevelStart( assetManager, this );
         levelStart.alignPivot();
         levelStart.x = config.levelStart.marginX / 2;
         levelStart.y = config.levelStart.marginY / 2;
@@ -150,7 +164,7 @@ public class GoodLifeLevel implements GameState
             game.removeChild( levelStart );
 
             //Draw player
-            character = new Character( assetManager );
+            character = new Character( assetManager, "green" );
             character.alignPivot( "center", "bottom");
             character.x = tileWidth;
             character.y = game.stage.stageHeight - tileWidth * 2;
@@ -221,6 +235,18 @@ public class GoodLifeLevel implements GameState
                     character.velocity.y = 0;
                 }
 
+                //Check collision with items
+                for( var i:int = goodLifeItems.length - 1; i >= 0; i-- )
+                {
+                    if( character.bounds.intersects( goodLifeItems[i].bounds ) )
+                    {
+                        game.removeChild( goodLifeItems[i] );
+                        foundItems.push( goodLifeItems[i] );
+                        goodLifeItems.splice( i, 1 );
+                        trace("Item hit®")
+                    }
+                }
+
                 //check if on ascending hill
                 if (( mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3 )) {
 
@@ -276,6 +302,11 @@ public class GoodLifeLevel implements GameState
             }
 
         }
+    }
+
+    public function startPlaying(color:String)
+    {
+
     }
 }
 }
