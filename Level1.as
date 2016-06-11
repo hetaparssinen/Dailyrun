@@ -178,7 +178,7 @@ package
 
 		private function touchEventHandler(event: TouchEvent)
 		{
-			levelStart.handleTouch(evenƒt);
+			levelStart.handleTouch(event);
 			//var startTouch:Touch;
 			var startTouch: Touch = event.getTouch(levelStart, TouchPhase.BEGAN);
 			var touch: Touch = event.getTouch(game.stage, TouchPhase.BEGAN);

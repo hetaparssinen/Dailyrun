@@ -5,26 +5,16 @@ package {
 
 import flash.display.Bitmap;
 import flash.net.SharedObject;
-import flash.trace.Trace;
-
-import starling.display.Image;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
 import starling.extensions.tmxmaps.TMXTileMap;
 import starling.utils.AssetManager;
 import starling.text.TextField;
-import flash.display.Sprite;
-import starling.events.Event;
 import starling.display.Image;
-import starling.display.Sprite;
 import starling.events.Event;
-import starling.textures.Texture;
 import flash.utils.Timer;
 import flash.events.TimerEvent;
-import starling.display.Button;
-
-
 
 public class GoodLifeLevel implements GameState
 {
@@ -54,6 +44,8 @@ public class GoodLifeLevel implements GameState
     public var saveDataObject:SharedObject;
     public var boughtItems:Array;
     public var foundItems:Vector.<Image>;
+    private var characterChosen:Boolean;
+    private var color:String;
 
     public function GoodLifeLevel( game:GameStateManager ):void
     {
@@ -81,6 +73,7 @@ public class GoodLifeLevel implements GameState
         tilesets.push(Bitmap(new exampleTileSet()));
         gameSpeed = 5;
         foundItems = new Vector.<Image>;
+        characterChosen = false;
 
         //Load and render map
         tilesets.push(Bitmap(new exampleTileSet()));
@@ -154,32 +147,42 @@ public class GoodLifeLevel implements GameState
 
     }
 
-    private function touchEventHandler( event:TouchEvent )
+    public function startPlaying(color: String)
     {
-        var startTouch:Touch = event.getTouch( levelStart, TouchPhase.BEGAN );
-        var touch:Touch = event.getTouch( game.stage, TouchPhase.BEGAN );
-        if( startTouch && !isPlaying)
+        characterChosen = true;
+        isPlaying = true;
+        this.color=color;
+    }
+
+    private function touchEventHandler(event: TouchEvent)
+    {
+        levelStart.handleTouch(event);
+        //var startTouch:Touch;
+        var startTouch: Touch = event.getTouch(levelStart, TouchPhase.BEGAN);
+        var touch: Touch = event.getTouch(game.stage, TouchPhase.BEGAN);
+        if (characterChosen)
         {
             isPlaying = true;
-            game.removeChild( levelStart );
+            game.removeChild(levelStart);
 
             //Draw player
-            character = new Character( assetManager, "green" );
-            character.alignPivot( "center", "bottom");
+            character = new Character(assetManager, color);
+            character.alignPivot("center", "bottom");
             character.x = tileWidth;
             character.y = game.stage.stageHeight - tileWidth * 2;
             //character.scale = 2;
-            game.addChild( character );
+            game.addChild(character);
+            characterChosen = false;
 
-            tapToJumpImg = new Image( assetManager.getTexture( "tapToJump" ) );
+            tapToJumpImg = new Image(assetManager.getTexture("tapToJump"));
             tapToJumpImg.x = 140;
             tapToJumpImg.y = 20;
-            game.addChild( tapToJumpImg );
-            var tapToJumpTimer:Timer = new Timer( 2000 );
-            tapToJumpTimer.addEventListener( TimerEvent.TIMER, removeTapToJump );
+            game.addChild(tapToJumpImg);
+            var tapToJumpTimer: Timer = new Timer(2000);
+            tapToJumpTimer.addEventListener(TimerEvent.TIMER, removeTapToJump);
             tapToJumpTimer.start();
         }
-        else if ( isPlaying && !character.jumping && touch )
+        else if (isPlaying && !character.jumping && touch)
         {
             character.jumping = true;
             character.velocity.y = -100;
@@ -302,11 +305,6 @@ public class GoodLifeLevel implements GameState
             }
 
         }
-    }
-
-    public function startPlaying(color:String)
-    {
-
     }
 }
 }
