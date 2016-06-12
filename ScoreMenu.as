@@ -142,19 +142,7 @@ public class ScoreMenu extends Sprite
 				trace (score);
 				if (score >= 10)
 				{
-					this.removeChild(object1);
-					this.removeChild(object2);
-					this.removeChild(object3);
-					this.removeChild(object4);
-					this.removeChild(object1);
-					this.removeChild(object1);
-					this.removeChild(explanation);
-					this.removeChild( text );
-					this.removeChild( scoreText );
-					this.removeChild(scoreBike);
-					this.removeChild(scoreGuitar);
-					this.removeChild(scoreDjembe );
-					this.removeChild(scorelaptop );
+					removeContent();
 					
 					savedData.push( "Bike" );
 					game.saveDataObject.data.boughtItems = savedData;
@@ -171,19 +159,7 @@ public class ScoreMenu extends Sprite
 				trace (score);
 				if (score >= 20)
 				{
-					this.removeChild(object1);
-					this.removeChild(object2);
-					this.removeChild(object3);
-					this.removeChild(object4);
-					this.removeChild(object1);
-					this.removeChild(object1);
-					this.removeChild(explanation);
-					this.removeChild( text );
-					this.removeChild( scoreText );
-					this.removeChild(scoreBike);
-					this.removeChild(scoreGuitar);
-					this.removeChild(scoreDjembe );
-					this.removeChild(scorelaptop );
+					removeContent();
 					
 					savedData.push( "Guitar" );
 					game.saveDataObject.data.boughtItems = savedData;
@@ -198,19 +174,7 @@ public class ScoreMenu extends Sprite
 				trace (score);
 				if (score >= 30)
 				{
-					this.removeChild(object1);
-					this.removeChild(object2);
-					this.removeChild(object3);
-					this.removeChild(object4);
-					this.removeChild(object1);
-					this.removeChild(object1);
-					this.removeChild(explanation);
-					this.removeChild( text );
-					this.removeChild( scoreText );
-					this.removeChild(scoreBike);
-					this.removeChild(scoreGuitar);
-					this.removeChild(scoreDjembe );
-					this.removeChild(scorelaptop );
+					removeContent();
 					
 					savedData.push( "Djembe" );
 					game.saveDataObject.data.boughtItems = savedData;
@@ -224,19 +188,7 @@ public class ScoreMenu extends Sprite
 				trace (score);
 				if (score >= 40)
 				{
-					this.removeChild(object1);
-					this.removeChild(object2);
-					this.removeChild(object3);
-					this.removeChild(object4);
-					this.removeChild(object1);
-					this.removeChild(object1);
-					this.removeChild(explanation);
-					this.removeChild( text );
-					this.removeChild( scoreText );
-					this.removeChild(scoreBike);
-					this.removeChild(scoreGuitar);
-					this.removeChild(scoreDjembe );
-					this.removeChild(scorelaptop );
+					removeContent();
 					
 					savedData.push( "laptop" );
 					game.saveDataObject.data.boughtItems = savedData;
@@ -245,6 +197,15 @@ public class ScoreMenu extends Sprite
 					addChild( screen4);
 				}
 			}
+		}
+		
+		private function removeContent() {
+			while ( this.numChildren > 0 ) {
+				this.removeChildAt( 0 );
+			}
+			var background:Quad = new Quad( stageWidth, stageHeight, 123456 );
+			background.alpha = 0.9;
+			addChild( background );
 		}
 	}
 }
