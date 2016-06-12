@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by Lourens on 5-5-2016.
  */
 package {
@@ -108,13 +108,15 @@ public class GoodLifeLevel implements GameState
         {
             if( mapTMX.layers[1].layerData[i] == 1 )
             {
-                var item:Image = new Image( assetManager.getTexture( boughtItems[ itemCreationCount % boughtItems.length ]) );
-                item.scale = ( tileWidth / item.height );
-                item.x = ( i % mapWidth ) * tileWidth;
-                item.y = int( i / mapWidth ) * tileWidth;
-                game.addChild(item);
-                goodLifeItems.push( item );
-                itemCreationCount++;
+				if ( boughtItems != null ) {
+					var item:Image = new Image( assetManager.getTexture( boughtItems[ itemCreationCount % boughtItems.length ]) );
+					item.scale = ( tileWidth / item.height );
+					item.x = ( i % mapWidth ) * tileWidth;
+					item.y = int( i / mapWidth ) * tileWidth;
+					game.addChild(item);
+					goodLifeItems.push( item );
+					itemCreationCount++;
+				}
             }
         }
 
