@@ -130,6 +130,7 @@
 		{
 			protection = false;
 			protectionTimer.stop();
+			mainCharacter = new MovieClip(assetManager.getTextures(color + "Character"), 12);
 			removeChild( protectionBubble );
 		}
 

@@ -3,7 +3,7 @@
 	import starling.events.Event;
 	import starling.utils.AssetManager;
 	import starling.events.TouchEvent;
-
+	import flash.net.SharedObject;
 	
 	/*
 	* This class manages the state of the game, such as the Main Menu Screen, High Score Screen,
@@ -16,6 +16,7 @@
 		private var currentGameState:GameState;
 		private var lastUpdate:int;
 		private var assetManager:AssetManager;
+		public var saveDataObject:SharedObject;
 		
 		/*
 		* This function sets the assetmanager and checks if the class is being added to the stage.
@@ -25,6 +26,7 @@
 		public function GameStateManager( assetManager:AssetManager ):void
 		{
 			this.assetManager = assetManager;
+			saveDataObject = SharedObject.getLocal( "dailyRun" );
 			addEventListener( Event.ADDED_TO_STAGE, initialize );
 		}
 
@@ -40,7 +42,7 @@
 		*/
 		private function initialize():void
 		{
-			setGameState( Level1 );
+			var mainMenu:MainMenu = new MainMenu( this );
 			addEventListener( Event.ENTER_FRAME, update );
 		}
 		
@@ -64,7 +66,9 @@
 			var currentTime:int = new Date().getTime();
 			var deltaTime:Number = ( currentTime - lastUpdate ) / 1000;
 			
-			currentGameState.update( deltaTime );
+			if ( currentGameState ) {
+				currentGameState.update( deltaTime );
+			}
 			
 			lastUpdate = currentTime;
 		}
