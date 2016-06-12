@@ -42,7 +42,7 @@
 		*/
 		private function initialize():void
 		{
-			setGameState( GoodLifeLevel );
+			var mainMenu:MainMenu = new MainMenu( this );
 			addEventListener( Event.ENTER_FRAME, update );
 		}
 		
@@ -66,7 +66,9 @@
 			var currentTime:int = new Date().getTime();
 			var deltaTime:Number = ( currentTime - lastUpdate ) / 1000;
 			
-			currentGameState.update( deltaTime );
+			if ( currentGameState ) {
+				currentGameState.update( deltaTime );
+			}
 			
 			lastUpdate = currentTime;
 		}

@@ -41,7 +41,7 @@ public class GoodLifeLevel implements GameState
     private var gameSpeed:int;
     private var background:Background;
     private var tapToJumpImg:Image;
-    public var saveDataObject:SharedObject;
+    //public var saveDataObject:SharedObject;
     public var boughtItems:Array;
     public var foundItems:Vector.<Image>;
     private var characterChosen:Boolean;
@@ -59,9 +59,10 @@ public class GoodLifeLevel implements GameState
     private function initialize():void
     {
         //get bought items from savedata and store them in the boughtItems array
-        saveDataObject = SharedObject.getLocal( "dailyRun" );
+        //saveDataObject = SharedObject.getLocal( "dailyRun" );
         boughtItems = new Array();
-        boughtItems = saveDataObject.data.boughtItems;
+        boughtItems = game.saveDataObject.data.boughtItems;
+		trace(boughtItems);
 
         //Get JSON file for settings
         config = assetManager.getObject( "config" );
@@ -162,14 +163,15 @@ public class GoodLifeLevel implements GameState
         //var startTouch:Touch;
         var startTouch: Touch = event.getTouch(levelStart, TouchPhase.BEGAN);
         var touch: Touch = event.getTouch(game.stage, TouchPhase.BEGAN);
+		
         if (characterChosen)
         {
-            isPlaying = true;
+            //isPlaying = true;
             game.removeChild(levelStart);
 
             //Draw player
-            character = new Character(assetManager, color);
-            character.alignPivot("center", "bottom");
+            character = new Character( assetManager, this.color );
+            character.alignPivot( "center", "bottom");
             character.x = tileWidth;
             character.y = game.stage.stageHeight - tileWidth * 2;
             //character.scale = 2;
@@ -298,7 +300,7 @@ public class GoodLifeLevel implements GameState
             {
                 isPlaying = false;
 
-                var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
+                var scoreScreen:ScoreMenu = new ScoreMenu( game, assetManager, score );
                 game.addChild( scoreScreen );
 
                 trace( "FINISH" );

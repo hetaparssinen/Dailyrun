@@ -1,10 +1,11 @@
-﻿package  {
-import starling.display.Quad;
-import starling.display.Sprite;
+﻿﻿package  
+{
+	import starling.display.Quad;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.display.Button;
-import starling.text.TextField;
-import starling.utils.AssetManager;
+	import starling.text.TextField;
+	import starling.utils.AssetManager;
 
 public class ScoreMenu extends Sprite
 	{
@@ -17,6 +18,13 @@ public class ScoreMenu extends Sprite
 		private var score:int;
 		private var stageWidth;
 		private var stageHeight;
+		private var explanation;
+		private var text;
+		private var scoreText;
+		private var scoreBike;
+		private var scoreGuitar;
+		private var scoreDjembe;
+		private var scorelaptop;
 		
 		public function ScoreMenu( assetManager:AssetManager, stageWidth:int, stageHeight:int, score:int )
 		{
@@ -36,29 +44,54 @@ public class ScoreMenu extends Sprite
 			background.alpha = 0.9;
 			addChild( background );
 
-			var text:TextField = new TextField( 300, 100, "Well done!", "Verdana", 30, 0, true );
+			text = new TextField( 300, 100, "Well done!", "Verdana", 30, 0, true );
 			text.alignPivot();
 			text.x = stageWidth / 2;
 			text.y = 50;
 			addChild( text );
 
-			var scoreText:TextField = new TextField( 300, 100, "Score: " + score, "Verdana", 20 );
+			scoreText = new TextField( 300, 100, "Score: " + score, "Verdana", 20 );
 			scoreText.alignPivot();
 			scoreText.x = stageWidth / 2;
 			scoreText.y = 110;
 			addChild( scoreText );
-
-			var explanation:TextField = new TextField( 300, 100, "Spend your points to buy some of the following items:",
+			
+			explanation = new TextField( 300, 100, "Spend your points to buy some of the following items:",
 			"Verdana", 17);
 			explanation.alignPivot();
 			explanation.x = stageWidth / 2;
-			explanation.y = 175;
+			explanation.y = 160;
 			addChild( explanation );
+			
+			scoreBike = new TextField( 300, 100, "You need 10", "Verdana", 10 );
+			scoreBike.alignPivot();
+			scoreBike.x = 75;
+			scoreBike.y = 200;
+			addChild( scoreBike );
+			
+			scoreGuitar = new TextField( 300, 100, "You need 20", "Verdana", 10 );
+			scoreGuitar.alignPivot();
+			scoreGuitar.x = 190;
+			scoreGuitar.y = 200;
+			addChild( scoreGuitar );
+			
+			scoreDjembe = new TextField( 300, 100, "You need 30", "Verdana", 10 );
+			scoreDjembe.alignPivot();
+			scoreDjembe.x = 290;
+			scoreDjembe.y = 200;
+			addChild( scoreDjembe );
+			
+			scorelaptop = new TextField( 300, 100, "You need 40", "Verdana", 10 );
+			scorelaptop.alignPivot();
+			scorelaptop.x = 400;
+			scorelaptop.y = 200;
+			addChild( scorelaptop );
+			
 
 			object1 = new Button(assetManager.getTexture("Bike"));
 			object1.alignPivot();
 			object1.scale = 0.2;
-			object1.x = 96;
+			object1.x = 80;
 			object1.y = 250;
 			this.addChild(object1);
 			
@@ -86,29 +119,107 @@ public class ScoreMenu extends Sprite
 			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
 		}
 		
+		
 		private function onMainMenuClick(event:Event):void
 		{
 			
 			var buttonPress:Button = event.target as Button;
-			if((buttonPress as Button) == object1) {
-				
-				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id: "none1"}, true));
-				
-			}
-			
-			if ((buttonPress as Button ) == object2){
-				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none2"}, true));
-			}
-			
-			if ((buttonPress as Button) == object3){
-				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none3"}, true));
-			}
-			if ((buttonPress as Button) == object4){
-				this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none4"}, true));
-			}
-			
-		}
+			if((buttonPress as Button) == object1) 
+			{
+				trace (score);
+				if (score >= 10)
+				{
+					this.removeChild(object1);
+					this.removeChild(object2);
+					this.removeChild(object3);
+					this.removeChild(object4);
+					this.removeChild(object1);
+					this.removeChild(object1);
+					this.removeChild(explanation);
+					this.removeChild( text );
+					this.removeChild( scoreText );
+					this.removeChild(scoreBike);
+					this.removeChild(scoreGuitar);
+					this.removeChild(scoreDjembe );
+					this.removeChild(scorelaptop );
 		
+					var screen1:Screen1 = new Screen1( assetManager, score );
+					addChild( screen1 );
+				}
+					//this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none2"}, true));
+			
+			}
+			
+			if ((buttonPress as Button ) == object2)
+				{
+				trace (score);
+				if (score >= 20)
+				{
+					this.removeChild(object1);
+					this.removeChild(object2);
+					this.removeChild(object3);
+					this.removeChild(object4);
+					this.removeChild(object1);
+					this.removeChild(object1);
+					this.removeChild(explanation);
+					this.removeChild( text );
+					this.removeChild( scoreText );
+					this.removeChild(scoreBike);
+					this.removeChild(scoreGuitar);
+					this.removeChild(scoreDjembe );
+					this.removeChild(scorelaptop );
+		
+					var screen2:Screen2 = new Screen2 (assetManager, score );
+					addChild( screen2 );
+				}
+			}
+			
+			if ((buttonPress as Button) == object3)
+				{
+				trace (score);
+				if (score >= 30)
+				{
+					this.removeChild(object1);
+					this.removeChild(object2);
+					this.removeChild(object3);
+					this.removeChild(object4);
+					this.removeChild(object1);
+					this.removeChild(object1);
+					this.removeChild(explanation);
+					this.removeChild( text );
+					this.removeChild( scoreText );
+					this.removeChild(scoreBike);
+					this.removeChild(scoreGuitar);
+					this.removeChild(scoreDjembe );
+					this.removeChild(scorelaptop );
+		
+					var screen3:Screen3 = new Screen3 (assetManager, score );
+					addChild( screen3 );
+				}
+			}
+			if ((buttonPress as Button) == object4)
+				{
+				trace (score);
+				if (score >= 40)
+				{
+					this.removeChild(object1);
+					this.removeChild(object2);
+					this.removeChild(object3);
+					this.removeChild(object4);
+					this.removeChild(object1);
+					this.removeChild(object1);
+					this.removeChild(explanation);
+					this.removeChild( text );
+					this.removeChild( scoreText );
+					this.removeChild(scoreBike);
+					this.removeChild(scoreGuitar);
+					this.removeChild(scoreDjembe );
+					this.removeChild(scorelaptop );
+		
+					var screen4:Screen4 = new Screen4(assetManager, score );
+					addChild( screen4);
+				}
+			}
+		}
 	}
-	
 }
