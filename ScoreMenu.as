@@ -10,7 +10,8 @@
 public class ScoreMenu extends Sprite
 	{
 
-		private var assetManager:AssetManager
+		private var assetManager:AssetManager;
+		private var game:GameStateManager;
 		private var object1:Button;
 		private var object2:Button;
 		private var object3:Button;
@@ -25,14 +26,26 @@ public class ScoreMenu extends Sprite
 		private var scoreGuitar;
 		private var scoreDjembe;
 		private var scorelaptop;
+		private var savedData:Array;
 		
-		public function ScoreMenu( assetManager:AssetManager, stageWidth:int, stageHeight:int, score:int )
+		public function ScoreMenu( game:GameStateManager, assetManager:AssetManager, score:int )
 		{
-			this.assetManager = assetManager
-			this.stageWidth = stageWidth;
-			this.stageHeight = stageHeight;
+			this.assetManager = assetManager;
+			this.game = game;
+			initializeBoughtItems();
+			trace(savedData);
+			this.stageWidth = game.stage.stageWidth;
+			this.stageHeight = game.stage.stageHeight;
 			this.score = score;
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, Add);
+		}
+		
+		private function initializeBoughtItems():void {
+			if ( this.game.saveDataObject.data.boughtItems != null ) {
+				savedData = this.game.saveDataObject.data.boughtItems;
+			} else {
+				savedData = new Array();
+			}
 		}
 		
 		private function Add(event:Event):void {
@@ -142,6 +155,9 @@ public class ScoreMenu extends Sprite
 					this.removeChild(scoreGuitar);
 					this.removeChild(scoreDjembe );
 					this.removeChild(scorelaptop );
+					
+					savedData.push( "Bike" );
+					game.saveDataObject.data.boughtItems = savedData;
 		
 					var screen1:Screen1 = new Screen1( assetManager, score );
 					addChild( screen1 );
@@ -168,6 +184,9 @@ public class ScoreMenu extends Sprite
 					this.removeChild(scoreGuitar);
 					this.removeChild(scoreDjembe );
 					this.removeChild(scorelaptop );
+					
+					savedData.push( "Guitar" );
+					game.saveDataObject.data.boughtItems = savedData;
 		
 					var screen2:Screen2 = new Screen2 (assetManager, score );
 					addChild( screen2 );
@@ -192,6 +211,9 @@ public class ScoreMenu extends Sprite
 					this.removeChild(scoreGuitar);
 					this.removeChild(scoreDjembe );
 					this.removeChild(scorelaptop );
+					
+					savedData.push( "Djembe" );
+					game.saveDataObject.data.boughtItems = savedData;
 		
 					var screen3:Screen3 = new Screen3 (assetManager, score );
 					addChild( screen3 );
@@ -215,6 +237,9 @@ public class ScoreMenu extends Sprite
 					this.removeChild(scoreGuitar);
 					this.removeChild(scoreDjembe );
 					this.removeChild(scorelaptop );
+					
+					savedData.push( "laptop" );
+					game.saveDataObject.data.boughtItems = savedData;
 		
 					var screen4:Screen4 = new Screen4(assetManager, score );
 					addChild( screen4);

@@ -413,7 +413,7 @@ package
 				{
 					isPlaying = false;
 
-					var scoreScreen:ScoreMenu = new ScoreMenu( assetManager, game.stage.stageWidth, game.stage.stageHeight, score );
+					var scoreScreen:ScoreMenu = new ScoreMenu( game, assetManager, score );
 					game.addChild( scoreScreen );
 					
 					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
