@@ -302,7 +302,7 @@ package
 						else if (character.health <= 0)
 						{
 							isPlaying = false;
-							var gameOver: GameOver = new GameOver(assetManager);
+							var gameOver: GameOver = new GameOver( assetManager, game );
 							gameOver.alignPivot();
 							gameOver.x = game.stage.stageWidth / 2;
 							gameOver.y = game.stage.stageHeight / 2;
