@@ -12,10 +12,10 @@ public class ScoreMenu extends Sprite
 
 		private var assetManager:AssetManager;
 		private var game:GameStateManager;
-		private var object1:Button;
-		private var object2:Button;
-		private var object3:Button;
-		private var object4:Button;
+		private var bikeButton:Button;
+		private var guitarButton:Button;
+		private var djembeButton:Button;
+		private var laptopButton:Button;
 		private var score:int;
 		private var stageWidth;
 		private var stageHeight;
@@ -27,6 +27,7 @@ public class ScoreMenu extends Sprite
 		private var scoreDjembe;
 		private var scorelaptop;
 		private var savedData:Array;
+		private var objects:Array;
 		
 		public function ScoreMenu( game:GameStateManager, assetManager:AssetManager, score:int )
 		{
@@ -37,7 +38,7 @@ public class ScoreMenu extends Sprite
 			this.stageWidth = game.stage.stageWidth;
 			this.stageHeight = game.stage.stageHeight;
 			this.score = score;
-			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, Add);
+			this.addEventListener(Event.ADDED_TO_STAGE, Add);
 		}
 		
 		private function initializeBoughtItems():void {
@@ -76,126 +77,45 @@ public class ScoreMenu extends Sprite
 			explanation.y = 160;
 			addChild( explanation );
 			
-			scoreBike = new TextField( 300, 100, "You need 10", "Verdana", 10 );
-			scoreBike.alignPivot();
-			scoreBike.x = 75;
-			scoreBike.y = 200;
-			addChild( scoreBike );
-			
-			scoreGuitar = new TextField( 300, 100, "You need 20", "Verdana", 10 );
-			scoreGuitar.alignPivot();
-			scoreGuitar.x = 190;
-			scoreGuitar.y = 200;
-			addChild( scoreGuitar );
-			
-			scoreDjembe = new TextField( 300, 100, "You need 30", "Verdana", 10 );
-			scoreDjembe.alignPivot();
-			scoreDjembe.x = 290;
-			scoreDjembe.y = 200;
-			addChild( scoreDjembe );
-			
-			scorelaptop = new TextField( 300, 100, "You need 40", "Verdana", 10 );
-			scorelaptop.alignPivot();
-			scorelaptop.x = 400;
-			scorelaptop.y = 200;
-			addChild( scorelaptop );
-			
+			bikeButton = new Button(assetManager.getTexture("bike"));
+			guitarButton = new Button(assetManager.getTexture("guitar"));
+			djembeButton = new Button(assetManager.getTexture("djembe"));
+			laptopButton = new Button(assetManager.getTexture("laptop"));
 
-			object1 = new Button(assetManager.getTexture("Bike"));
-			object1.alignPivot();
-			object1.scale = 0.2;
-			object1.x = 80;
-			object1.y = 250;
-			this.addChild(object1);
+			objects = new Array(bikeButton, guitarButton, djembeButton, laptopButton);
 			
-			object2 = new Button(assetManager.getTexture("Guitar"));
-			object2.alignPivot();
-			object2.scale = 0.2;
-			object2.x = 192;
-			object2.y = 250;
-			this.addChild(object2);
-			
-			object3 = new Button(assetManager.getTexture("Djembe"));
-			object3.alignPivot();
-			object3.scale = 0.2;
-			object3.x = 288;
-			object3.y = 250;
-			this.addChild(object3);
-			
-			object4 = new Button(assetManager.getTexture("laptop"));
-			object4.alignPivot();
-			object4.scale = 0.2;
-			object4.x = 384;
-			object4.y = 250;
-			this.addChild(object4);
+			for ( var i:int = 0; i < objects.length; i++) {
+				var scoreText:TextField = new TextField( 300, 100, "You need " + (i + 1) + "0" , "Verdana", 10 );
+				scoreText.alignPivot("center", "top");
+				scoreText.height = 20;
+				scoreText.y = 190;
+				scoreText.x = this.game.stage.stageWidth / (objects.length + 1) + i * ( this.game.stage.stageWidth / (objects.length + 1) );
+				this.addChild( scoreText );
+				objects[i].alignPivot();
+				objects[i].scale = 0.2;
+				objects[i].y = 250;
+				objects[i].x = this.game.stage.stageWidth / (objects.length + 1) + i * ( this.game.stage.stageWidth / (objects.length + 1) );
+				this.addChild( objects[i] );
+			}
 			
 			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
-		}
-		
+		}		
 		
 		private function onMainMenuClick(event:Event):void
 		{
-			
 			var buttonPress:Button = event.target as Button;
-			if((buttonPress as Button) == object1) 
-			{
-				trace (score);
-				if (score >= 10)
-				{
-					removeContent();
-					
-					savedData.push( "Bike" );
-					game.saveDataObject.data.boughtItems = savedData;
-		
-					var screen1:Screen1 = new Screen1( assetManager, score );
-					addChild( screen1 );
-				}
-					//this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id:"none2"}, true));
-			
-			}
-			
-			if ((buttonPress as Button ) == object2)
-				{
-				trace (score);
-				if (score >= 20)
-				{
-					removeContent();
-					
-					savedData.push( "Guitar" );
-					game.saveDataObject.data.boughtItems = savedData;
-		
-					var screen2:Screen2 = new Screen2 (assetManager, score );
-					addChild( screen2 );
-				}
-			}
-			
-			if ((buttonPress as Button) == object3)
-				{
-				trace (score);
-				if (score >= 30)
-				{
-					removeContent();
-					
-					savedData.push( "Djembe" );
-					game.saveDataObject.data.boughtItems = savedData;
-		
-					var screen3:Screen3 = new Screen3 (assetManager, score );
-					addChild( screen3 );
-				}
-			}
-			if ((buttonPress as Button) == object4)
-				{
-				trace (score);
-				if (score >= 40)
-				{
-					removeContent();
-					
-					savedData.push( "laptop" );
-					game.saveDataObject.data.boughtItems = savedData;
-		
-					var screen4:Screen4 = new Screen4(assetManager, score );
-					addChild( screen4);
-				}
+			if ( buttonPress == bikeButton && score >= 10 ) {
+				removeContent();
+				pushData("bike");
+			} else if ( buttonPress == guitarButton && score >= 20 ) {
+				removeContent();
+				pushData("guitar");
+			} else if ( buttonPress == djembeButton && score >= 30 ) {
+				removeContent();
+				pushData("djembe");
+			} else if ( buttonPress == laptopButton && score >= 40 ) {
+				removeContent();
+				pushData("laptop");
 			}
 		}
 		
@@ -206,6 +126,14 @@ public class ScoreMenu extends Sprite
 			var background:Quad = new Quad( stageWidth, stageHeight, 123456 );
 			background.alpha = 0.9;
 			addChild( background );
+		}
+		
+		private function pushData( object:String ) {
+			savedData.push( object );
+			game.saveDataObject.data.boughtItems = savedData;
+
+			var continueScreen:ContinueScreen= new ContinueScreen( assetManager, score, object );
+			addChild( continueScreen );
 		}
 	}
 }
