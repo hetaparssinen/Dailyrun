@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
+ <tileset firstgid="1" name="sprites" tilewidth="64" tileheight="64" tilecount="4" columns="2">
+  <image source="sprites.png" width="128" height="128"/>
+ </tileset>
+ <layer name="Floor" width="100" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDDfADMSMUIyNTy3zmch0z0ABZHcgux+XODY5UvyNSz8yJlYPLjtxmU+senLdz0TAX6OY/hgAQ+sAwA==
+  </data>
+ </layer>
+ <layer name="Enemies" width="100" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjALyAeNAOwAJkOMWXHoImcWIg00OIEU/vcJ7MMXrKCAOAAAfEAAK
+  </data>
+ </layer>
+ <layer name="GoodBoys" width="100" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUDGfAONAOGEFgqIb1UHX3KEAFABAEAAQ=
+  </data>
+ </layer>
+ <layer name="FriendsBubble" width="100" height="5" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAuYKSyeaNgFIyCUTAKRsEoIAwAD1AAAg==
+  </data>
+ </layer>
+ <layer name="Finish" width="100" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjILBCxgH2gGjYBQMEQAACvwAAg==
+  </data>
+ </layer>
+</map>
