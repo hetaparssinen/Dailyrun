@@ -300,8 +300,7 @@ public class GoodLifeLevel implements GameState
             {
                 isPlaying = false;
 
-                var scoreScreen:ScoreMenu = new ScoreMenu( game, assetManager, score );
-                game.addChild( scoreScreen );
+                var endScreen:LifeScreen = new LifeScreen( game, foundItems );
 
                 trace( "FINISH" );
 
