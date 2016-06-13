@@ -6,6 +6,7 @@ import flash.net.drm.AddToDeviceGroupSetting;
 import starling.textures.Texture;
 import starling.events.Event;
 import starling.display.Sprite;
+import starling.display.Quad;
 
 /*
 	* This class manages the Main Menu.
@@ -53,13 +54,22 @@ import starling.display.Sprite;
 		}
 		
 		public function drawMainMenu():void {
+			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 123456 );
+			background.alpha = 0.9;
+			game.addChild( background );
+			
 			level1Button = new Button( assetManager.getTexture( "button-pink" ) );
 			level1Button.text = "Level 1";
+			level1Button.alignPivot();
+			level1Button.x = game.stage.stageWidth / 2;
+			level1Button.y = game.stage.stageHeight / 4;
 			game.addChild( level1Button );
 			
 			lifeLevelButton = new Button( assetManager.getTexture( "button-pink" ) );
 			lifeLevelButton.text = "Life level";
-			lifeLevelButton.y = lifeLevelButton.height * 2;
+			lifeLevelButton.alignPivot();
+			lifeLevelButton.x = game.stage.stageWidth / 2;
+			lifeLevelButton.y = game.stage.stageHeight / 4 + lifeLevelButton.height + 20;
 			game.addChild( lifeLevelButton );
 		}
 		
