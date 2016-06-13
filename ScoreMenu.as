@@ -132,7 +132,7 @@ public class ScoreMenu extends Sprite
 			savedData.push( object );
 			game.saveDataObject.data.boughtItems = savedData;
 
-			var continueScreen:ContinueScreen= new ContinueScreen( assetManager, score, object );
+			var continueScreen:ContinueScreen= new ContinueScreen( game, assetManager, score, object );
 			addChild( continueScreen );
 		}
 	}

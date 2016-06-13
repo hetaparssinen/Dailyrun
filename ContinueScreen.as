@@ -9,19 +9,17 @@
 public class ContinueScreen extends Sprite
 	{
 
-		private var assetManager:AssetManager
-		private var object1:Button;
+		private var assetManager:AssetManager;
+		private var game:GameStateManager;
+		private var continueButton:Button;
 		private var score:int;
-		private var stageWidth;
-		private var stageHeight;
 		private var text;
 		private var item:String;
 		
-		public function ContinueScreen( assetManager:AssetManager, score:int, item:String )
+		public function ContinueScreen( game, assetManager:AssetManager, score:int, item:String )
 		{
 			this.assetManager = assetManager;
-			this.stageWidth = stageWidth;
-			this.stageHeight = stageHeight;
+			this.game = game;
 			this.score = score;
 			this.item = item;
 			this.addEventListener(starling.events.Event.ADDED_TO_STAGE, Add);
@@ -32,7 +30,7 @@ public class ContinueScreen extends Sprite
 		}
 		
 		private function draw():void {
-			var background:Quad = new Quad( stageWidth, stageHeight, 123456 );
+			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 123456 );
 			background.alpha = 0.9;
 			addChild( background );
 
@@ -49,29 +47,27 @@ public class ContinueScreen extends Sprite
 			explanation.y = 175;
 			addChild( explanation );
 
-			object1 = new Button(assetManager.getTexture("bike"));
-			object1.alignPivot();
-			object1.scale = 0.4;
-			object1.x = 240;
-			object1.y = 250;
-			this.addChild(object1);
+			continueButton = new Button(assetManager.getTexture("button-pink"));
+			continueButton.text = "Go to next level!";
+			continueButton.alignPivot();
+			continueButton.scale = 0.8;
+			continueButton.x = 240;
+			continueButton.y = 250;
+			this.addChild( continueButton );
 			
-			this.addEventListener(Event.TRIGGERED, onMainMenuClick);
+			continueButton.addEventListener(Event.TRIGGERED, continueClick);
 		}
 		
-		private function onMainMenuClick(event:Event):void
+		private function continueClick(event:Event):void
 		{
-			
-			var buttonPress:Button = event.target as Button;
-			if((buttonPress as Button) == object1) 
-			{
-				trace (score);
-				//var scoreScreen:Screen1 = new Screen1( assetManager, score );
-				//addChild( scoreScreen );
-				//this.dispatchEvent(new PressEvent(PressEvent.newScreen, {id: "none1"}, true));
+			trace(this.game.currentState() + " current state");
+			// Remove all content from current game
+			while ( this.game.numChildren > 0 ) {
+				this.game.removeChildAt( 0 );
 			}
-			
-			
+			// Start a new game
+			var newLevel:DailyRun = new DailyRun();
+			this.game.addChild(newLevel);
 		}
 		
 	}
