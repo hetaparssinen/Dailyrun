@@ -7,6 +7,8 @@ import starling.textures.Texture;
 import starling.events.Event;
 import starling.display.Sprite;
 import starling.display.Quad;
+import starling.display.Image;
+import starling.utils.deg2rad;
 
 /*
 	* This class manages the Main Menu.
@@ -72,13 +74,21 @@ import starling.display.Quad;
 			background.alpha = 0.9;
 			game.addChild( background );
 			
+			var logo:Image = new Image( assetManager.getTexture( "dailyRun" ) );
+			logo.scale = 0.4;
+			logo.rotation = deg2rad(-35);
+			logo.alignPivot("left", "center");
+			logo.y = game.stage.stageHeight / 2;
+			logo.x = 40;
+			game.addChild( logo );
+			
 			level1Button = new Button( assetManager.getTexture( "button-pink" ) );
 			level1Button.text = "Level 1";
 			level1Button.scale = 0.8;
 			trace("height " + level1Button.height);
 			trace( game.stage.stageHeight + " stage ");
 			level1Button.alignPivot("center", "top");
-			level1Button.x = game.stage.stageWidth / 2;
+			level1Button.x = game.stage.stageWidth / 2 + 80;
 			level1Button.y = 10;
 			game.addChild( level1Button );
 			
@@ -86,7 +96,7 @@ import starling.display.Quad;
 			level2Button.text = "Level 2";
 			level2Button.scale = 0.8;
 			level2Button.alignPivot("center", "top");
-			level2Button.x = game.stage.stageWidth / 2;
+			level2Button.x = game.stage.stageWidth / 2 + 80;
 			level2Button.y = 10 + level2Button.height + 5;
 			//level2Button.enabled = false;
 			game.addChild( level2Button );
@@ -95,7 +105,7 @@ import starling.display.Quad;
 			level3Button.text = "Level 3";
 			level3Button.scale = 0.8;
 			level3Button.alignPivot("center", "top");
-			level3Button.x = game.stage.stageWidth / 2;
+			level3Button.x = game.stage.stageWidth / 2 + 80;
 			level3Button.y = 10 + 2 * level3Button.height + 2 * 5;
 			//level3Button.enabled = false;
 			game.addChild( level3Button );
@@ -104,7 +114,7 @@ import starling.display.Quad;
 			lifeLevelButton.text = "Life level";
 			lifeLevelButton.scale = 0.8;
 			lifeLevelButton.alignPivot("center", "top");
-			lifeLevelButton.x = game.stage.stageWidth / 2;
+			lifeLevelButton.x = game.stage.stageWidth / 2 + 80;
 			lifeLevelButton.y = 10 + 3 * lifeLevelButton.height + 3 * 5;
 			game.addChild( lifeLevelButton );
 		}
