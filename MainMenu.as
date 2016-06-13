@@ -88,6 +88,7 @@ import starling.display.Quad;
 			level2Button.alignPivot("center", "top");
 			level2Button.x = game.stage.stageWidth / 2;
 			level2Button.y = 10 + level2Button.height + 5;
+			//level2Button.enabled = false;
 			game.addChild( level2Button );
 			
 			level3Button = new Button( assetManager.getTexture( "button-pink" ) );
@@ -96,6 +97,7 @@ import starling.display.Quad;
 			level3Button.alignPivot("center", "top");
 			level3Button.x = game.stage.stageWidth / 2;
 			level3Button.y = 10 + 2 * level3Button.height + 2 * 5;
+			//level3Button.enabled = false;
 			game.addChild( level3Button );
 			
 			lifeLevelButton = new Button( assetManager.getTexture( "button-pink" ) );
