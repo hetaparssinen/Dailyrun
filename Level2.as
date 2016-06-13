@@ -420,6 +420,8 @@ package
 						game.saveDataObject.data.level1HighScore = score;
 						game.saveDataObject.flush();
 					}
+					
+					game.saveDataObject.data.level2passed = true;
 
 					trace( "FINISH" );
 					
