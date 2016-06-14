@@ -107,15 +107,20 @@ public class ScoreMenu extends Sprite
 			if ( buttonPress == bikeButton && score >= 10 ) {
 				removeContent();
 				pushData("bike");
+				score = score-10;
+				trace (score);
 			} else if ( buttonPress == guitarButton && score >= 20 ) {
 				removeContent();
 				pushData("guitar");
+				score = score-20;
 			} else if ( buttonPress == djembeButton && score >= 30 ) {
 				removeContent();
 				pushData("djembe");
+				score = score-30;
 			} else if ( buttonPress == laptopButton && score >= 40 ) {
 				removeContent();
 				pushData("laptop");
+				score = score-40;
 			}
 		}
 		
