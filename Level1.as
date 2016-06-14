@@ -436,6 +436,7 @@ package
 					game.saveDataObject.data.level1passed = true;
 
 					trace( "FINISH" );
+					assetManager.playSound( "applause" );
 					
 					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}

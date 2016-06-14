@@ -312,6 +312,7 @@ public class GoodLifeLevel implements GameState
                 var endScreen:LifeScreen = new LifeScreen( game, foundItems );
 
                 trace( "FINISH" );
+                assetManager.playSound( "applause" );
 
                 game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
             }

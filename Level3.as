@@ -294,7 +294,11 @@ package
 					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit)
 					{
 						enemies[i].isHit = true;
-						assetManager.playSound( "hitBadGuy" );
+
+						if ( !character.isProtected() )
+						{
+							assetManager.playSound("hitBadBoy");
+						}
 
 						if (character.health > 0)
 						{
@@ -428,6 +432,7 @@ package
 					}
 
 					trace( "FINISH" );
+					assetManager.playSound( "applause" );
 					
 					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
