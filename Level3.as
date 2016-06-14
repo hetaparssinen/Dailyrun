@@ -1,6 +1,7 @@
-﻿﻿﻿/**
+﻿﻿﻿
+/**
  * Created by Lourens on 5-5-2016.
-*/
+ */
 package
 {
 
@@ -39,8 +40,8 @@ package
 		private var character: Character;
 		private var mapTMX: TMXTileMap;
 		private var mapWidth: int;
-		private var enemies: Vector.< Enemy >;
-		private var goodGuys: Vector.< GoodGuy >;
+		private var enemies: Vector.< Enemy > ;
+		private var goodGuys: Vector.< GoodGuy > ;
 		private var collectedGoodGuys: Array;
 		private var friendsBubble: FriendsBubble;
 		private var characterChosen: Boolean;
@@ -50,7 +51,7 @@ package
 		private var gameSpeed: int;
 		private var background: Background;
 		private var tapToJumpImg: Image;
-		private var color:String;
+		private var color: String;
 
 		public function Level3(game: GameStateManager): void
 		{
@@ -72,8 +73,8 @@ package
 			var tilesets: Vector.< Bitmap > = new Vector.< Bitmap > ();
 			tilesets.push(Bitmap(new exampleTileSet()));
 			gameSpeed = 5;
-			//score = 0;
-
+		//	score = game.saveDataObject.data.totalScore;
+			score=0;
 			//Load and render map
 			tilesets.push(Bitmap(new exampleTileSet()));
 			mapTMX = TMXTileMap.createMap(mapXML, tilesets);
@@ -87,7 +88,7 @@ package
 			collectedGoodGuys = new Array();
 
 			//Add background
-			background = new Background(assetManager.getTexture("landscape_size ok"), game.stage.stageWidth);
+			background = new Background(assetManager.getTexture("landscape3"), game.stage.stageWidth);
 			game.addChild(background);
 
 			for (var i: int = 0; i < mapTMX.layers.length; i++)
@@ -173,7 +174,7 @@ package
 		{
 			characterChosen = true;
 			isPlaying = true;
-			this.color=color;
+			this.color = color;
 		}
 
 		private function touchEventHandler(event: TouchEvent)
@@ -193,8 +194,8 @@ package
 				character.x = tileWidth;
 				character.y = game.stage.stageHeight - tileWidth * 2;
 				//character.scale = 2;
-				game.addChild(character); 
-				characterChosen = false; 
+				game.addChild(character);
+				characterChosen = false;
 
 				tapToJumpImg = new Image(assetManager.getTexture("tapToJump"));
 				tapToJumpImg.x = 140;
@@ -202,7 +203,7 @@ package
 				game.addChild(tapToJumpImg);
 				var tapToJumpTimer: Timer = new Timer(2000);
 				tapToJumpTimer.addEventListener(TimerEvent.TIMER, removeTapToJump);
-				tapToJumpTimer.start(); 
+				tapToJumpTimer.start();
 			}
 			else if (isPlaying && !character.jumping && touch)
 			{
@@ -217,8 +218,8 @@ package
 			game.removeChild(tapToJumpImg);
 		}
 
-		
-		
+
+
 		public function update(deltaTime: Number)
 		{
 			if (isPlaying)
@@ -290,9 +291,12 @@ package
 				// Check collision with enemies
 				for (var i: int = 0; i < enemies.length; i++)
 				{
-					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit)
+					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit && !character.protection)
 					{
 						enemies[i].isHit = true;
+						score-=30;
+						scoreText.text = "Score: " + score;
+
 
 						if (character.health > 0)
 						{
@@ -302,18 +306,14 @@ package
 						else if (character.health <= 0)
 						{
 							isPlaying = false;
-							var gameOver: GameOver = new GameOver( assetManager, game );
+							var gameOver: GameOver = new GameOver(assetManager, game);
 							gameOver.alignPivot();
 							gameOver.x = game.stage.stageWidth / 2;
 							gameOver.y = game.stage.stageHeight / 2;
-							
-							
+
+
 							game.addChild(gameOver);
-							
-							
-							
-							
-							
+
 							break;
 						}
 					}
@@ -326,7 +326,7 @@ package
 					{
 						goodGuys[i].isHit = true;
 
-						score += 10;
+						score += 30;
 						scoreText.text = "Score: " + score;
 
 						var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
@@ -343,7 +343,7 @@ package
 				if (character.bounds.intersects(friendsBubble.bounds) && !friendsBubble.isHit && !friendsBubble.block)
 				{
 					friendsBubble.isHit = true;
-					score += 20;
+					score += 40;
 					scoreText.text = "Score: " + score;
 
 					game.removeChild(friendsBubble);
@@ -409,23 +409,25 @@ package
 					}
 				}
 
-				 if( character.bounds.intersects( finish.bounds ) )
+				if (character.bounds.intersects(finish.bounds))
 				{
 					isPlaying = false;
 
-					var scoreScreen:ScoreMenu = new ScoreMenu( game, assetManager, score );
-					game.addChild( scoreScreen );
-					
-					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
-						game.saveDataObject.data.level1HighScore = score;
+					var scoreScreen: ScoreMenu = new ScoreMenu(game, assetManager, score);
+					game.addChild(scoreScreen);
+
+					if (game.saveDataObject.data.level3HighScore == null || game.saveDataObject.data.level3HighScore < score)
+					{
+						//game.saveDataObject.data.level3HighScore = score;
 						game.saveDataObject.flush();
 					}
 
-					trace( "FINISH" );
+					trace("FINISH");
+					//game.saveDataObject.data.totalLevel = score;
 					
-					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
+					game.removeEventListener(Event.ENTER_FRAME, update); //Doesn't work???
 				}
-            
+
 			}
 		}
 	}

@@ -72,7 +72,7 @@ package
 			var tilesets: Vector.< Bitmap > = new Vector.< Bitmap > ();
 			tilesets.push(Bitmap(new exampleTileSet()));
 			gameSpeed = 5;
-			//score = 0;
+			score = 0;
 
 			//Load and render map
 			tilesets.push(Bitmap(new exampleTileSet()));
@@ -290,10 +290,11 @@ package
 				// Check collision with enemies
 				for (var i: int = 0; i < enemies.length; i++)
 				{
-					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit)
+					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit && !character.protection)
 					{
 						enemies[i].isHit = true;
-
+						score -= 10;
+						scoreText.text = "Score: " + score;
 						if (character.health > 0)
 						{
 							character.decreaseHealth();
@@ -310,13 +311,11 @@ package
 							
 							game.addChild(gameOver);
 							
-							
-							
-							
-							
+		
 							break;
 						}
 					}
+					
 				}
 
 				// Check collision with good boys
@@ -422,6 +421,8 @@ package
 					}
 					
 					game.saveDataObject.data.level1passed = true;
+					//game.saveDataObject.data.totalScore = score;
+		
 
 					trace( "FINISH" );
 					

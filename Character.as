@@ -40,7 +40,7 @@
 
 		public var health: Number;
 		public var maxHealth: Number;
-		private var protection: Boolean = false;
+		public var protection: Boolean = false;
 
 		private var config: Object;
 

@@ -72,7 +72,9 @@ package
 			var tilesets: Vector.< Bitmap > = new Vector.< Bitmap > ();
 			tilesets.push(Bitmap(new exampleTileSet()));
 			gameSpeed = 5;
-			//score = 0;
+			//score = game.saveDataObject.data.totalScore;
+			score = 0;
+			trace(score);
 
 			//Load and render map
 			tilesets.push(Bitmap(new exampleTileSet()));
@@ -87,7 +89,7 @@ package
 			collectedGoodGuys = new Array();
 
 			//Add background
-			background = new Background(assetManager.getTexture("landscape_size ok"), game.stage.stageWidth);
+			background = new Background(assetManager.getTexture("landscape2"), game.stage.stageWidth);
 			game.addChild(background);
 
 			for (var i: int = 0; i < mapTMX.layers.length; i++)
@@ -290,9 +292,11 @@ package
 				// Check collision with enemies
 				for (var i: int = 0; i < enemies.length; i++)
 				{
-					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit)
+					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit && !character.protection)
 					{
 						enemies[i].isHit = true;
+						score-=20;
+						scoreText.text = "Score: " + score;
 
 						if (character.health > 0)
 						{
@@ -317,6 +321,7 @@ package
 							break;
 						}
 					}
+					//score = score-10;
 				}
 
 				// Check collision with good boys
@@ -326,7 +331,7 @@ package
 					{
 						goodGuys[i].isHit = true;
 
-						score += 10;
+						score += 20;
 						scoreText.text = "Score: " + score;
 
 						var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
@@ -343,7 +348,7 @@ package
 				if (character.bounds.intersects(friendsBubble.bounds) && !friendsBubble.isHit && !friendsBubble.block)
 				{
 					friendsBubble.isHit = true;
-					score += 20;
+					score += 30;
 					scoreText.text = "Score: " + score;
 
 					game.removeChild(friendsBubble);
@@ -416,11 +421,12 @@ package
 					var scoreScreen:ScoreMenu = new ScoreMenu( game, assetManager, score );
 					game.addChild( scoreScreen );
 					
-					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
-						game.saveDataObject.data.level1HighScore = score;
+					if ( game.saveDataObject.data.level2HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
+						game.saveDataObject.data.level2HighScore = score;
 						game.saveDataObject.flush();
 					}
 					
+					//game.saveDataObject.data.totalScore = score;
 					game.saveDataObject.data.level2passed = true;
 
 					trace( "FINISH" );
