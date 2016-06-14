@@ -51,21 +51,25 @@ import starling.utils.deg2rad;
 		
 		public function level1Start( e:Event ):void {
 			trace("Level 1 starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( Level1 );
 		}
 		
 		public function level2Start( e:Event ):void {
 			trace("Level 2 starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( Level2 );
 		}
 		
 		public function level3Start( e:Event ):void {
 			trace("Level 3 starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( Level3 );
 		}
 		
 		public function lifeLevelStart( e:Event ):void {
 			trace("Life level starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( GoodLifeLevel );
 		}
 		

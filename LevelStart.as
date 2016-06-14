@@ -102,6 +102,7 @@ package
 			if (clickYellow)
 			{
 				trace("You touched yellow");
+				assetManager.playSound( "mouseClick" );
 				level.startPlaying("yellow");
 			}
 			else
@@ -109,6 +110,7 @@ package
 					
 			{
 				trace("You touched blue");
+				assetManager.playSound( "mouseClick" );
 				level.startPlaying("blue");
 				
 			}
@@ -116,12 +118,14 @@ package
 				if(clickGreen)
 				{
 					trace("You touched green");
+					assetManager.playSound( "mouseClick" );
 					level.startPlaying("green");
 				}
 			else
 				if(clickPink)
 				{
 					trace("you touched pink");
+					assetManager.playSound( "mouseClick" );
 					level.startPlaying("pink");
 				}
 				

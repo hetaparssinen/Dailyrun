@@ -207,6 +207,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
+				character.jumpingSound = true;
 				character.velocity.y = -100;
 			}
 
@@ -294,6 +295,11 @@ package
 					{
 						enemies[i].isHit = true;
 
+						if ( !character.isProtected() )
+						{
+							assetManager.playSound("hitBadBoy");
+						}
+
 						if (character.health > 0)
 						{
 							character.decreaseHealth();
@@ -307,13 +313,7 @@ package
 							gameOver.x = game.stage.stageWidth / 2;
 							gameOver.y = game.stage.stageHeight / 2;
 							
-							
 							game.addChild(gameOver);
-							
-							
-							
-							
-							
 							break;
 						}
 					}
@@ -324,6 +324,9 @@ package
 				{
 					if (character.bounds.intersects(goodGuys[i].bounds) && !goodGuys[i].isHit)
 					{
+
+						assetManager.playSound( "hitGoodBoy" );
+
 						goodGuys[i].isHit = true;
 
 						score += 10;
@@ -342,6 +345,8 @@ package
 				// Check collision with friends bubble
 				if (character.bounds.intersects(friendsBubble.bounds) && !friendsBubble.isHit && !friendsBubble.block)
 				{
+					assetManager.playSound( "protection" );
+
 					friendsBubble.isHit = true;
 					score += 20;
 					scoreText.text = "Score: " + score;
@@ -358,6 +363,11 @@ package
 				//check collision with ground underneath character and adjust character.y
 				if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
 				{
+					if( character.jumping )
+					{
+						assetManager.playSound( "landing" );
+					}
+
 					character.jumping = false;
 					character.y -= character.y % tileWidth
 				}
@@ -385,6 +395,7 @@ package
 
 						if (charTileY < charTileX)
 							character.jumping = false;
+							assetManager.playSound( "landing" );
 
 					}
 				}
@@ -406,6 +417,7 @@ package
 
 						if (charTileY < charTileX)
 							character.jumping = false;
+							assetManager.playSound( "landing" );
 					}
 				}
 

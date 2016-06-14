@@ -106,15 +106,19 @@ public class ScoreMenu extends Sprite
 			var buttonPress:Button = event.target as Button;
 			if ( buttonPress == bikeButton && score >= 10 ) {
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("bike");
 			} else if ( buttonPress == guitarButton && score >= 20 ) {
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("guitar");
 			} else if ( buttonPress == djembeButton && score >= 30 ) {
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("djembe");
 			} else if ( buttonPress == laptopButton && score >= 40 ) {
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("laptop");
 			}
 		}

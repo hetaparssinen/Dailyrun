@@ -189,6 +189,7 @@ public class GoodLifeLevel implements GameState
         else if (isPlaying && !character.jumping && touch)
         {
             character.jumping = true;
+            assetManager.playSound( "jump" );
             character.velocity.y = -100;
         }
 
@@ -234,6 +235,12 @@ public class GoodLifeLevel implements GameState
             {
                 //check collision with ground underneath character and adjust character.y
                 if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1) {
+
+                    if( character.jumping )
+                    {
+                        assetManager.playSound( "landing" )
+                    }
+
                     character.jumping = false;
                     character.y -= character.y % tileWidth
                 }
@@ -250,7 +257,7 @@ public class GoodLifeLevel implements GameState
                         game.removeChild( goodLifeItems[i] );
                         foundItems.push( goodLifeItems[i] );
                         goodLifeItems.splice( i, 1 );
-                        trace("Item hit®")
+                        assetManager.playSound( "protection" );
                     }
                 }
 
@@ -269,6 +276,7 @@ public class GoodLifeLevel implements GameState
 
                         if (charTileY < charTileX)
                             character.jumping = false;
+                            assetManager.playSound( "landing" );
 
                     }
                 }
@@ -287,6 +295,7 @@ public class GoodLifeLevel implements GameState
 
                         if ( (32 - charTileY) < charTileX)
                             character.jumping = false;
+                            assetManager.playSound( "landing" );
                     }
                 }
             }
