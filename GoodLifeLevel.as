@@ -160,13 +160,11 @@ public class GoodLifeLevel implements GameState
     private function touchEventHandler(event: TouchEvent)
     {
         levelStart.handleTouch(event);
-        //var startTouch:Touch;
         var startTouch: Touch = event.getTouch(levelStart, TouchPhase.BEGAN);
         var touch: Touch = event.getTouch(game.stage, TouchPhase.BEGAN);
 		
         if (characterChosen)
         {
-            //isPlaying = true;
             game.removeChild(levelStart);
 
             //Draw player
@@ -174,7 +172,6 @@ public class GoodLifeLevel implements GameState
             character.alignPivot( "center", "bottom");
             character.x = tileWidth;
             character.y = game.stage.stageHeight - tileWidth * 2;
-            //character.scale = 2;
             game.addChild(character);
             characterChosen = false;
 
@@ -300,7 +297,7 @@ public class GoodLifeLevel implements GameState
             {
                 isPlaying = false;
 
-                var endScreen:LifeScreen = new LifeScreen( game, foundItems );
+                var endScreen:LifeScreen = new LifeScreen( game, foundItems, color );
 
                 trace( "FINISH" );
 
