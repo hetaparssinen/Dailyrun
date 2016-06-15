@@ -109,12 +109,14 @@ import starling.text.TextField;
 			
 			lifeLevelButton = new Button( assetManager.getTexture( "button-pink" ), "LIFE LEVEL" );
 			initButton( lifeLevelButton );
+			lifeLevelButton.fontColor = 4849471;
 			lifeLevelButton.y = 10 + 3 * lifeLevelButton.height + 3 * 5;
 			game.addChild( lifeLevelButton );
 		}
 		
 		private function initButton( button:Button ):void {
 			button.scale = 0.65;
+			button.fontColor = 16777215;
 			button.fontName = "DK Codswallop";
 			button.fontSize = 54;
 			button.alignPivot("center", "top");
