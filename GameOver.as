@@ -12,30 +12,51 @@ package
 	import starling.events.Touch;
 	import starling.utils.AssetManager;
 	import starling.events.Event;
+	import starling.text.TextField;
 
 	public class GameOver extends Sprite
 	{
 		private var currentGame:GameStateManager;
+		private var assetManager:AssetManager;
 
 		public function GameOver( assetManager: AssetManager, game:GameStateManager )
 		{
-			var assetManager:AssetManager = assetManager;
+			this.assetManager = assetManager;
 			this.currentGame = game;
-			var img:Image = new Image(assetManager.getTexture("gameOver"));
+			drawGameOver();
+		}
+		
+		public function drawGameOver():void {
+			//Place background
+			var background:Quad = new Quad( currentGame.stage.stageWidth, currentGame.stage.stageHeight, 41701);
+			addChild( background );
+			
+			var img:Image = new Image( assetManager.getTexture( "gameOver" ) );
+			img.scale = 0.5;
 			img.alignPivot();
 			img.x = currentGame.stage.stageWidth / 2;
-			img.y = currentGame.stage.stageHeight / 2;
-			currentGame.addChild(img);
+			img.y = 60;
+			addChild(img);
 
-			var restartButton: Button = new Button(assetManager.getTexture("object1"), "RESTART");
+			var logo:TextField = new TextField( currentGame.stage.stageWidth, 200, "You are pregnant lol", "Comic Sans MS", 24 );
+			logo.color = 15466636;
+			logo.alignPivot();
+			logo.y = currentGame.stage.stageHeight / 2;
+			logo.x = currentGame.stage.stageWidth / 2;
+			addChild( logo );
+			
+			var restartButton: Button = new Button( assetManager.getTexture( "button-pink" ), "PLAY AGAIN");
+			restartButton.fontSize = 54;
+			restartButton.fontColor = 41701;
+			restartButton.fontName = "DK Codswallop";
 			restartButton.alignPivot();
-			restartButton.scale = 0.2;
+			restartButton.scale = 0.65;
 			restartButton.x = currentGame.stage.stageWidth / 2;
-			restartButton.y = currentGame.stage.stageHeight / 2;
-			currentGame.addChild(restartButton);
+			restartButton.y = 270;
+			addChild(restartButton);
 			restartButton.addEventListener(Event.TRIGGERED, onRestartButtonClicked);
-
 		}
+		
 		public function onRestartButtonClicked(event: Event): void
 		{
 			// Remove all content from current game
