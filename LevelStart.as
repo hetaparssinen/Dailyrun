@@ -41,7 +41,7 @@ package
 			//place text
 			var text:Image = new Image( assetManager.getTexture( "chooseTheCharacter" ) );
 			text.alignPivot();
-			text.x = background.width / 2 + config.levelStart.borderThickness / 2;
+			text.x = background.width / 2;
 			text.y = 70;
 			addChild(text);
 			
