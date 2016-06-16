@@ -3,7 +3,6 @@
 */
 package
 {
-
 	import flash.display.Bitmap;
 	import starling.display.Image;
 	import starling.events.Touch;
@@ -41,7 +40,7 @@ package
 		private var mapWidth: int;
 		private var enemies: Vector.< Enemy >;
 		private var goodGuys: Vector.< GoodGuy >;
-		private var flowers:Vector.<Image>;
+		private var groundImages:Vector.<Image>;
 		private var collectedGoodGuys: Array;
 		private var friendsBubble: FriendsBubble;
 		private var characterChosen: Boolean;
@@ -52,6 +51,10 @@ package
 		private var background: Background;
 		private var tapToJumpImg: Image;
 		private var color:String;
+		private var shakeBack = false;
+		
+		private var blur:Image;
+		private var blurImages:Array;
 
 		public function Level1(game: GameStateManager): void
 		{
@@ -85,8 +88,9 @@ package
 
 			enemies = new Vector.<Enemy>();
 			goodGuys = new Vector.<GoodGuy>();
-			flowers = new Vector.<Image>();
+			groundImages = new Vector.<Image>();
 			collectedGoodGuys = new Array();
+			blurImages = new Array();
 
 			//Add background
 			background = new Background(assetManager.getTexture("landscape_size ok"), game.stage.stageWidth);
@@ -104,7 +108,7 @@ package
 			scoreText = new TextField(150, 50, "Score: " + score);
 			game.addChild(scoreText);
 			
-			// Add flowers
+			// Add flowers / ground
 			for (var i: int = 0; i < mapTMX.layers[0].layerData.length; i++)
 			{
 				if (mapTMX.layers[0].layerData[i] == 1)
@@ -115,19 +119,19 @@ package
 					flower.x = (i % mapWidth) * tileWidth;
 					flower.y = int(i / mapWidth) * tileWidth - (flower.height - 64);
 					game.addChild(flower);
-					flowers.push( flower );					
+					groundImages.push( flower );	
 				} else if ( mapTMX.layers[0].layerData[i] == 2 ) {
 					var flower:Image = new Image( assetManager.getTexture( "ground_down" ) );
 					flower.x = (i % mapWidth) * tileWidth;
 					flower.y = int(i / mapWidth) * tileWidth;
 					game.addChild(flower);
-					flowers.push( flower );
+					groundImages.push( flower );
 				} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
 					var flower:Image = new Image( assetManager.getTexture( "ground_up" ) );
 					flower.x = (i % mapWidth) * tileWidth;
 					flower.y = int(i / mapWidth) * tileWidth;
 					game.addChild(flower);
-					flowers.push( flower );
+					groundImages.push( flower );
 				}
 			}
 
@@ -269,12 +273,12 @@ package
 				}
 				
 				// Move flowers and remove if off the screen
-				for ( var i:int = 0; i < flowers.length; i++ ) {
-					if ( flowers[i].x <= -flowers[i].width ) {
-						game.removeChild( flowers[i] );
-						flowers.splice( i, 1 );
+				for ( var i:int = 0; i < groundImages.length; i++ ) {
+					if ( groundImages[i].x <= -groundImages[i].width ) {
+						game.removeChild( groundImages[i] );
+						groundImages.splice( i, 1 );
 					} else {
-						flowers[i].x -= gameSpeed;
+						groundImages[i].x -= gameSpeed;
 					}
 				}
 
@@ -332,7 +336,15 @@ package
 					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit)
 					{
 						enemies[i].isHit = true;
-
+						
+						var timerShake:Timer = new Timer( 50, 10 );
+						timerShake.addEventListener(TimerEvent.TIMER, shake);
+						timerShake.start();
+						
+						blur = new Image( assetManager.getTexture( "blur" ) );
+						game.addChild( blur );
+						blurImages.push( blur );
+						
 						if (character.health > 0)
 						{
 							character.decreaseHealth();
@@ -346,13 +358,7 @@ package
 							gameOver.x = game.stage.stageWidth / 2;
 							gameOver.y = game.stage.stageHeight / 2;
 							
-							
 							game.addChild(gameOver);
-							
-							
-							
-							
-							
 							break;
 						}
 					}
@@ -374,7 +380,11 @@ package
 						hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
 						hittedGoodGuy.y = 30;
 						game.addChild(hittedGoodGuy);
-
+						
+						if ( blurImages != null ) {
+							game.removeChild( blurImages[0] );
+							blurImages.splice( 0, 1 );
+						}
 					}
 				}
 
@@ -477,6 +487,16 @@ package
 		function randomRange(minNum:Number, maxNum:Number):Number 
 		{
 			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+		}
+		
+		function shake( event:TimerEvent ) {
+			if ( shakeBack ) {
+				background.x -= 3;
+				shakeBack = false;
+			} else {
+				background.x += 3;
+				shakeBack = true;
+			}
 		}
 	}
 }
