@@ -41,6 +41,7 @@ package
 		private var mapWidth: int;
 		private var enemies: Vector.< Enemy >;
 		private var goodGuys: Vector.< GoodGuy >;
+		private var flowers:Vector.<Image>;
 		private var collectedGoodGuys: Array;
 		private var friendsBubble: FriendsBubble;
 		private var characterChosen: Boolean;
@@ -82,8 +83,9 @@ package
 			tileWidth = mapTMX.tileWidth;
 			mapWidth = mapTMX.mapWidth;
 
-			enemies = new Vector.< Enemy > ();
-			goodGuys = new Vector.< GoodGuy > ();
+			enemies = new Vector.<Enemy>();
+			goodGuys = new Vector.<GoodGuy>();
+			flowers = new Vector.<Image>();
 			collectedGoodGuys = new Array();
 
 			//Add background
@@ -101,6 +103,33 @@ package
 			//add score indicator
 			scoreText = new TextField(150, 50, "Score: " + score);
 			game.addChild(scoreText);
+			
+			// Add flowers
+			for (var i: int = 0; i < mapTMX.layers[0].layerData.length; i++)
+			{
+				if (mapTMX.layers[0].layerData[i] == 1)
+				{
+					var num:Number = randomRange(1, 6);
+					trace(num + " NUM");
+					var flower:Image = new Image( assetManager.getTexture( "ground_" + num ) );
+					flower.x = (i % mapWidth) * tileWidth;
+					flower.y = int(i / mapWidth) * tileWidth - (flower.height - 64);
+					game.addChild(flower);
+					flowers.push( flower );					
+				} else if ( mapTMX.layers[0].layerData[i] == 2 ) {
+					var flower:Image = new Image( assetManager.getTexture( "ground_down" ) );
+					flower.x = (i % mapWidth) * tileWidth;
+					flower.y = int(i / mapWidth) * tileWidth;
+					game.addChild(flower);
+					flowers.push( flower );
+				} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
+					var flower:Image = new Image( assetManager.getTexture( "ground_up" ) );
+					flower.x = (i % mapWidth) * tileWidth;
+					flower.y = int(i / mapWidth) * tileWidth;
+					game.addChild(flower);
+					flowers.push( flower );
+				}
+			}
 
 			// Add bad boys to the screen
 			for (var i: int = 0; i < mapTMX.layers[1].layerData.length; i++)
@@ -238,6 +267,16 @@ package
 				{
 					mapTMX.layers[i].layerSprite.x -= gameSpeed;
 				}
+				
+				// Move flowers and remove if off the screen
+				for ( var i:int = 0; i < flowers.length; i++ ) {
+					if ( flowers[i].x <= -flowers[i].width ) {
+						game.removeChild( flowers[i] );
+						flowers.splice( i, 1 );
+					} else {
+						flowers[i].x -= gameSpeed;
+					}
+				}
 
 				// Move enemies and remove if off the screen
 				for (var i: int = 0; i < enemies.length; i++)
@@ -354,6 +393,11 @@ package
 				var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
 				var yLoc: int = (character.y - tileWidth) / tileWidth;
 				var tileNum: int = (yLoc * mapWidth) + xLoc;
+				
+				if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
+					character.jumping = false;
+					character.y = game.stage.stageHeight;
+				}
 
 				//check collision with ground underneath character and adjust character.y
 				if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
@@ -429,6 +473,10 @@ package
 				}
             
 			}
+		}
+		function randomRange(minNum:Number, maxNum:Number):Number 
+		{
+			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
 		}
 	}
 }
