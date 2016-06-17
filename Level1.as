@@ -113,7 +113,7 @@ package
 			{
 				if (mapTMX.layers[0].layerData[i] == 1)
 				{
-					var num:Number = randomRange(1, 6);
+					var num:Number = randomRange(1, 4);
 					trace(num + " NUM");
 					var flower:Image = new Image( assetManager.getTexture( "ground_" + num ) );
 					flower.x = (i % mapWidth) * tileWidth;
@@ -337,13 +337,15 @@ package
 					{
 						enemies[i].isHit = true;
 						
-						var timerShake:Timer = new Timer( 50, 10 );
-						timerShake.addEventListener(TimerEvent.TIMER, shake);
-						timerShake.start();
-						
-						blur = new Image( assetManager.getTexture( "blur" ) );
-						game.addChild( blur );
-						blurImages.push( blur );
+						if ( !character.protection ) {
+							blur = new Image( assetManager.getTexture( "blur" ) );
+							game.addChild( blur );
+							blurImages.push( blur );
+							
+							var timerShake:Timer = new Timer( 50, 10 );
+							timerShake.addEventListener(TimerEvent.TIMER, shake);
+							timerShake.start();
+						}
 						
 						if (character.health > 0)
 						{
