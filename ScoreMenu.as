@@ -1,5 +1,4 @@
-﻿﻿
-package
+﻿﻿package
 {
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -116,7 +115,7 @@ package
 			{
 				removeContent();
 				pushData("bike");
-				score = score - 10;
+				score -= 10;
 				trace(score);
 			}
 			else if (buttonPress == guitarButton && score >= 20)
