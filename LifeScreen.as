@@ -72,12 +72,12 @@
 			this.game.removeChild( congratsText );
 			this.game.removeChild( continueButton );
 			
-			var story:TextField = new TextField( this.game.stage.stageWidth, 200, "You passed all levels! Now you can enjoy the items that you have collected to your life.", "Comic Sans MS", 18 );
-			story.color = 15466636;
-			story.alignPivot();
-			story.y = 45;
-			story.x = this.game.stage.stageWidth / 2;
-			this.game.addChild( story );
+			var text:TextField = new TextField( this.game.stage.stageWidth, 200, "You passed all levels! Now you can enjoy the items that you have collected to your life.", "Comic Sans MS", 18 );
+			text.color = 15466636;
+			text.alignPivot();
+			text.y = 45;
+			text.x = this.game.stage.stageWidth / 2;
+			this.game.addChild( text );
 			
 			var restartButton:Button = new Button( assetManager.getTexture( "button-pink" ), "MAIN MENU");
 			restartButton.fontSize = 44;
@@ -101,11 +101,11 @@
 			this.game.addChild( readMoreButton );
 			readMoreButton.addEventListener(Event.TRIGGERED, readMoreButtonClicked);
 			
-			var story:TextField = new TextField( 200, 30, "About peer pressure", "Comic Sans MS", 16, 41701 );
-			story.alignPivot("left", "center");
-			story.y = readMoreButton.y + 40;
-			story.x = readMoreButton.x - readMoreButton.width / 2 - 10;
-			this.game.addChild( story );
+			text = new TextField( 200, 30, "About peer pressure", "Comic Sans MS", 16, 41701 );
+			text.alignPivot("left", "center");
+			text.y = readMoreButton.y + 40;
+			text.x = readMoreButton.x - readMoreButton.width / 2 - 10;
+			this.game.addChild( text );
 		}
 		
 		private function restartButtonClicked():void {

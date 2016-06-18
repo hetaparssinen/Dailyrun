@@ -105,7 +105,7 @@ public class GoodLifeLevel implements GameState
         //add good life items
         var itemCreationCount:int = 0;
 
-        for( var i:int = 0; i < mapTMX.layers[1].layerData.length; i++)
+        for( i = 0; i < mapTMX.layers[1].layerData.length; i++ )
         {
             if( mapTMX.layers[1].layerData[i] == 1 )
             {
@@ -122,7 +122,7 @@ public class GoodLifeLevel implements GameState
         }
 
         //add finish
-        for( var i:int = 0; i < mapTMX.layers[2].layerData.length; i++ )
+        for( i = 0; i < mapTMX.layers[2].layerData.length; i++ )
         {
             if( mapTMX.layers[2].layerData[i] == 1 )
             {
@@ -214,7 +214,7 @@ public class GoodLifeLevel implements GameState
             }
 
             //move items
-            for ( var i:int = 0; i < goodLifeItems.length; i++ )
+            for ( i = 0; i < goodLifeItems.length; i++ )
             {
                 goodLifeItems[i].x -= gameSpeed;
             }
@@ -222,25 +222,13 @@ public class GoodLifeLevel implements GameState
             // Move finish
             finish.x -= gameSpeed;
 
-            var xLoc:int = ( character.x - mapTMX.layers[0].layerSprite.x ) / tileWidth;
-            var yLoc:int = ( character.y - tileWidth ) / tileWidth;
-            var tileNum:int = ( yLoc * mapWidth ) + xLoc;
-
             //Check terrain if character is not above the screen
             if( character.y > 0)
             {
-                //check collision with ground underneath character and adjust character.y
-                if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1) {
-                    character.jumping = false;
-                    character.y -= character.y % tileWidth
-                }
-                else if (mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 && character.jumping == false) {
-                    character.jumping = true;
-                    character.velocity.y = 0;
-                }
+                checkGround();
 
                 //Check collision with items
-                for( var i:int = goodLifeItems.length - 1; i >= 0; i-- )
+                for( i = goodLifeItems.length - 1; i >= 0; i-- )
                 {
                     if( character.bounds.intersects( goodLifeItems[i].bounds ) )
                     {
@@ -251,41 +239,10 @@ public class GoodLifeLevel implements GameState
                     }
                 }
 
-                //check if on ascending hill
-                if (( mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3 )) {
-
-                    if (!character.jumping) {
-                        var groundHeight:int = ( game.stage.stageHeight - character.y ) / tileWidth;
-                        groundHeight *= tileWidth;
-                        var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
-                        character.y = game.stage.stageHeight - groundHeight - hillHeight;
-                    }
-                    else if (character.jumping) {
-                        var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
-                        var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
-
-                        if (charTileY < charTileX)
-                            character.jumping = false;
-
-                    }
-                }
-
-                //check if on descending hill
-                if (( mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2 )) {
-                    if (!character.jumping) {
-                        var groundHeight:int = character.y / tileWidth;
-                        groundHeight *= tileWidth;
-                        var hillHeight:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
-                        character.y = groundHeight + hillHeight;
-                    }
-                    else if (character.jumping) {
-                        var charTileX:int = ( character.x - mapTMX.layers[0].layerSprite.x ) % tileWidth;
-                        var charTileY:int = ( game.stage.stageHeight - character.y ) % tileWidth;
-
-                        if ( (32 - charTileY) < charTileX)
-                            character.jumping = false;
-                    }
-                }
+				//check if on ascending hill (3)
+				checkIfHill(3);
+				// check if descending hill (2)
+				checkIfHill(2);
             }
             else
             {
@@ -306,5 +263,79 @@ public class GoodLifeLevel implements GameState
 
         }
     }
+	function checkGround() {
+		if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
+			character.jumping = false;
+			character.y = game.stage.stageHeight;
+		}
+		
+		var tileNum:int = countTileNum();
+		//check collision with ground underneath character and adjust character.y
+		if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
+		{
+			character.jumping = false;
+			character.y -= character.y % tileWidth
+		}
+		else if (mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 && character.jumping == false)
+		{
+			character.jumping = true;
+			character.velocity.y = 0;
+		}
+	}
+	
+	function checkIfHill( n:int ) {
+		var tileNum:int = countTileNum();
+		if ((mapTMX.layers[0].layerData[tileNum] == n || mapTMX.layers[0].layerData[tileNum + mapWidth] == n))
+		{
+			if ( n == 3 ) {
+				ascendingHill();
+			} else if ( n == 2 ) {
+				descendingHill();
+			}
+		}
+	}
+	
+	function ascendingHill() {
+		if (!character.jumping)
+		{
+			var groundHeight:int = (game.stage.stageHeight - character.y) / tileWidth;
+			groundHeight *= tileWidth;
+			var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+			character.y = game.stage.stageHeight - groundHeight - hillHeight;
+		}
+		else if (character.jumping)
+		{
+			var charTileX:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+			var charTileY:int = (game.stage.stageHeight - character.y) % tileWidth;
+
+			if (charTileY < charTileX)
+				character.jumping = false;
+		}
+	}
+	
+	function descendingHill() {
+		if (!character.jumping)
+		{
+			var groundHeight:int = character.y / tileWidth;
+			groundHeight *= tileWidth;
+			var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+			character.y = groundHeight + hillHeight;
+		}
+		else if (character.jumping)
+		{
+			var charTileX: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+			var charTileY: int = (game.stage.stageHeight - character.y) % tileWidth;
+
+			if (charTileY < charTileX)
+				character.jumping = false;
+		}
+	}
+	
+	function countTileNum():int {
+		var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
+		var yLoc: int = (character.y - tileWidth) / tileWidth;
+		var tileNum: int = (yLoc * mapWidth) + xLoc;
+		return tileNum;
+	}
 }
 }

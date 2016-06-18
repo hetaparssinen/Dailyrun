@@ -39,10 +39,11 @@ package
 		private var character: Character;
 		private var mapTMX: TMXTileMap;
 		private var mapWidth: int;
-		private var enemies: Vector.< Enemy >;
-		private var goodGuys: Vector.< GoodGuy >;
-		private var collectedGoodGuys: Array;
-		private var friendsBubble: FriendsBubble;
+		private var enemies:Array;
+		private var goodGuys:Array;
+		private var collectedGoodGuys:Array;
+		private var groundImages:Array;
+		private var friendsBubbles:Array;
 		private var characterChosen: Boolean;
 		private var score: int;
 		private var scoreText: TextField;
@@ -51,6 +52,10 @@ package
 		private var background: Background;
 		private var tapToJumpImg: Image;
 		private var color:String;
+		private var shakeBack = false;
+		
+		private var blur:Image;
+		private var blurImages:Array;
 
 		public function Level3(game: GameStateManager): void
 		{
@@ -82,9 +87,12 @@ package
 			tileWidth = mapTMX.tileWidth;
 			mapWidth = mapTMX.mapWidth;
 
-			enemies = new Vector.< Enemy > ();
-			goodGuys = new Vector.< GoodGuy > ();
+			enemies = new Array();
+			goodGuys = new Array();
+			groundImages = new Array();
 			collectedGoodGuys = new Array();
+			friendsBubbles = new Array();
+			blurImages = new Array();
 
 			//Add background
 			background = new Background(assetManager.getTexture("landscape_size ok"), game.stage.stageWidth);
@@ -101,9 +109,23 @@ package
 			//add score indicator
 			scoreText = new TextField(150, 50, "Score: " + score);
 			game.addChild(scoreText);
+			
+			// Add flowers / ground
+			for ( i = 0; i < mapTMX.layers[0].layerData.length; i++ )
+			{
+				if (mapTMX.layers[0].layerData[i] == 1)
+				{
+					var num:Number = randomRange(1, 4);
+					newGroundImage( "ground_" + num, i );
+				} else if ( mapTMX.layers[0].layerData[i] == 2 ) {
+					newGroundImage( "ground_down", i );
+				} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
+					newGroundImage( "ground_up", i );
+				}
+			}
 
 			// Add bad boys to the screen
-			for (var i: int = 0; i < mapTMX.layers[1].layerData.length; i++)
+			for ( i = 0; i < mapTMX.layers[1].layerData.length; i++ )
 			{
 				if (mapTMX.layers[1].layerData[i] == 1)
 				{
@@ -116,7 +138,7 @@ package
 			}
 
 			// Add good guys to the screen
-			for (var i: int = 0; i < mapTMX.layers[2].layerData.length; i++)
+			for ( i = 0; i < mapTMX.layers[2].layerData.length; i++ )
 			{
 				if (mapTMX.layers[2].layerData[i] == 1)
 				{
@@ -130,19 +152,20 @@ package
 			}
 
 			// Add friends bubble to the screen
-			for (var i: int = 0; i < mapTMX.layers[3].layerData.length; i++)
+			for ( i = 0; i < mapTMX.layers[3].layerData.length; i++ )
 			{
 				if (mapTMX.layers[3].layerData[i] == 1)
 				{
-					friendsBubble = new FriendsBubble(assetManager);
-					game.addChild(friendsBubble);
+					var friendsBubble:FriendsBubble = new FriendsBubble(assetManager);
 					friendsBubble.x = (i % mapWidth) * tileWidth;
 					friendsBubble.y = int(i / mapWidth) * tileWidth;
+					game.addChild(friendsBubble);
+					friendsBubbles.push( friendsBubble );
 				}
 			}
 
 			//add finish
-			for (var i: int = 0; i < mapTMX.layers[4].layerData.length; i++)
+			for ( i = 0; i < mapTMX.layers[4].layerData.length; i++ )
 			{
 				if (mapTMX.layers[4].layerData[i] == 1)
 				{
@@ -209,21 +232,12 @@ package
 				character.jumping = true;
 				character.velocity.y = -100;
 			}
-
-		}
-
-		public function removeTapToJump(e: TimerEvent): void
-		{
-			game.removeChild(tapToJumpImg);
-		}
-
-		
+		}		
 		
 		public function update(deltaTime: Number)
 		{
 			if (isPlaying)
 			{
-
 				//update background
 				background.update();
 
@@ -238,177 +252,45 @@ package
 				{
 					mapTMX.layers[i].layerSprite.x -= gameSpeed;
 				}
+				
+				// Move flowers and remove if off the screen
+				moveAndRemove( groundImages );
 
 				// Move enemies and remove if off the screen
-				for (var i: int = 0; i < enemies.length; i++)
-				{
-					if (enemies[i].x <= 0)
-					{
-						game.removeChild(enemies[i]);
-						enemies.splice(i, 1);
-					}
-					else
-					{
-						enemies[i].x -= gameSpeed;
-					}
-				}
+				moveAndRemove( enemies );
 
 				// Move good boys and remove is off the screen
-				for (var i: int = 0; i < goodGuys.length; i++)
-				{
-					if (goodGuys[i].x <= 0)
-					{
-						game.removeChild(goodGuys[i]);
-						goodGuys.splice(i, 1);
-					}
-					else
-					{
-						goodGuys[i].x -= gameSpeed;
-					}
-				}
+				moveAndRemove( goodGuys );
 
 				// Move friends bubble and remove if off the screen
-				if (friendsBubble.x <= 0)
-				{
-					game.removeChild(friendsBubble);
-				}
-				else
-				{
-					friendsBubble.x -= gameSpeed;
-				}
-				// Quick fix because it fucks up other way..... fix this later
-				// (after passing the friends bubble it adds protection after first 
-				// jump, even the character didn't touch the protection bubble)
-				if ((friendsBubble.x + friendsBubble.width / 2) <= (character.x - character.width / 2) && !friendsBubble.isHit)
-				{
-					friendsBubble.block = true;
-				}
+				moveAndRemove( friendsBubbles );
 
 				// Move finish
 				finish.x -= gameSpeed;
 
 				// Check collision with enemies
-				for (var i: int = 0; i < enemies.length; i++)
-				{
-					if (character.bounds.intersects(enemies[i].bounds) && !enemies[i].isHit)
-					{
-						enemies[i].isHit = true;
-
-						if (character.health > 0)
-						{
-							character.decreaseHealth();
-							character.updateCharacter();
-						}
-						else if (character.health <= 0)
-						{
-							isPlaying = false;
-							var gameOver: GameOver = new GameOver( assetManager, game );
-							gameOver.alignPivot();
-							gameOver.x = game.stage.stageWidth / 2;
-							gameOver.y = game.stage.stageHeight / 2;
-							
-							
-							game.addChild(gameOver);
-							
-							
-							
-							
-							
-							break;
-						}
-					}
+				if ( checkCollision( enemies ) != -1 ) {
+					enemyHit();
 				}
-
+		
 				// Check collision with good boys
-				for (var i: int = 0; i < goodGuys.length; i++)
-				{
-					if (character.bounds.intersects(goodGuys[i].bounds) && !goodGuys[i].isHit)
-					{
-						goodGuys[i].isHit = true;
-
-						score += 10;
-						scoreText.text = "Score: " + score;
-
-						var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
-						hittedGoodGuy.scale = 0.5;
-						collectedGoodGuys.push(hittedGoodGuy);
-						hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
-						hittedGoodGuy.y = 30;
-						game.addChild(hittedGoodGuy);
-
-					}
+				if ( checkCollision( goodGuys ) != -1 ) {
+					goodGuyHit();
 				}
 
 				// Check collision with friends bubble
-				if (character.bounds.intersects(friendsBubble.bounds) && !friendsBubble.isHit && !friendsBubble.block)
-				{
-					friendsBubble.isHit = true;
-					score += 20;
-					scoreText.text = "Score: " + score;
-
-					game.removeChild(friendsBubble);
-					character.addProtection();
-
+				var bubble:int = checkCollision( friendsBubbles );
+				if ( bubble != -1 ) {
+					friendsBubbleHit( bubble );
 				}
-
-				var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
-				var yLoc: int = (character.y - tileWidth) / tileWidth;
-				var tileNum: int = (yLoc * mapWidth) + xLoc;
-
-				//check collision with ground underneath character and adjust character.y
-				if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
-				{
-					character.jumping = false;
-					character.y -= character.y % tileWidth
-				}
-				else if (mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 && character.jumping == false)
-				{
-					character.jumping = true;
-					character.velocity.y = 0;
-				}
-
-				//check if on ascending hill
-				if ((mapTMX.layers[0].layerData[tileNum] == 3 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 3))
-				{
-
-					if (!character.jumping)
-					{
-						var groundHeight: int = (game.stage.stageHeight - character.y) / tileWidth;
-						groundHeight *= tileWidth;
-						var hillHeight: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
-						character.y = game.stage.stageHeight - groundHeight - hillHeight;
-					}
-					else if (character.jumping)
-					{
-						var charTileX: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
-						var charTileY: int = (game.stage.stageHeight - character.y) % tileWidth;
-
-						if (charTileY < charTileX)
-							character.jumping = false;
-
-					}
-				}
-
-				//check if on descending hill
-				if ((mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2))
-				{
-					if (!character.jumping)
-					{
-						var groundHeight: int = character.y / tileWidth;
-						groundHeight *= tileWidth;
-						var hillHeight: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
-						character.y = groundHeight + hillHeight;
-					}
-					else if (character.jumping)
-					{
-						var charTileX: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
-						var charTileY: int = (game.stage.stageHeight - character.y) % tileWidth;
-
-						if (charTileY < charTileX)
-							character.jumping = false;
-					}
-				}
-
+				
+				checkGround();
+				//check if on ascending hill (3)
+				checkIfHill(3);
+				// check if descending hill (2)
+				checkIfHill(2);
+				
+				// If finish
 				 if( character.bounds.intersects( finish.bounds ) )
 				{
 					isPlaying = false;
@@ -427,6 +309,190 @@ package
 				}
             
 			}
+		}
+		function removeTapToJump(e: TimerEvent):void
+		{
+			game.removeChild(tapToJumpImg);
+		}
+		
+		function randomRange(minNum:Number, maxNum:Number):Number 
+		{
+			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+		}
+		
+		function shake( event:TimerEvent ) {
+			if ( shakeBack ) {
+				background.x -= 3;
+				shakeBack = false;
+			} else {
+				background.x += 3;
+				shakeBack = true;
+			}
+		}
+		
+		function checkGround() {
+			if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
+				character.jumping = false;
+				character.y = game.stage.stageHeight;
+			}
+			
+			var tileNum:int = countTileNum();
+			//check collision with ground underneath character and adjust character.y
+			if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
+			{
+				character.jumping = false;
+				character.y -= character.y % tileWidth
+			}
+			else if (mapTMX.layers[0].layerData[tileNum + mapWidth] == 0 && character.jumping == false)
+			{
+				character.jumping = true;
+				character.velocity.y = 0;
+			}
+		}
+		
+		function checkIfHill( n:int ) {
+			var tileNum:int = countTileNum();
+			if ((mapTMX.layers[0].layerData[tileNum] == n || mapTMX.layers[0].layerData[tileNum + mapWidth] == n))
+			{
+				if ( n == 3 ) {
+					ascendingHill();
+				} else if ( n == 2 ) {
+					descendingHill();
+				}
+			}
+		}
+		
+		function ascendingHill() {
+			if (!character.jumping)
+			{
+				var groundHeight:int = (game.stage.stageHeight - character.y) / tileWidth;
+				groundHeight *= tileWidth;
+				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				character.y = game.stage.stageHeight - groundHeight - hillHeight;
+			}
+			else if (character.jumping)
+			{
+				var charTileX:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				var charTileY:int = (game.stage.stageHeight - character.y) % tileWidth;
+
+				if (charTileY < charTileX)
+					character.jumping = false;
+			}
+		}
+		
+		function descendingHill() {
+			if (!character.jumping)
+			{
+				var groundHeight:int = character.y / tileWidth;
+				groundHeight *= tileWidth;
+				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				character.y = groundHeight + hillHeight;
+			}
+			else if (character.jumping)
+			{
+				var charTileX: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				var charTileY: int = (game.stage.stageHeight - character.y) % tileWidth;
+
+				if (charTileY < charTileX)
+					character.jumping = false;
+			}
+		}
+		
+		function countTileNum():int {
+			var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
+			var yLoc: int = (character.y - tileWidth) / tileWidth;
+			var tileNum: int = (yLoc * mapWidth) + xLoc;
+			return tileNum;
+		}
+		
+		function newGroundImage( image:String, i:int ) {
+			var flower:Image = new Image( assetManager.getTexture( image ) );
+			flower.x = (i % mapWidth) * tileWidth;
+			flower.y = int(i / mapWidth) * tileWidth - (flower.height - tileWidth);
+			game.addChild(flower);
+			groundImages.push( flower );
+		}
+		
+		function moveAndRemove( objects:Array ) {
+			for ( var i:int = 0; i < objects.length; i++ )
+			{
+				if ( objects[i].x <= -objects[i].width )
+				{
+					game.removeChild( objects[i] );
+					objects.splice(i, 1);
+				}
+				else
+				{
+					objects[i].x -= gameSpeed;
+				}
+			}
+		}
+		
+		function checkCollision( objects:Array ):int {
+			for ( var i:int = 0; i < objects.length; i++ ) {
+				if ( character.bounds.intersects( objects[i].bounds ) && !objects[i].isHit ) {
+					objects[i].isHit = true;
+					return i;
+				}
+			}
+			return -1;
+		}
+		
+		function enemyHit() {
+			if ( !character.protection ) {
+				blur = new Image( assetManager.getTexture( "blur" ) );
+				game.addChild( blur );
+				blurImages.push( blur );
+				
+				var timerShake:Timer = new Timer( 50, 10 );
+				timerShake.addEventListener(TimerEvent.TIMER, shake);
+				timerShake.start();
+			}
+			
+			if (character.health > 0)
+			{
+				character.decreaseHealth();
+				character.updateCharacter();
+			}
+			else if (character.health <= 0)
+			{
+				isPlaying = false;
+				var gameOver: GameOver = new GameOver( assetManager, game );
+				gameOver.alignPivot();
+				gameOver.x = game.stage.stageWidth / 2;
+				gameOver.y = game.stage.stageHeight / 2;
+				
+				game.addChild(gameOver);
+			}
+		}
+		
+		function goodGuyHit() {
+			decreaseScore( 10 );
+
+			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
+			hittedGoodGuy.scale = 0.5;
+			collectedGoodGuys.push(hittedGoodGuy);
+			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
+			hittedGoodGuy.y = 30;
+			game.addChild(hittedGoodGuy);
+			
+			if ( blurImages != null ) {
+				game.removeChild( blurImages[0] );
+				blurImages.splice( 0, 1 );
+			}
+		}
+		
+		function friendsBubbleHit( i:int ) {
+			decreaseScore( 20 );
+
+			game.removeChild( friendsBubbles[i] );
+			friendsBubbles.splice( i, 1 );
+			character.addProtection();
+		}
+		
+		function decreaseScore( plusScore:int ) {
+			this.score += plusScore;
+			scoreText.text = "Score: " + this.score;
 		}
 	}
 }
