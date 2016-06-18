@@ -47,6 +47,7 @@ package
 		private var score: int;
 		private var scoreText: TextField;
 		private var finish: Image;
+		private var start:Image;
 		private var gameSpeed: int;
 		private var background: Background;
 		private var tapToJumpImg: Image;
@@ -170,15 +171,20 @@ package
 				{
 					finish = new Image(assetManager.getTexture("goal"));
 
-					finish.scale = 128 / finish.height;
-
 					finish.alignPivot("left", "bottom");
 					finish.x = (i % mapWidth) * tileWidth;
-					finish.y = int(i / mapWidth) * tileWidth + tileWidth + 55;
+					finish.y = int(i / mapWidth) * tileWidth + tileWidth * 2;
 
 					game.addChild(finish);
 				}
 			}
+			
+			// Add start
+			start = new Image(assetManager.getTexture("school"));
+			start.alignPivot("left", "bottom");
+			start.x = -100;
+			start.y = game.stage.stageHeight - tileWidth;
+			game.addChild(start);
 
 			//Add eventListener for tapping the screen
 			game.addEventListener(TouchEvent.TOUCH, touchEventHandler);
@@ -266,6 +272,13 @@ package
 
 				// Move finish
 				finish.x -= gameSpeed;
+				
+				// Move and remove start
+				if ( start.x + start.width < 0 ) {
+					game.removeChild( start );
+				} else {
+					start.x -= gameSpeed;
+				}
 
 				// Check collision with enemies
 				if ( checkCollision( enemies ) != -1 ) {

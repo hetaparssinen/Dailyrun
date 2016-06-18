@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="180" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
  <tileset firstgid="1" name="sprites" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="sprites.png" width="128" height="128"/>
  </tileset>
- <layer name="Floor" width="100" height="5">
+ <layer name="Floor" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUEAOYgZgRipmoZA6lZpFrJ7X8QA+347MfF8blLkL60PXjUk+Kv4m1E5u5+PRS4kZS4g+f+cT6axTTBwMAojMA2w==
+   eJztU0EOwCAIc/r/P28XE7MgtkjEA016k1KglpJIJBJn0D4+0SYC0eevQfWjRueOlrWn1wwnvK88SHn29vff3w3YzZGUiZWWViPVz94zXtGeki4yo8Ujky9EX8sXc+cGvJP8MPUI2J0yN07ey2q8pfYXLJzpoH28/aB8AWgPAZA=
   </data>
  </layer>
- <layer name="Enemies" width="100" height="5">
+ <layer name="Enemies" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C2gHGgHUAjQC9/kWsPJe4bjnFGqp9orZ4agBQ7calFFx+OcT9SAAAtQAAN
+   eJzt0zkKAEAIBEH3/582FzbwNugKRRiDUQTAZW/7AJw01YtoTuY+Og/L24nu/QqezN+unfM7ACIUWQAADQ==
   </data>
  </layer>
- <layer name="GoodBoys" width="100" height="5">
+ <layer name="GoodBoys" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjALyAeNAO2CQAnLDZTQ8RwG5AAAQDAAE
+   eJzt0jENAAAIBLHHv2k8sBBIq+CGSwDgptoO4KXpV34ELmofDAAE
   </data>
  </layer>
- <layer name="FriendsBubble" width="100" height="5">
+ <layer name="FriendsBubble" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYKAuYKSyeaNgFIyCUTAKRsEoIAwAD1AAAg==
+   eJztzDEBAAAMAiDXv/RK6AcBSLqu/AEAALDxG9AAAg==
   </data>
  </layer>
- <layer name="Finish" width="100" height="5">
+ <layer name="Finish" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjILBCRgH2gGjYBQMIQAACwAAAg==
+   eJztzjENAAAIA7Dh3zQaFg6eVkETAIC7+Q4AUFsTzAAC
   </data>
  </layer>
 </map>
