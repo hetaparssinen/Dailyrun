@@ -20,7 +20,7 @@
 			logo.y = 60;
 			logo.x = 480 / 2;
 			addChild( logo );
-			var backdrop:Quad = new Quad (300, 40, 16758711);
+			var backdrop:Quad = new Quad (300, 40, 16777215);
 			backdrop.x = 480 / 2 - backdrop.width / 2;
 			backdrop.y = 320 / 2 - backdrop.height / 2;
 			addChild (backdrop);
