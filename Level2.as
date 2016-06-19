@@ -395,15 +395,9 @@ package
 		function ascendingHill() {
 			if (!character.jumping)
 			{
-				trace("charac y " + character.y );
-				//trace(game.stage.stageHeight + " ';''';;'';;; " + character.y);
 				var groundHeight:int = (game.stage.stageHeight - character.y) / tileWidth;
-				//trace(groundHeight + " dfhafha");
 				groundHeight *= tileWidth;
-				//trace( groundHeight );
-				//trace( character.x + " '''''''' " + mapTMX.layers[0].layerSprite.x );
 				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
-				//trace( hillHeight + " hill" );
 				character.y = game.stage.stageHeight - groundHeight - hillHeight;
 			}
 			else if (character.jumping)
@@ -419,7 +413,6 @@ package
 		function descendingHill() {
 			if (!character.jumping)
 			{
-				//trace("charac y " + character.y );
 				var groundHeight:int = character.y / tileWidth;
 				groundHeight *= tileWidth;
 				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
