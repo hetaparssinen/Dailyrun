@@ -14,6 +14,7 @@ import starling.display.Sprite;
 	{
 
 		var assetManager:AssetManager;
+		var loader:Loader;
 		
 		/*
 		* This function checks if the class is being added to the stage.
@@ -32,6 +33,8 @@ import starling.display.Sprite;
 		private function initialize()
 		{
 			assetManager = new AssetManager();
+			loader = new Loader();
+			addChild( loader );
 			var folder:File = File.applicationDirectory.resolvePath( "assets" );
 			assetManager.enqueue( folder );
 			assetManager.loadQueue( onProgress );
@@ -45,6 +48,7 @@ import starling.display.Sprite;
 		private function onProgress( ratio:Number )
 		{
 			trace( ratio );
+			loader.update( ratio );
 			
 			if( ratio == 1 )
 			{

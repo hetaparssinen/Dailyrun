@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="110" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
  <tileset firstgid="1" name="sprites" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="sprites.png" width="128" height="128"/>
+  <terraintypes>
+   <terrain name="New Terrain" tile="-1"/>
+  </terraintypes>
  </tileset>
- <layer name="Floor" width="100" height="5">
+ <layer name="Floor" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AU0BMwAzEjEmYaADuphenhdkIAm99wuYta4UCKv2kV9vSKG1zuZxogf41i3BgAjQMA0g==
+   eJxjYBgFo2AUDGXADMSMSJhpAOwkxW5ceunldloAmJ9wuR+fn0nBpIQPqXZSy+3UikNqhRkut9HC/FFMHQwAsx8A3A==
   </data>
  </layer>
- <layer name="Enemies" width="100" height="5">
+ <layer name="Enemies" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo4C2gHGA9A5FMNL8S09A67Ad7HGHy33o4oPdH6MANwAAIYAACQ==
+   eJxjYBgFo2BwAMYB0jucwWi4DDygdRwM9jjG5T508cHuj1FAPwAAJZAACQ==
   </data>
  </layer>
- <layer name="GoodBoys" width="100" height="5">
+ <layer name="GoodBoys" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2DwA8aBdsAoGAUkgqGQZoeCG0cB8QAAETwABA==
+   eJxjYBgFo2D4AMaBdsAoGAUDDIZCHhgKbhwFAwcAE0QABA==
   </data>
  </layer>
- <layer name="FriendsBubble" width="100" height="5">
+ <layer name="FriendsBubble" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYKAuYKSyeaNgFIyCUTAKRsEoIAwAD1AAAg==
+   eJxjYKAuYKSyeaNgFIyCUTAKRsEoGDkAABDgAAI=
   </data>
  </layer>
- <layer name="Finish" width="100" height="5">
+ <layer name="Finish" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjILBCRgH2gGjYBQMIQAACwAAAg==
+   eJxjYBgFo2AUjIKRARgH2gGjYBSMAoIAAAxAAAI=
+  </data>
+ </layer>
+ <layer name="Start" width="110" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AUjIJRgA8wDrQDRsEoGEEAAAwIAAI=
   </data>
  </layer>
 </map>

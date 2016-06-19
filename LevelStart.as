@@ -16,7 +16,6 @@ package
 
 	public class LevelStart extends Sprite
 	{
-
 		private var assetManager: AssetManager;
 		private var config: Object;
 		private var level:GameState;
@@ -24,7 +23,6 @@ package
 		private var characterBlue:Image;
 		private var characterPink: Image;
 		private var characterGreen: Image;
-		
 
 		public function LevelStart(assetManager:AssetManager, level:GameState)
 		{
@@ -36,59 +34,41 @@ package
 
 		private function initialize()
 		{
-			//Place border
-			var border: Quad = new Quad(stage.stageWidth - config.levelStart.marginX, stage.stageHeight - config.levelStart.marginY, 16711680);
-			addChild(border);
-
-			//place box
-			var box: Quad = new Quad(border.width - config.levelStart.borderThickness, border.height - config.levelStart.borderThickness, 16776960);
-			box.alignPivot();
-			box.x = this.width / 2;
-			box.y = this.height / 2;
-			addChild(box);
-			
+			//Place background
+			var background:Quad = new Quad(stage.stageWidth - config.levelStart.marginX, stage.stageHeight - config.levelStart.marginY, 41701);
+			addChild( background );
 
 			//place text
-			var text: TextField = new TextField(box.width, 50, "Choose your character", "Verdana", 30);
+			var text:Image = new Image( assetManager.getTexture( "chooseTheCharacter" ) );
 			text.alignPivot();
-			text.x = box.width / 2 + config.levelStart.borderThickness / 2;
-			text.y = 40;
+			text.x = background.width / 2;
+			text.y = 70;
 			addChild(text);
 			
-			
-			
-			
 			//Adding the characters for the choosing screen
-		
-
 			characterYellow = new Image(assetManager.getTexture("yellow"));
 			characterYellow.x = 30;
-			characterYellow.y = 100;
+			characterYellow.y = 140;
 			characterYellow.scale=1.5;
 			addChild(characterYellow);
 			
-			
 			characterBlue=new Image(assetManager.getTexture("blue"));
 			characterBlue.x=110;
-			characterBlue.y=100;
+			characterBlue.y=140;
 			characterBlue.scale=1.5;
 			addChild(characterBlue);
 			
 			characterGreen=new Image(assetManager.getTexture("green"));
 			characterGreen.x=190;
-			characterGreen.y=100;
+			characterGreen.y=140;
 			characterGreen.scale=1.5;
 			addChild(characterGreen);
 			
 			characterPink=new Image(assetManager.getTexture("pink"));
 			characterPink.x=270;
-			characterPink.y=100;
+			characterPink.y=140;
 			characterPink.scale=1.5;
 			addChild(characterPink);
-			
-			
-			
-			
 		}
 
 		public function handleTouch(event: TouchEvent): void
@@ -98,34 +78,22 @@ package
 			var clickGreen:Touch=event.getTouch(characterGreen,TouchPhase.BEGAN);
 			var clickPink:Touch=event.getTouch(characterPink,TouchPhase.BEGAN);
 			
-			
 			if (clickYellow)
 			{
-				trace("You touched yellow");
 				level.startPlaying("yellow");
 			}
-			else
-				if(clickBlue)
-					
+			else if(clickBlue)		
 			{
-				trace("You touched blue");
 				level.startPlaying("blue");
-				
 			}
-			else
-				if(clickGreen)
-				{
-					trace("You touched green");
-					level.startPlaying("green");
-				}
-			else
-				if(clickPink)
-				{
-					trace("you touched pink");
-					level.startPlaying("pink");
-				}
-				
-			
+			else if(clickGreen)
+			{
+				level.startPlaying("green");
+			}
+			else if(clickPink)
+			{
+				level.startPlaying("pink");
+			}
 		}
 	}
 }
