@@ -136,6 +136,12 @@ package
 					enemy.x = (i % mapWidth) * tileWidth;
 					enemy.y = int(i / mapWidth) * tileWidth + tileWidth;
 					enemies.push(enemy);
+				} else if ( mapTMX.layers[1].layerData[i] == 2 ) {
+					var enemystatic = new Enemy( assetManager.getTexture( "badBoy" ) );
+					game.addChild(enemystatic);
+					enemystatic.x = (i % mapWidth) * tileWidth;
+					enemystatic.y = int(i / mapWidth) * tileWidth;
+					enemies.push(enemystatic);
 				}
 			}
 
@@ -305,7 +311,9 @@ package
 				checkIfHill(2);
 				
 				for ( var i:int = 0; i < enemies.length; i++ ) {
-					checkEnemyHill( enemies[i] );
+					if ( enemies[i] is MovingEnemy ) {
+						checkEnemyHill( enemies[i] );
+					}
 				}
 				
 				// If finish
@@ -465,7 +473,11 @@ package
 				}
 				else if ( objects[i].x < game.stage.stageWidth && objects[i].x > 0 ) 
 				{
-					objects[i].x -= gameSpeed + 2;
+					if ( objects[i] is MovingEnemy ) {
+						objects[i].x -= gameSpeed + 2;
+					} else {
+						objects[i].x -= gameSpeed;
+					}
 				}
 				else
 				{
