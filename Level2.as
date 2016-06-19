@@ -131,10 +131,10 @@ package
 			{
 				if (mapTMX.layers[1].layerData[i] == 1)
 				{
-					var enemy: Enemy = new Enemy(assetManager.getTexture("badBoy"));
+					var enemy:MovingEnemy = new MovingEnemy(assetManager);
 					game.addChild(enemy);
 					enemy.x = (i % mapWidth) * tileWidth;
-					enemy.y = int(i / mapWidth) * tileWidth + 5;
+					enemy.y = int(i / mapWidth) * tileWidth + tileWidth;
 					enemies.push(enemy);
 				}
 			}
@@ -264,7 +264,7 @@ package
 				moveAndRemove( groundImages );
 
 				// Move enemies and remove if off the screen
-				moveAndRemove( enemies );
+				moveAndRemoveMoving( enemies );
 
 				// Move good boys and remove is off the screen
 				moveAndRemove( goodGuys );
@@ -303,6 +303,10 @@ package
 				checkIfHill(3);
 				// check if descending hill (2)
 				checkIfHill(2);
+				
+				for ( var i:int = 0; i < enemies.length; i++ ) {
+					checkEnemyHill( enemies[i] );
+				}
 				
 				// If finish
 				 if( character.bounds.intersects( finish.bounds ) )
@@ -383,9 +387,15 @@ package
 		function ascendingHill() {
 			if (!character.jumping)
 			{
+				trace("charac y " + character.y );
+				//trace(game.stage.stageHeight + " ';''';;'';;; " + character.y);
 				var groundHeight:int = (game.stage.stageHeight - character.y) / tileWidth;
+				//trace(groundHeight + " dfhafha");
 				groundHeight *= tileWidth;
+				//trace( groundHeight );
+				//trace( character.x + " '''''''' " + mapTMX.layers[0].layerSprite.x );
 				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				//trace( hillHeight + " hill" );
 				character.y = game.stage.stageHeight - groundHeight - hillHeight;
 			}
 			else if (character.jumping)
@@ -401,6 +411,7 @@ package
 		function descendingHill() {
 			if (!character.jumping)
 			{
+				//trace("charac y " + character.y );
 				var groundHeight:int = character.y / tileWidth;
 				groundHeight *= tileWidth;
 				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
@@ -413,6 +424,20 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
+			}
+		}
+		
+		function checkEnemyHill( enemy:MovingEnemy ) {
+			var xLoc: int = (enemy.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
+			var yLoc: int = (enemy.y - tileWidth) / tileWidth;
+			var tileNum: int = (yLoc * mapWidth) + xLoc;
+			// Check only going down ;) we don't need to check going up....at least for now
+			if ((mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2))
+			{
+				var groundHeight:int = (game.stage.stageHeight - enemy.y) / tileWidth;
+				groundHeight *= tileWidth;
+				var hillHeight:int = tileWidth - (enemy.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				enemy.y = game.stage.stageHeight - groundHeight - hillHeight;
 			}
 		}
 		
@@ -429,6 +454,24 @@ package
 			flower.y = int(i / mapWidth) * tileWidth - (flower.height - tileWidth);
 			game.addChild(flower);
 			groundImages.push( flower );
+		}
+		function moveAndRemoveMoving(objects:Array) {
+			for ( var i:int = 0; i < objects.length; i++ )
+			{
+				if ( objects[i].x <= -objects[i].width )
+				{
+					game.removeChild( objects[i] );
+					objects.splice(i, 1);
+				}
+				else if ( objects[i].x < game.stage.stageWidth && objects[i].x > 0 ) 
+				{
+					objects[i].x -= gameSpeed + 2;
+				}
+				else
+				{
+					objects[i].x -= gameSpeed;
+				}
+			}
 		}
 		
 		function moveAndRemove( objects:Array ) {
