@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!-- 
 	Usage:
 
@@ -16,29 +16,29 @@
 	<text xml:lang="ja">Japanese App name goes here</text>
 	</name>
 -->
-<application xmlns="http://ns.adobe.com/air/application/20.0">
-  <id>dailyrun</id>
-  <versionNumber>1.0.0</versionNumber>
-  <versionLabel/>
-  <filename>dailyrun</filename>
-  <description/>
-  <name>dailyrun</name>
-  <copyright/>
-  <initialWindow>
-    <content>dailyrun.swf</content>
-    <systemChrome>standard</systemChrome>
-    <transparent>false</transparent>
-    <visible>true</visible>
-    <fullScreen>true</fullScreen>
-    <aspectRatio>landscape</aspectRatio>
-    <renderMode>direct</renderMode>
-    <autoOrients>false</autoOrients></initialWindow>
-  <icon/>
-  <customUpdateUI>false</customUpdateUI>
-  <allowBrowserInvocation>false</allowBrowserInvocation>
-  <android>
-    <manifestAdditions><![CDATA[<manifest>
-</manifest>]]></manifestAdditions>
-  </android>
-  <supportedLanguages>en</supportedLanguages>
+<application xmlns="http://ns.adobe.com/air/application/17.0">
+    <id>dailyrun</id>
+    <versionNumber>1.0.0</versionNumber>
+    <versionLabel></versionLabel>
+    <filename>dailyrun</filename>
+    <description></description>
+    <name>dailyrun</name>
+    <copyright></copyright>
+    <initialWindow>
+        <content>dailyrun.swf</content>
+        <systemChrome>standard</systemChrome>
+        <transparent>false</transparent>
+        <visible>true</visible>
+        <fullScreen>true</fullScreen>
+        <aspectRatio>landscape</aspectRatio>
+        <renderMode>direct</renderMode>
+        <autoOrients>false</autoOrients>
+    </initialWindow>
+    <icon></icon>
+    <customUpdateUI>false</customUpdateUI>
+    <allowBrowserInvocation>false</allowBrowserInvocation>
+    <android>
+        <manifestAdditions><![CDATA[<manifest></manifest>]]></manifestAdditions>
+    </android>
+    <supportedLanguages>en</supportedLanguages>
 </application>
