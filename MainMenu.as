@@ -78,16 +78,15 @@ import starling.text.TextField;
 		}
 		
 		public function drawMainMenu():void {
-			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 15238888 );
+			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 16776960 );
 			//background.alpha = 0.8;
 			game.addChild( background );
 			
-			var logo:TextField = new TextField( 200, 200, "DAILY RUN", "DK Codswallop", 54 );
+			var logo:Image = new Image (assetManager.getTexture("logo"));
 			logo.rotation = deg2rad( -25 );
-			logo.color = 15466636;
 			logo.alignPivot("left", "center");
-			logo.y = game.stage.stageHeight / 2;
-			logo.x = 0;
+			logo.y = game.stage.stageHeight / 2 - 30;
+			logo.x = 20;
 			game.addChild( logo );
 			
 			level1Button = new Button( assetManager.getTexture( "button-pink" ), "LEVEL 1" );
@@ -117,14 +116,13 @@ import starling.text.TextField;
 			
 			lifeLevelButton = new Button( assetManager.getTexture( "button-pink" ), "LIFE LEVEL" );
 			initButton( lifeLevelButton );
-			lifeLevelButton.fontColor = 4849471;
 			lifeLevelButton.y = 10 + 3 * lifeLevelButton.height + 3 * 5;
 			game.addChild( lifeLevelButton );
 		}
 		
 		private function initButton( button:Button ):void {
 			button.scale = 0.65;
-			button.fontColor = 16777215;
+			button.fontColor = 16776960;
 			button.fontName = "DK Codswallop";
 			button.fontSize = 54;
 			button.alignPivot("center", "top");

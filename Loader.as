@@ -11,7 +11,7 @@
 		
 		public function Loader() 
 		{
-			var background:Quad = new Quad( 480, 320, 15238888 );
+			var background:Quad = new Quad( 480, 320, 16776960 );
 			addChild( background );
 
 			var logo:TextField = new TextField( 480, 200, "DAILY RUN", "DK Codswallop", 54 );
@@ -24,7 +24,7 @@
 			backdrop.x = 480 / 2 - backdrop.width / 2;
 			backdrop.y = 320 / 2 - backdrop.height / 2;
 			addChild (backdrop);
-			bar=new Quad (300, 40, 2875959);
+			bar=new Quad (300, 40, 15466636);
 			bar.x = 480 / 2 - bar.width / 2;
 			bar.y = 320 / 2 - bar.height / 2;
 			addChild (bar);

@@ -109,7 +109,7 @@ package
 			}
 
 			//add score indicator
-			scoreText = new TextField(150, 50, "Score: " + score);
+			scoreText = new TextField(150, 50, "Score: " + score, "Gotham Rounded", 12,16776960);
 			game.addChild(scoreText);
 			
 			// Add flowers / ground
@@ -311,7 +311,7 @@ package
 				// check if descending hill (2)
 				checkIfHill(2);
 				
-				for ( var i:int = 0; i < enemies.length; i++ ) {
+				for ( i = 0; i < enemies.length; i++ ) {
 					if ( enemies[i] is MovingEnemy ) {
 						checkEnemyHill( enemies[i] );
 					}
