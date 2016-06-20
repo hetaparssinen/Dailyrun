@@ -516,6 +516,10 @@ package
 				{
 					character.decreaseHealth();
 					character.updateCharacter();
+
+					if( score != 0 ) {
+						decreaseScore(-10);
+					}
 				}
 				else if (character.health <= 0)
 				{
