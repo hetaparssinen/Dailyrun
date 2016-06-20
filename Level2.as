@@ -17,8 +17,8 @@ package
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import flash.utils.Timer;
 	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 
 	public class Level2 implements GameState
 	{
@@ -50,7 +50,6 @@ package
 		private var start:Image;
 		private var gameSpeed: int;
 		private var background: Background;
-		private var tapToJumpImg: Image;
 		private var color:String;
 		private var shakeBack = false;
 		
@@ -230,14 +229,6 @@ package
 				//character.scale = 2;
 				game.addChild(character); 
 				characterChosen = false; 
-
-				tapToJumpImg = new Image(assetManager.getTexture("tapToJump"));
-				tapToJumpImg.x = 140;
-				tapToJumpImg.y = 20;
-				game.addChild(tapToJumpImg);
-				var tapToJumpTimer: Timer = new Timer(2000);
-				tapToJumpTimer.addEventListener(TimerEvent.TIMER, removeTapToJump);
-				tapToJumpTimer.start(); 
 			}
 			else if (isPlaying && !character.jumping && touch)
 			{
@@ -340,11 +331,6 @@ package
 				}
             
 			}
-		}
-		
-		function removeTapToJump(e: TimerEvent):void
-		{
-			game.removeChild(tapToJumpImg);
 		}
 		
 		function randomRange(minNum:Number, maxNum:Number):Number 
