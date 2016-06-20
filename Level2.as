@@ -310,7 +310,7 @@ package
 				// check if descending hill (2)
 				checkIfHill(2);
 				
-				for ( var i:int = 0; i < enemies.length; i++ ) {
+				for ( i = 0; i < enemies.length; i++ ) {
 					if ( enemies[i] is MovingEnemy ) {
 						checkEnemyHill( enemies[i] );
 					}
