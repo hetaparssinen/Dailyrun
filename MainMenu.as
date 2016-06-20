@@ -9,6 +9,7 @@ import starling.display.Sprite;
 import starling.display.Quad;
 import starling.utils.deg2rad;
 import starling.text.TextField;
+import starling.display.Image;
 
 /*
 	* This class manages the Main Menu.
