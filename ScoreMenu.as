@@ -114,6 +114,7 @@
 			if (buttonPress == bikeButton && score >= 10)
 			{
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("bike");
 				score -= 10;
 				trace(score);
@@ -121,18 +122,21 @@
 			else if (buttonPress == guitarButton && score >= 20)
 			{
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("guitar");
 				score = score - 20;
 			}
 			else if (buttonPress == djembeButton && score >= 30)
 			{
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("djembe");
 				score = score - 30;
 			}
 			else if (buttonPress == laptopButton && score >= 40)
 			{
 				removeContent();
+				assetManager.playSound( "mouseClick" );
 				pushData("laptop");
 				score = score - 40;
 			}

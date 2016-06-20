@@ -233,6 +233,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
+				character.jumpingSound = true;
 				character.velocity.y = -100;
 			}
 
@@ -319,19 +320,20 @@ package
 		
 
 					trace( "FINISH" );
+					assetManager.playSound( "applause" );
 					
 					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
             
 			}
 		}
-		
+
 		function removeTapToJump(e: TimerEvent): void
 		{
 			game.removeChild(tapToJumpImg);
 		}
-		
-		function randomRange(minNum:Number, maxNum:Number):Number 
+
+		function randomRange(minNum:Number, maxNum:Number):Number
 		{
 			return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
 		}
@@ -356,6 +358,11 @@ package
 			//check collision with ground underneath character and adjust character.y
 			if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
 			{
+				if( character.jumping )
+				{
+					assetManager.playSound( "landing" );
+				}
+
 				character.jumping = false;
 				character.y -= character.y % tileWidth
 			}
@@ -393,6 +400,7 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
+					assetManager.playSound( "landing" );
 			}
 		}
 		
@@ -411,6 +419,7 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
+					assetManager.playSound( "landing" );
 			}
 		}
 		
@@ -420,7 +429,7 @@ package
 			var tileNum: int = (yLoc * mapWidth) + xLoc;
 			return tileNum;
 		}
-		
+
 		function newGroundImage( image:String, i:int ) {
 			var flower:Image = new Image( assetManager.getTexture( image ) );
 			flower.x = (i % mapWidth) * tileWidth;
@@ -459,6 +468,8 @@ package
 				blur = new Image( assetManager.getTexture( "blur" ) );
 				game.addChild( blur );
 				blurImages.push( blur );
+
+				assetManager.playSound("hitBadBoy");
 				
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
@@ -495,6 +506,8 @@ package
 			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
 			hittedGoodGuy.y = 30;
 			game.addChild(hittedGoodGuy);
+
+			assetManager.playSound( "hitGoodBoy" );
 			
 			if ( blurImages != null ) {
 				game.removeChild( blurImages[0] );
@@ -508,6 +521,7 @@ package
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
 			character.addProtection();
+			assetManager.playSound( "protection" );
 		}
 		
 		function decreaseScore( plusScore:int ) {

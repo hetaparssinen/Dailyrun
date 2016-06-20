@@ -243,6 +243,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
+				assetManager.playSound( "jump" );
 				character.velocity.y = -100;
 			}
 		}		
@@ -335,7 +336,6 @@ package
 					
 					game.removeEventListener(Event.ENTER_FRAME, update); //Doesn't work???
 				}
-
 			}
 		}
 		function removeTapToJump(e: TimerEvent):void
@@ -368,6 +368,11 @@ package
 			//check collision with ground underneath character and adjust character.y
 			if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
 			{
+				if( character.jumping )
+				{
+					assetManager.playSound( "landing" );
+				}
+				
 				character.jumping = false;
 				character.y -= character.y % tileWidth
 			}
@@ -511,6 +516,8 @@ package
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
 				timerShake.start();
+
+				assetManager.playSound("hitBadBoy");
 			
 				if (character.health > 0)
 				{
@@ -528,8 +535,18 @@ package
 					gameOver.alignPivot();
 					gameOver.x = game.stage.stageWidth / 2;
 					gameOver.y = game.stage.stageHeight / 2;
-					
+
 					game.addChild(gameOver);
+
+					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
+						game.saveDataObject.data.level1HighScore = score;
+						game.saveDataObject.flush();
+					}
+
+					trace( "FINISH" );
+					assetManager.playSound( "applause" );
+					
+					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
 			}
 		}
@@ -543,6 +560,8 @@ package
 			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
 			hittedGoodGuy.y = 30;
 			game.addChild(hittedGoodGuy);
+
+				assetManager.playSound( "hitGoodBoy" );
 			
 			if ( blurImages != null ) {
 				game.removeChild( blurImages[0] );
@@ -552,6 +571,8 @@ package
 		
 		function friendsBubbleHit( i:int ) {
 			decreaseScore( 20 );
+
+				assetManager.playSound( "protection" );
 
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );

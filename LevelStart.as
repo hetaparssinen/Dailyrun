@@ -80,20 +80,30 @@ package
 			
 			if (clickYellow)
 			{
+				trace("You touched yellow");
+				assetManager.playSound( "mouseClick" );
 				level.startPlaying("yellow");
 			}
 			else if(clickBlue)		
 			{
+				trace("You touched blue");
+				assetManager.playSound( "mouseClick" );
 				level.startPlaying("blue");
 			}
-			else if(clickGreen)
-			{
-				level.startPlaying("green");
-			}
-			else if(clickPink)
-			{
-				level.startPlaying("pink");
-			}
+			else
+				if(clickGreen)
+				{
+					trace("You touched green");
+					assetManager.playSound( "mouseClick" );
+					level.startPlaying("green");
+				}
+			else
+				if(clickPink)
+				{
+					trace("you touched pink");
+					assetManager.playSound( "mouseClick" );
+					level.startPlaying("pink");
+				}
 		}
 	}
 }

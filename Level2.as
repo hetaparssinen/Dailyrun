@@ -242,6 +242,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
+				assetManager.playSound( "jump" );
 				character.velocity.y = -100;
 			}
 
@@ -333,6 +334,7 @@ package
 					game.saveDataObject.data.level2passed = true;
 
 					trace( "FINISH" );
+					assetManager.playSound( "applause" );
 					
 					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
@@ -370,6 +372,11 @@ package
 			//check collision with ground underneath character and adjust character.y
 			if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
 			{
+				if( character.jumping )
+				{
+					assetManager.playSound( "landing" );
+				}
+				
 				character.jumping = false;
 				character.y -= character.y % tileWidth
 			}
@@ -407,6 +414,7 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
+					assetManager.playSound( "landing" );
 			}
 		}
 		
@@ -425,6 +433,7 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
+					assetManager.playSound( "landing" );
 			}
 		}
 		
@@ -513,6 +522,7 @@ package
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
 				timerShake.start();
+				assetManager.playSound("hitBadBoy");
 			
 				if (character.health > 0)
 				{
@@ -539,6 +549,8 @@ package
 		function goodGuyHit() {
 			decreaseScore( 10 );
 
+				assetManager.playSound( "hitGoodBoy" );
+
 			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
 			hittedGoodGuy.scale = 0.5;
 			collectedGoodGuys.push(hittedGoodGuy);
@@ -555,7 +567,9 @@ package
 		function friendsBubbleHit( i:int ) {
 			decreaseScore( 20 );
 
-			game.removeChild( friendsBubbles[i] );
+				assetManager.playSound( "protection" );
+
+				game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
 			character.addProtection();
 		}

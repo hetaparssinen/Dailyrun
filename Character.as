@@ -1,28 +1,13 @@
 ﻿package
 {
-	import starling.display.Sprite;
-	import starling.display.Image;
-	import starling.utils.AssetManager;
-	import flash.display.Bitmap;
-	import starling.textures.Texture;
-	import flash.geom.Point;
-	import starling.display.MovieClip;
 
-	import starling.display.Sprite;
+	import flash.media.Sound;
 	import starling.utils.AssetManager;
 	import starling.display.MovieClip;
 	import starling.core.Starling;
 	import starling.display.Sprite;
-	import starling.events.Event;
-	import flash.filesystem.File;
-
 	import starling.display.Image;
-	import flash.ui.Keyboard;
-	import starling.events.KeyboardEvent;
-	import starling.utils.ArrayUtil;
-	import flash.display.BitmapData;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 
@@ -35,12 +20,13 @@
 		private var mainCharacter: MovieClip;
 
 		public var jumping = false;
+		public var jumpingSound:Boolean = false;
 
 		public var velocity: Point = new Point(0, 0);
 
 		public var health: Number;
 		public var maxHealth: Number;
-		public var protection: Boolean = false;
+		public var protection:Boolean = false;
 
 		private var config: Object;
 
@@ -48,9 +34,15 @@
 		private var protectionBubble:Image;
 		
 		private var color:String;
+		private var jumpSound:Sound;
 
 		//var levelStart: LevelStart();
-
+		
+		public function isProtected():Boolean
+		{
+			return protection;
+		}
+		
 		public function Character(assetManager: AssetManager, color: String)
 		{
 			this.assetManager = assetManager;
@@ -71,6 +63,12 @@
 
 		public function update(deltaTime: Number)
 		{
+			if( jumpingSound )
+			{
+				trace("sound")
+				assetManager.playSound( "jump" );
+				jumpingSound = false;
+			}
 			if (jumping)
 			{
 				this.y += this.velocity.y * deltaTime * 3;

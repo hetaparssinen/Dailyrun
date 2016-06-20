@@ -60,6 +60,8 @@ public class ContinueScreen extends Sprite
 		
 		private function continueClick(event:Event):void
 		{
+			game.setGameState( MainMenu );
+			/*
 			trace(this.game.currentState() + " current state");
 			// Remove all content from current game
 			while ( this.game.numChildren > 0 ) {
@@ -68,6 +70,7 @@ public class ContinueScreen extends Sprite
 			// Start a new game
 			var newLevel:DailyRun = new DailyRun();
 			this.game.addChild(newLevel);
+			*/
 		}
 		
 	}

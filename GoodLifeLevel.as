@@ -186,6 +186,7 @@ public class GoodLifeLevel implements GameState
         else if (isPlaying && !character.jumping && touch)
         {
             character.jumping = true;
+            assetManager.playSound( "jump" );
             character.velocity.y = -100;
         }
 
@@ -235,10 +236,10 @@ public class GoodLifeLevel implements GameState
                         game.removeChild( goodLifeItems[i] );
                         foundItems.push( goodLifeItems[i] );
                         goodLifeItems.splice( i, 1 );
-                        trace("Item hit®")
+                        assetManager.playSound( "protection" );
                     }
                 }
-
+                
 				//check if on ascending hill (3)
 				checkIfHill(3);
 				// check if descending hill (2)
@@ -257,6 +258,7 @@ public class GoodLifeLevel implements GameState
                 var endScreen:LifeScreen = new LifeScreen( game, foundItems, color );
 
                 trace( "FINISH" );
+                assetManager.playSound( "applause" );
 
                 game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
             }
@@ -265,14 +267,23 @@ public class GoodLifeLevel implements GameState
     }
 	function checkGround() {
 		if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
-			character.jumping = false;
-			character.y = game.stage.stageHeight;
+            if( character.jumping )
+            {
+                assetManager.playSound( "landing" );
+            }
+
+            character.jumping = false;
 		}
 		
 		var tileNum:int = countTileNum();
 		//check collision with ground underneath character and adjust character.y
 		if (character.y % tileWidth > 0 && mapTMX.layers[0].layerData[tileNum + mapWidth] == 1)
 		{
+            if( character.jumping )
+            {
+                assetManager.playSound( "landing" );
+            }
+
 			character.jumping = false;
 			character.y -= character.y % tileWidth
 		}
@@ -310,6 +321,7 @@ public class GoodLifeLevel implements GameState
 
 			if (charTileY < charTileX)
 				character.jumping = false;
+                assetManager.playSound( "landing" );
 		}
 	}
 	
@@ -328,6 +340,7 @@ public class GoodLifeLevel implements GameState
 
 			if (charTileY < charTileX)
 				character.jumping = false;
+                assetManager.playSound( "landing" );
 		}
 	}
 	

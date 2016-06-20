@@ -1,5 +1,7 @@
 ﻿package  {
 
+import flash.media.SoundTransform;
+
 import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.utils.AssetManager;
@@ -58,12 +60,13 @@ import starling.display.Sprite;
 		}
 		
 		/*
-		* This function starts the Game State Manager.
+		* This function starts the Game State Manager and starts the music
 		* 
 		* 
 		*/
 		private function startDailyRun()
 		{
+			assetManager.playSound( "music", 0, 100, new SoundTransform( 0.2 ) );
 			var gameStateManager:GameStateManager = new GameStateManager( assetManager );
 			addChild( gameStateManager );
 		}

@@ -1,13 +1,12 @@
 ﻿package  {
 
+import flash.media.SoundTransform;
+
 import starling.utils.AssetManager;
 import starling.display.Button;
-import flash.net.drm.AddToDeviceGroupSetting;
-import starling.textures.Texture;
 import starling.events.Event;
 import starling.display.Sprite;
 import starling.display.Quad;
-import starling.display.Image;
 import starling.utils.deg2rad;
 import starling.text.TextField;
 
@@ -16,7 +15,7 @@ import starling.text.TextField;
 	* 
 	* 
 	*/
-	public class MainMenu extends Sprite {
+	public class MainMenu extends Sprite implements GameState {
 
 		private var game:GameStateManager;
 		private var assetManager:AssetManager;
@@ -39,8 +38,6 @@ import starling.text.TextField;
 			this.assetManager = game.getAssetManager();
 			trace("Main Menu")
 			
-			//game.setGameState( MainMenu );
-			
 			drawMainMenu();
 			
 			level1Button.addEventListener( Event.TRIGGERED, level1Start );
@@ -48,24 +45,35 @@ import starling.text.TextField;
 			level3Button.addEventListener( Event.TRIGGERED, level3Start );
 			lifeLevelButton.addEventListener( Event.TRIGGERED, lifeLevelStart );
 		}
-		
+
+
+		public function update(deltaTime:Number){
+                }
+
+		public function startPlaying(color:String){
+                }
+
 		public function level1Start( e:Event ):void {
 			trace("Level 1 starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( Level1 );
 		}
 		
 		public function level2Start( e:Event ):void {
 			trace("Level 2 starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( Level2 );
 		}
 		
 		public function level3Start( e:Event ):void {
 			trace("Level 3 starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( Level3 );
 		}
 		
 		public function lifeLevelStart( e:Event ):void {
 			trace("Life level starting");
+			assetManager.playSound( "mouseClick" );
 			game.setGameState( GoodLifeLevel );
 		}
 		
