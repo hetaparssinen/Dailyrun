@@ -136,6 +136,12 @@ package
 					enemy.x = (i % mapWidth) * tileWidth;
 					enemy.y = int(i / mapWidth) * tileWidth + tileWidth;
 					enemies.push(enemy);
+				} else if ( mapTMX.layers[1].layerData[i] == 2 ) {
+					var enemystatic = new Enemy( assetManager.getTexture( "badBoy" ) );
+					game.addChild(enemystatic);
+					enemystatic.x = (i % mapWidth) * tileWidth;
+					enemystatic.y = int(i / mapWidth) * tileWidth;
+					enemies.push(enemystatic);
 				}
 			}
 
@@ -305,7 +311,9 @@ package
 				checkIfHill(2);
 				
 				for ( var i:int = 0; i < enemies.length; i++ ) {
-					checkEnemyHill( enemies[i] );
+					if ( enemies[i] is MovingEnemy ) {
+						checkEnemyHill( enemies[i] );
+					}
 				}
 				
 				// If finish
@@ -387,15 +395,9 @@ package
 		function ascendingHill() {
 			if (!character.jumping)
 			{
-				trace("charac y " + character.y );
-				//trace(game.stage.stageHeight + " ';''';;'';;; " + character.y);
 				var groundHeight:int = (game.stage.stageHeight - character.y) / tileWidth;
-				//trace(groundHeight + " dfhafha");
 				groundHeight *= tileWidth;
-				//trace( groundHeight );
-				//trace( character.x + " '''''''' " + mapTMX.layers[0].layerSprite.x );
 				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
-				//trace( hillHeight + " hill" );
 				character.y = game.stage.stageHeight - groundHeight - hillHeight;
 			}
 			else if (character.jumping)
@@ -411,7 +413,6 @@ package
 		function descendingHill() {
 			if (!character.jumping)
 			{
-				//trace("charac y " + character.y );
 				var groundHeight:int = character.y / tileWidth;
 				groundHeight *= tileWidth;
 				var hillHeight:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
@@ -465,7 +466,11 @@ package
 				}
 				else if ( objects[i].x < game.stage.stageWidth && objects[i].x > 0 ) 
 				{
-					objects[i].x -= gameSpeed + 2;
+					if ( objects[i] is MovingEnemy ) {
+						objects[i].x -= gameSpeed + 2;
+					} else {
+						objects[i].x -= gameSpeed;
+					}
 				}
 				else
 				{
@@ -508,22 +513,26 @@ package
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
 				timerShake.start();
-			}
 			
-			if (character.health > 0)
-			{
-				character.decreaseHealth();
-				character.updateCharacter();
-			}
-			else if (character.health <= 0)
-			{
-				isPlaying = false;
-				var gameOver: GameOver = new GameOver( assetManager, game );
-				gameOver.alignPivot();
-				gameOver.x = game.stage.stageWidth / 2;
-				gameOver.y = game.stage.stageHeight / 2;
-				
-				game.addChild(gameOver);
+				if (character.health > 0)
+				{
+					character.decreaseHealth();
+					character.updateCharacter();
+
+					if( score != 0 ) {
+						decreaseScore(-10);
+					}
+				}
+				else if (character.health <= 0)
+				{
+					isPlaying = false;
+					var gameOver: GameOver = new GameOver( assetManager, game );
+					gameOver.alignPivot();
+					gameOver.x = game.stage.stageWidth / 2;
+					gameOver.y = game.stage.stageHeight / 2;
+					
+					game.addChild(gameOver);
+				}
 			}
 		}
 		

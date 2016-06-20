@@ -117,7 +117,7 @@ package
 			{
 				if (mapTMX.layers[0].layerData[i] == 1)
 				{
-					var num:Number = randomRange(1, 4);
+					var num:Number = randomRange(1, 2);
 					newGroundImage( "ground_" + num, i );
 				} else if ( mapTMX.layers[0].layerData[i] == 2 ) {
 					newGroundImage( "ground_down", i );
@@ -131,11 +131,17 @@ package
 			{
 				if (mapTMX.layers[1].layerData[i] == 1)
 				{
-					var enemy: Enemy = new Enemy(assetManager.getTexture("badBoy"));
+					var enemy:MovingEnemy = new MovingEnemy(assetManager);
 					game.addChild(enemy);
 					enemy.x = (i % mapWidth) * tileWidth;
-					enemy.y = int(i / mapWidth) * tileWidth + 5;
+					enemy.y = int(i / mapWidth) * tileWidth + tileWidth;
 					enemies.push(enemy);
+				} else if ( mapTMX.layers[1].layerData[i] == 2 ) {
+					var enemystatic = new Enemy( assetManager.getTexture( "badBoy" ) );
+					game.addChild(enemystatic);
+					enemystatic.x = (i % mapWidth) * tileWidth;
+					enemystatic.y = int(i / mapWidth) * tileWidth;
+					enemies.push(enemystatic);
 				}
 			}
 
@@ -264,7 +270,7 @@ package
 				moveAndRemove( groundImages );
 
 				// Move enemies and remove if off the screen
-				moveAndRemove( enemies );
+				moveAndRemoveMoving( enemies );
 
 				// Move good boys and remove is off the screen
 				moveAndRemove( goodGuys );
@@ -303,6 +309,12 @@ package
 				checkIfHill(3);
 				// check if descending hill (2)
 				checkIfHill(2);
+				
+				for ( var i:int = 0; i < enemies.length; i++ ) {
+					if ( enemies[i] is MovingEnemy ) {
+						checkEnemyHill( enemies[i] );
+					}
+				}
 				
 				// If finish
 				 if( character.bounds.intersects( finish.bounds ) )
@@ -414,6 +426,19 @@ package
 			}
 		}
 		
+		function checkEnemyHill( enemy:MovingEnemy ) {
+			var xLoc: int = (enemy.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
+			var yLoc: int = (enemy.y - tileWidth) / tileWidth;
+			var tileNum: int = (yLoc * mapWidth) + xLoc;
+			if ((mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2))
+			{
+				var groundHeight:int = (game.stage.stageHeight - enemy.y) / tileWidth;
+				groundHeight *= tileWidth;
+				var hillHeight:int = tileWidth - (enemy.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
+				enemy.y = game.stage.stageHeight - groundHeight - hillHeight;
+			}
+		}
+		
 		function countTileNum():int {
 			var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
 			var yLoc: int = (character.y - tileWidth) / tileWidth;
@@ -427,6 +452,29 @@ package
 			flower.y = int(i / mapWidth) * tileWidth - (flower.height - tileWidth);
 			game.addChild(flower);
 			groundImages.push( flower );
+		}
+		
+		function moveAndRemoveMoving(objects:Array) {
+			for ( var i:int = 0; i < objects.length; i++ )
+			{
+				if ( objects[i].x <= -objects[i].width )
+				{
+					game.removeChild( objects[i] );
+					objects.splice(i, 1);
+				}
+				else if ( objects[i].x < game.stage.stageWidth && objects[i].x > 0 ) 
+				{
+					if ( objects[i] is MovingEnemy ) {
+						objects[i].x -= gameSpeed + 2;
+					} else {
+						objects[i].x -= gameSpeed;
+					}
+				}
+				else
+				{
+					objects[i].x -= gameSpeed;
+				}
+			}
 		}
 		
 		function moveAndRemove( objects:Array ) {
@@ -463,22 +511,26 @@ package
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
 				timerShake.start();
-			}
 			
-			if (character.health > 0)
-			{
-				character.decreaseHealth();
-				character.updateCharacter();
-			}
-			else if (character.health <= 0)
-			{
-				isPlaying = false;
-				var gameOver: GameOver = new GameOver( assetManager, game );
-				gameOver.alignPivot();
-				gameOver.x = game.stage.stageWidth / 2;
-				gameOver.y = game.stage.stageHeight / 2;
-				
-				game.addChild(gameOver);
+				if (character.health > 0)
+				{
+					character.decreaseHealth();
+					character.updateCharacter();
+
+					if( score != 0 ) {
+						decreaseScore(-10);
+					}
+				}
+				else if (character.health <= 0)
+				{
+					isPlaying = false;
+					var gameOver: GameOver = new GameOver( assetManager, game );
+					gameOver.alignPivot();
+					gameOver.x = game.stage.stageWidth / 2;
+					gameOver.y = game.stage.stageHeight / 2;
+					
+					game.addChild(gameOver);
+				}
 			}
 		}
 		

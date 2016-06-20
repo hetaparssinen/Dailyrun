@@ -81,34 +81,28 @@
 
 		public function decreaseHealth()
 		{
-			if (!protection)
-			{
-				this.health -= 1;
-			}
+			this.health -= 1;
 		}
 
 		public function updateCharacter(): void
 		{
-			if (!protection)
+			if (health == 1)
 			{
-				if (health == 1)
-				{
-					removeChild(mainCharacter);
-					Starling.juggler.remove(mainCharacter);
-					mainCharacter = new MovieClip(assetManager.getTextures("illGirl"), 12);
-					addChild(mainCharacter);
-					Starling.juggler.add(mainCharacter);
-					this.alignPivot("center", "bottom");
-				}
-				else if (health == 0)
-				{
-					removeChild(mainCharacter);
-					Starling.juggler.remove(mainCharacter);
-					mainCharacter = new MovieClip(assetManager.getTextures("pregnantGirl"), 12);
-					addChild(mainCharacter);
-					Starling.juggler.add(mainCharacter);
-					this.alignPivot("center", "bottom");
-				}
+				removeChild(mainCharacter);
+				Starling.juggler.remove(mainCharacter);
+				mainCharacter = new MovieClip(assetManager.getTextures("illGirl"), 12);
+				addChild(mainCharacter);
+				Starling.juggler.add(mainCharacter);
+				this.alignPivot("center", "bottom");
+			}
+			else if (health == 0)
+			{
+				removeChild(mainCharacter);
+				Starling.juggler.remove(mainCharacter);
+				mainCharacter = new MovieClip(assetManager.getTextures("pregnantGirl"), 12);
+				addChild(mainCharacter);
+				Starling.juggler.add(mainCharacter);
+				this.alignPivot("center", "bottom");
 			}
 		}
 

@@ -463,22 +463,26 @@ package
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
 				timerShake.start();
-			}
 			
-			if (character.health > 0)
-			{
-				character.decreaseHealth();
-				character.updateCharacter();
-			}
-			else if (character.health <= 0)
-			{
-				isPlaying = false;
-				var gameOver: GameOver = new GameOver( assetManager, game );
-				gameOver.alignPivot();
-				gameOver.x = game.stage.stageWidth / 2;
-				gameOver.y = game.stage.stageHeight / 2;
-				
-				game.addChild(gameOver);
+				if (character.health > 0)
+				{
+					character.decreaseHealth();
+					character.updateCharacter();
+
+					if( score != 0 ) {
+						decreaseScore(-10);
+					}
+				}
+				else if (character.health <= 0)
+				{
+					isPlaying = false;
+					var gameOver: GameOver = new GameOver( assetManager, game );
+					gameOver.alignPivot();
+					gameOver.x = game.stage.stageWidth / 2;
+					gameOver.y = game.stage.stageHeight / 2;
+					
+					game.addChild(gameOver);
+				}
 			}
 		}
 		

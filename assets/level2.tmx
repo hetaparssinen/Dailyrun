@@ -10,7 +10,7 @@
  </layer>
  <layer name="Enemies" width="140" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMFCAcZjYQQ9Ajj9w6SFkFiMONq0BvewabGlisLlnFNAGDGQ8AwAycAAM
+   eJxjYBgFo2AUjIJRMFCAcZjYQQ9Ajj9w6SFkFiMONq0BvewabGmCaaAdMAroAgYy3QEANNQADQ==
   </data>
  </layer>
  <layer name="GoodBoys" width="140" height="5" visible="0">
@@ -18,9 +18,9 @@
    eJxjYBgFo2AUjIJRgAswDrQDRsGgAUM1LQxVd4+CUUBNAAAXhAAE
   </data>
  </layer>
- <layer name="FriendsBubble" width="140" height="5" visible="0">
+ <layer name="FriendsBubble" width="140" height="5">
   <data encoding="base64" compression="zlib">
-   eJztzDEBAAAMAiDXv/RC6AkBSLZu/AEAQOMBFZAAAg==
+   eJxjYBgFo2AUkAsYB9oBo2AUjIJRMApGwSggCAASoAAC
   </data>
  </layer>
  <layer name="Finish" width="140" height="5">
