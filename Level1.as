@@ -48,6 +48,7 @@ package
 		private var scoreText: TextField;
 		private var finish: Image;
 		private var start:Image;
+		private var pickMe:Image;
 		private var gameSpeed: int;
 		private var background: Background;
 		private var tapToJumpImg: Image;
@@ -142,12 +143,18 @@ package
 			{
 				if (mapTMX.layers[2].layerData[i] == 1)
 				{
-					// change assets names in some point....
-					var goodGuy: GoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
+					var goodGuy:GoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
 					game.addChild(goodGuy);
 					goodGuy.x = (i % mapWidth) * tileWidth;
 					goodGuy.y = int(i / mapWidth) * tileWidth;
 					goodGuys.push(goodGuy);
+				} else if ( mapTMX.layers[2].layerData[i] == 2 ) {
+					pickMe = new Image( assetManager.getTexture( "pickme" ) );
+					pickMe.alignPivot();
+					pickMe.scale = 0.7;
+					game.addChild(pickMe);
+					pickMe.x = (i % mapWidth) * tileWidth + goodGuys[0].width / 2;
+					pickMe.y = int(i / mapWidth) * tileWidth;
 				}
 			}
 
@@ -271,6 +278,12 @@ package
 
 				// Move finish
 				finish.x -= gameSpeed;
+				
+				if ( pickMe.x < 0 ) {
+					game.removeChild( pickMe );
+				} else {
+					pickMe.x -= gameSpeed;
+				}
 				
 				// Move and remove start
 				if ( start.x + start.width < 0 ) {
@@ -493,13 +506,15 @@ package
 			hittedGoodGuy.scale = 0.5;
 			collectedGoodGuys.push(hittedGoodGuy);
 			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
-			hittedGoodGuy.y = 30;
+			hittedGoodGuy.y = 15;
 			game.addChild(hittedGoodGuy);
 			
 			if ( blurImages != null ) {
 				game.removeChild( blurImages[0] );
 				blurImages.splice( 0, 1 );
 			}
+			
+			game.removeChild( pickMe );
 		}
 		
 		function friendsBubbleHit( i:int ) {
