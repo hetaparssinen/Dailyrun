@@ -109,7 +109,7 @@ package
 			}
 
 			//add score indicator
-			scoreText = new TextField(150, 50, "Score: " + score);
+			scoreText = new TextField(150, 50, "Score: " + score, "Gotham Rounded", 12,16776960);
 			game.addChild(scoreText);
 			
 			// Add flowers / ground

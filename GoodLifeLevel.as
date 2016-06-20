@@ -35,8 +35,6 @@ public class GoodLifeLevel implements GameState
     private var mapTMX:TMXTileMap;
     private var mapWidth:int;
     private var goodLifeItems:Vector.<Image>;
-    private var score:int;
-    private var scoreText:TextField;
     private var finish:Image;
     private var gameSpeed:int;
     private var background:Background;
@@ -97,10 +95,6 @@ public class GoodLifeLevel implements GameState
                 game.addChild(mapTMX.layers[i].layerSprite);
             }
         }
-
-        //add score indicator
-        scoreText = new TextField( 150, 50, "Score: " + score);
-        game.addChild(scoreText);
 
         //add good life items
         var itemCreationCount:int = 0;

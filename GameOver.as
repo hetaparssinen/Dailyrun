@@ -38,8 +38,7 @@ package
 			img.y = 60;
 			addChild(img);
 
-			var logo:TextField = new TextField( currentGame.stage.stageWidth, 200, "You are pregnant lol", "Comic Sans MS", 24 );
-			logo.color = 15466636;
+			var logo:TextField = new TextField( currentGame.stage.stageWidth, 200, "Oh! You are pregnant! Now it's gonna be harder to fulfill your dreams!", "Gotham Rounded", 24,16776960 );
 			logo.alignPivot();
 			logo.y = currentGame.stage.stageHeight / 2;
 			logo.x = currentGame.stage.stageWidth / 2;
@@ -47,7 +46,7 @@ package
 			
 			var restartButton: Button = new Button( assetManager.getTexture( "button-pink" ), "PLAY AGAIN");
 			restartButton.fontSize = 54;
-			restartButton.fontColor = 41701;
+			restartButton.fontColor = 16776960;
 			restartButton.fontName = "DK Codswallop";
 			restartButton.alignPivot();
 			restartButton.scale = 0.65;

@@ -47,6 +47,8 @@
 		private function initialize():void
 		{
 			var mainMenu:MainMenu = new MainMenu( this );
+			//var scoreMenu: ScoreMenu = new ScoreMenu( this, assetManager, 100)
+			//addChild(scoreMenu);
 			addEventListener( Event.ENTER_FRAME, update );
 		}
 		
