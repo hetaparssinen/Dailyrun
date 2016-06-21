@@ -15,6 +15,7 @@ import starling.display.Image;
 import starling.events.Event;
 import flash.utils.Timer;
 import flash.events.TimerEvent;
+import starling.display.Button;
 
 public class GoodLifeLevel implements GameState
 {
@@ -38,12 +39,16 @@ public class GoodLifeLevel implements GameState
     private var finish:Image;
     private var gameSpeed:int;
     private var background:Background;
-    private var tapToJumpImg:Image;
-    //public var saveDataObject:SharedObject;
     public var boughtItems:Array;
+	private var groundImages:Array;
     public var foundItems:Vector.<Image>;
     private var characterChosen:Boolean;
     private var color:String;
+	
+	private var pauseButton:Button;
+	private var continueButton:Button;
+	private var mainMenuButton:Button;
+	private var pauseScreen:PauseScreen;
 
     public function GoodLifeLevel( game:GameStateManager ):void
     {
@@ -61,6 +66,8 @@ public class GoodLifeLevel implements GameState
         boughtItems = new Array();
         boughtItems = game.saveDataObject.data.boughtItems;
 		trace(boughtItems);
+		
+		groundImages = new Array();
 
         //Get JSON file for settings
         config = assetManager.getObject( "config" );
@@ -95,6 +102,20 @@ public class GoodLifeLevel implements GameState
                 game.addChild(mapTMX.layers[i].layerSprite);
             }
         }
+		
+		// Add flowers / ground
+		for ( i = 0; i < mapTMX.layers[0].layerData.length; i++ )
+		{
+			if (mapTMX.layers[0].layerData[i] == 1)
+			{
+				var num:Number = randomRange(1, 4);
+				newGroundImage( "ground_" + num, i );
+			} else if ( mapTMX.layers[0].layerData[i] == 2 ) {
+				newGroundImage( "ground_down", i );
+			} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
+				newGroundImage( "ground_up", i );
+			}
+		}
 
         //add good life items
         var itemCreationCount:int = 0;
@@ -162,20 +183,19 @@ public class GoodLifeLevel implements GameState
             game.removeChild(levelStart);
 
             //Draw player
-            character = new Character( assetManager, this.color );
+            character = new Character( game, this.color );
             character.alignPivot( "center", "bottom");
             character.x = tileWidth;
             character.y = game.stage.stageHeight - tileWidth * 2;
             game.addChild(character);
             characterChosen = false;
-
-            tapToJumpImg = new Image(assetManager.getTexture("tapToJump"));
-            tapToJumpImg.x = 140;
-            tapToJumpImg.y = 20;
-            game.addChild(tapToJumpImg);
-            var tapToJumpTimer: Timer = new Timer(2000);
-            tapToJumpTimer.addEventListener(TimerEvent.TIMER, removeTapToJump);
-            tapToJumpTimer.start();
+			
+			pauseButton = new Button( assetManager.getTexture( "pauseButton" ) );
+			pauseButton.x = 10;
+			pauseButton.y = 10;
+			game.addChild( pauseButton );
+			
+			pauseButton.addEventListener( Event.TRIGGERED, pauseGame );
         }
         else if (isPlaying && !character.jumping && touch)
         {
@@ -184,10 +204,6 @@ public class GoodLifeLevel implements GameState
             character.velocity.y = -100;
         }
 
-    }
-
-    public function removeTapToJump( e:TimerEvent ):void {
-        game.removeChild( tapToJumpImg );
     }
 
     public function update(deltaTime:Number)
@@ -213,6 +229,9 @@ public class GoodLifeLevel implements GameState
             {
                 goodLifeItems[i].x -= gameSpeed;
             }
+			
+			// Move flowers and remove if off the screen
+			moveAndRemove( groundImages );
 
             // Move finish
             finish.x -= gameSpeed;
@@ -259,6 +278,20 @@ public class GoodLifeLevel implements GameState
 
         }
     }
+	
+	function randomRange(minNum:Number, maxNum:Number):Number
+	{
+		return (Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum);
+	}
+	
+	function newGroundImage( image:String, i:int ) {
+		var flower:Image = new Image( assetManager.getTexture( image ) );
+		flower.x = (i % mapWidth) * tileWidth;
+		flower.y = int(i / mapWidth) * tileWidth - (flower.height - tileWidth);
+		game.addChild(flower);
+		groundImages.push( flower );
+	}
+
 	function checkGround() {
 		if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
             if( character.jumping )
@@ -343,6 +376,62 @@ public class GoodLifeLevel implements GameState
 		var yLoc: int = (character.y - tileWidth) / tileWidth;
 		var tileNum: int = (yLoc * mapWidth) + xLoc;
 		return tileNum;
+	}
+	
+	function moveAndRemove( objects:Array ) {
+		for ( var i:int = 0; i < objects.length; i++ )
+		{
+			if ( objects[i].x <= -objects[i].width )
+			{
+				game.removeChild( objects[i] );
+				objects.splice(i, 1);
+			}
+			else
+			{
+				objects[i].x -= gameSpeed;
+			}
+		}
+	}
+	
+	function pauseGame( e:Event ) {
+		pauseScreen = new PauseScreen( game );
+		isPlaying = false;
+		
+		continueButton = new Button( assetManager.getTexture( "button-yellow" ), "CONTINUE" );
+		initButton( continueButton );
+		continueButton.y = game.stage.stageHeight / 2 - 40;
+		game.addChild( continueButton );
+		
+		mainMenuButton = new Button( assetManager.getTexture( "button-yellow" ), "MAIN MENU" );
+		initButton( mainMenuButton );
+		mainMenuButton.y = game.stage.stageHeight / 2 + 40;
+		game.addChild( mainMenuButton );
+		
+		continueButton.addEventListener( Event.TRIGGERED, continueGame );
+		mainMenuButton.addEventListener( Event.TRIGGERED, toMainMenu );
+	}
+	
+	function continueGame( e:Event ) {
+		pauseScreen.remove();
+		game.removeChild( continueButton );
+		game.removeChild( mainMenuButton );
+		isPlaying = true;
+	}
+	
+	function toMainMenu( e:Event ) {
+		while ( this.game.numChildren > 0 ) {
+			this.game.removeChildAt( 0 );
+		}
+		this.game.setGameState( MainMenu );
+	}
+	
+	function initButton( button:Button ) {
+		button.fontColor = 16716947;
+		button.fontName = "DK Codswallop";
+		button.fontSize = 54;
+		button.alignPivot();
+		button.scale = 0.65;
+		button.x = game.stage.stageWidth / 2;
 	}
 }
 }
