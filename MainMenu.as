@@ -85,11 +85,11 @@ import starling.display.Image;
 			if ( game.saveDataObject.data.mute == false ) {
 				game.saveDataObject.data.mute = true;
 				game.saveDataObject.data.backgroundMusic.stop();
-				muteButton = new Button( assetManager.getTexture( "noSound" ) );
+				muteButton = new Button( assetManager.getTexture( "soundOff" ) );
 			} else {
 				game.saveDataObject.data.mute = false;
 				game.saveDataObject.data.backgroundMusic = assetManager.playSound( "music", 0, 100, new SoundTransform( 0.2 ) );
-				muteButton = new Button( assetManager.getTexture( "sound" ) );
+				muteButton = new Button( assetManager.getTexture( "soundOn" ) );
 			}
 			initMuteButton();
 		}
@@ -137,9 +137,9 @@ import starling.display.Image;
 			game.addChild( lifeLevelButton );
 			
 			if ( game.saveDataObject.data.mute == false ) {
-				muteButton = new Button( assetManager.getTexture( "sound" ) );
+				muteButton = new Button( assetManager.getTexture( "soundOn" ) );
 			} else {
-				muteButton = new Button( assetManager.getTexture( "noSound" ) );
+				muteButton = new Button( assetManager.getTexture( "soundOff" ) );
 			}
 			initMuteButton();
 		}
