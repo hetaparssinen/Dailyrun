@@ -16,6 +16,7 @@ package
 
 	public class LevelStart extends Sprite
 	{
+		private var game:GameStateManager;
 		private var assetManager: AssetManager;
 		private var config: Object;
 		private var level:GameState;
@@ -24,10 +25,11 @@ package
 		private var characterPink: Image;
 		private var characterGreen: Image;
 
-		public function LevelStart(assetManager:AssetManager, level:GameState)
+		public function LevelStart(game:GameStateManager, level:GameState)
 		{
+			this.game = game;
 			this.level = level;
-			this.assetManager = assetManager;
+			this.assetManager = game.getAssetManager();
 			config = assetManager.getObject("config");
 			addEventListener(Event.ADDED_TO_STAGE, initialize);
 		}
@@ -81,27 +83,27 @@ package
 			if (clickYellow)
 			{
 				trace("You touched yellow");
-				assetManager.playSound( "mouseClick" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				level.startPlaying("yellow");
 			}
 			else if(clickBlue)		
 			{
 				trace("You touched blue");
-				assetManager.playSound( "mouseClick" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				level.startPlaying("blue");
 			}
 			else
 				if(clickGreen)
 				{
 					trace("You touched green");
-					assetManager.playSound( "mouseClick" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 					level.startPlaying("green");
 				}
 			else
 				if(clickPink)
 				{
 					trace("you touched pink");
-					assetManager.playSound( "mouseClick" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 					level.startPlaying("pink");
 				}
 		}

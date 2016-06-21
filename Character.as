@@ -14,7 +14,7 @@
 
 	public class Character extends Sprite
 	{
-
+		private var game:GameStateManager;
 		private var assetManager: AssetManager;
 
 		private var mainCharacter: MovieClip;
@@ -43,9 +43,10 @@
 			return protection;
 		}
 		
-		public function Character(assetManager: AssetManager, color: String)
+		public function Character(game, color: String)
 		{
-			this.assetManager = assetManager;
+			this.game = game;
+			this.assetManager = this.game.getAssetManager();;
 
 			config = assetManager.getObject("config");
 			this.color = color;
@@ -66,7 +67,7 @@
 			if( jumpingSound )
 			{
 				trace("sound")
-				assetManager.playSound( "jump" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "jump" );
 				jumpingSound = false;
 			}
 			if (jumping)

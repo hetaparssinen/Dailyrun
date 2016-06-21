@@ -25,6 +25,7 @@ import starling.display.Image;
 		private var level2Button:Button;
 		private var level3Button:Button;
 		private var lifeLevelButton:Button;
+		private var muteButton:Button;
 		
 		[Embed(source="assets/DKCodswallop.ttf", embedAsCFF="false", fontFamily="DK Codswallop")]
 		private static const FontDK:Class;
@@ -56,26 +57,41 @@ import starling.display.Image;
 
 		public function level1Start( e:Event ):void {
 			trace("Level 1 starting");
-			assetManager.playSound( "mouseClick" );
+			trace(game.saveDataObject.data.mute);
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 			game.setGameState( Level1 );
 		}
 		
 		public function level2Start( e:Event ):void {
 			trace("Level 2 starting");
-			assetManager.playSound( "mouseClick" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 			game.setGameState( Level2 );
 		}
 		
 		public function level3Start( e:Event ):void {
 			trace("Level 3 starting");
-			assetManager.playSound( "mouseClick" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 			game.setGameState( Level3 );
 		}
 		
 		public function lifeLevelStart( e:Event ):void {
 			trace("Life level starting");
-			assetManager.playSound( "mouseClick" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 			game.setGameState( GoodLifeLevel );
+		}
+		
+		public function mute( e:Event ):void {
+			game.removeChild( muteButton );
+			if ( game.saveDataObject.data.mute == false ) {
+				game.saveDataObject.data.mute = true;
+				game.saveDataObject.data.backgroundMusic.stop();
+				muteButton = new Button( assetManager.getTexture( "noSound" ) );
+			} else {
+				game.saveDataObject.data.mute = false;
+				game.saveDataObject.data.backgroundMusic = assetManager.playSound( "music", 0, 100, new SoundTransform( 0.2 ) );
+				muteButton = new Button( assetManager.getTexture( "sound" ) );
+			}
+			initMuteButton();
 		}
 		
 		public function drawMainMenu():void {
@@ -119,6 +135,13 @@ import starling.display.Image;
 			initButton( lifeLevelButton );
 			lifeLevelButton.y = 10 + 3 * lifeLevelButton.height + 3 * 5;
 			game.addChild( lifeLevelButton );
+			
+			if ( game.saveDataObject.data.mute == false ) {
+				muteButton = new Button( assetManager.getTexture( "sound" ) );
+			} else {
+				muteButton = new Button( assetManager.getTexture( "noSound" ) );
+			}
+			initMuteButton();
 		}
 		
 		private function initButton( button:Button ):void {
@@ -128,6 +151,13 @@ import starling.display.Image;
 			button.fontSize = 54;
 			button.alignPivot("center", "top");
 			button.x = game.stage.stageWidth / 2 + 80;
+		}
+		
+		private function initMuteButton():void {
+			muteButton.x = 10;
+			muteButton.y = game.stage.stageHeight - muteButton.height - 10;
+			game.addChild( muteButton );
+			muteButton.addEventListener( Event.TRIGGERED, mute );
 		}
 		
 

@@ -197,7 +197,7 @@ package
 			game.addEventListener(TouchEvent.TOUCH, touchEventHandler);
 
 			//Place start screen
-			levelStart = new LevelStart(assetManager, this);
+			levelStart = new LevelStart(game, this);
 			levelStart.alignPivot();
 			levelStart.x = config.levelStart.marginX / 2;
 			levelStart.y = config.levelStart.marginY / 2;
@@ -222,7 +222,7 @@ package
 				game.removeChild(levelStart);
 
 				//Draw player
-				character = new Character(assetManager, color);
+				character = new Character(game, color);
 				character.alignPivot("center", "bottom");
 				character.x = tileWidth;
 				character.y = game.stage.stageHeight - tileWidth * 2;
@@ -333,7 +333,7 @@ package
 		
 
 					trace( "FINISH" );
-					assetManager.playSound( "applause" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "applause" );
 					
 					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
@@ -373,7 +373,7 @@ package
 			{
 				if( character.jumping )
 				{
-					assetManager.playSound( "landing" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
 				}
 
 				character.jumping = false;
@@ -413,7 +413,7 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
-					assetManager.playSound( "landing" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
 			}
 		}
 		
@@ -432,7 +432,7 @@ package
 
 				if (charTileY < charTileX)
 					character.jumping = false;
-					assetManager.playSound( "landing" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
 			}
 		}
 		
@@ -482,7 +482,7 @@ package
 				game.addChild( blur );
 				blurImages.push( blur );
 
-				assetManager.playSound("hitBadBoy");
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound("hitBadBoy");
 				
 				var timerShake:Timer = new Timer( 50, 10 );
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
@@ -520,7 +520,7 @@ package
 			hittedGoodGuy.y = 15;
 			game.addChild(hittedGoodGuy);
 
-			assetManager.playSound( "hitGoodBoy" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );
 			
 			if ( blurImages != null ) {
 				game.removeChild( blurImages[0] );
@@ -536,7 +536,7 @@ package
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
 			character.addProtection();
-			assetManager.playSound( "protection" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "protection" );
 		}
 		
 		function decreaseScore( plusScore:int ) {

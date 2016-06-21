@@ -197,7 +197,7 @@ package
 			game.addEventListener(TouchEvent.TOUCH, touchEventHandler);
 
 			//Place start screen
-			levelStart = new LevelStart(assetManager, this);
+			levelStart = new LevelStart(game, this);
 			levelStart.alignPivot();
 			levelStart.x = config.levelStart.marginX / 2;
 			levelStart.y = config.levelStart.marginY / 2;
@@ -223,7 +223,7 @@ package
 				game.removeChild(levelStart);
 
 				//Draw player
-				character = new Character(assetManager, color);
+				character = new Character(game, color);
 				character.alignPivot("center", "bottom");
 				character.x = tileWidth;
 				character.y = game.stage.stageHeight - tileWidth * 2;
@@ -234,7 +234,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
-				assetManager.playSound( "jump" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "jump" );
 				character.velocity.y = -100;
 			}
 		}		
@@ -357,7 +357,7 @@ package
 			{
 				if( character.jumping )
 				{
-					assetManager.playSound( "landing" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
 				}
 				
 				character.jumping = false;
@@ -504,7 +504,7 @@ package
 				timerShake.addEventListener(TimerEvent.TIMER, shake);
 				timerShake.start();
 
-				assetManager.playSound("hitBadBoy");
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound("hitBadBoy");
 			
 				if (character.health > 0)
 				{
@@ -531,7 +531,7 @@ package
 					}
 
 					trace( "FINISH" );
-					assetManager.playSound( "applause" );
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "applause" );
 					
 					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
@@ -548,7 +548,7 @@ package
 			hittedGoodGuy.y = 30;
 			game.addChild(hittedGoodGuy);
 
-				assetManager.playSound( "hitGoodBoy" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );
 			
 			if ( blurImages != null ) {
 				game.removeChild( blurImages[0] );
@@ -559,7 +559,7 @@ package
 		function friendsBubbleHit( i:int ) {
 			decreaseScore( 20 );
 
-				assetManager.playSound( "protection" );
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "protection" );
 
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );

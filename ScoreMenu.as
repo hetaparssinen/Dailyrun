@@ -132,23 +132,23 @@ package {
 			var buttonPress: Button = event.target as Button;
 			if (buttonPress == bikeButton && score >= 10) {
 				removeContent();
-				assetManager.playSound( "mouseClick" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				pushData("bike");
 				score -= 10;
 				trace(score);
 			} else if (buttonPress == phoneButton && score >= 20) {
 				removeContent();
-				assetManager.playSound( "mouseClick" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				pushData("phone");
 				score = score - 20;
 			} else if (buttonPress == djembeButton && score >= 30) {
 				removeContent();
-				assetManager.playSound( "mouseClick" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				pushData("djembe");
 				score = score - 30;
 			} else if (buttonPress == laptopButton && score >= 40) {
 				removeContent();
-				assetManager.playSound( "mouseClick" );
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				pushData("laptop");
 				score = score - 40;
 			}
