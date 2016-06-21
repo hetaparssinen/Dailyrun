@@ -20,6 +20,7 @@ package
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	import starling.display.Button;
+	import flash.events.Event;
 
 	public class Level1 implements GameState
 	{
@@ -43,6 +44,7 @@ package
 		private var goodGuys:Array;
 		private var collectedGoodGuys:Array;
 		private var groundImages:Array;
+		private var smallGrassImages:Array;
 		private var friendsBubbles:Array;
 		private var characterChosen: Boolean;
 		private var score: int;
@@ -63,6 +65,8 @@ package
 		private var continueButton:Button;
 		private var mainMenuButton:Button;
 		private var pauseScreen:PauseScreen;
+		
+		private var pointsTimer:Timer;
 
 		public function Level1(game: GameStateManager): void
 		{
@@ -97,6 +101,7 @@ package
 			enemies = new Array();
 			goodGuys = new Array();
 			groundImages = new Array();
+			smallGrassImages = new Array();
 			collectedGoodGuys = new Array();
 			friendsBubbles = new Array();
 			blurImages = new Array();
@@ -114,9 +119,9 @@ package
 			}
 
 			//add score indicator
-			scoreText = new TextField(100, 50, "Score: " + score,"Gotham Rounded",12,16776960);
+			scoreText = new TextField( 100, 50, "Score: " + score, "Gotham Rounded", 12, 16776960);
 			scoreText.x = 30;
-			game.addChild(scoreText);
+			game.addChild( scoreText );
 			
 			// Add flowers / ground
 			for ( i = 0; i < mapTMX.layers[0].layerData.length; i++ )
@@ -130,6 +135,14 @@ package
 				} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
 					newGroundImage( "ground_up", i );
 				}
+			}
+			for ( i = 0; i < game.stage.stageWidth / 64; i++ ) {
+				var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
+				grass.alignPivot( "left", "bottom" );
+				grass.x = i * 64;
+				grass.y = game.stage.stageHeight;
+				game.addChild( grass );
+				smallGrassImages.push( grass );
 			}
 
 			// Add bad boys to the screen
@@ -250,6 +263,10 @@ package
 				game.addChild( pauseButton );
 				
 				pauseButton.addEventListener( Event.TRIGGERED, pauseGame );
+				
+				pointsTimer = new Timer( 5000, 100 );
+				pointsTimer.addEventListener( TimerEvent.TIMER, pointsTimerHandler );
+				pointsTimer.start();
 			}
 			else if (isPlaying && !character.jumping && touch)
 			{
@@ -281,6 +298,8 @@ package
 				
 				// Move flowers and remove if off the screen
 				moveAndRemove( groundImages );
+				
+				moveAndRemove( smallGrassImages, true );
 
 				// Move enemies and remove if off the screen
 				moveAndRemove( enemies );
@@ -465,19 +484,29 @@ package
 			groundImages.push( flower );
 		}
 		
-		function moveAndRemove( objects:Array ) {
+		function moveAndRemove( objects:Array, addMore:Boolean=false ) {
 			for ( var i:int = 0; i < objects.length; i++ )
 			{
 				if ( objects[i].x <= -objects[i].width )
 				{
 					game.removeChild( objects[i] );
 					objects.splice(i, 1);
+					if ( addMore ) addSmallGrass();
 				}
 				else
 				{
 					objects[i].x -= gameSpeed;
 				}
 			}
+		}
+		
+		function addSmallGrass() {
+			var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
+			grass.alignPivot( "left", "bottom" );
+			grass.x = game.stage.stageWidth;
+			grass.y = game.stage.stageHeight;
+			game.addChild( grass );
+			smallGrassImages.push( grass );
 		}
 		
 		function checkCollision( objects:Array ):int {
@@ -508,9 +537,7 @@ package
 					character.decreaseHealth();
 					character.updateCharacter();
 
-					if( score != 0 ) {
-						decreaseScore(-10);
-					}
+					updateScore( -20 );
 				}
 				else if (character.health <= 0)
 				{
@@ -526,9 +553,7 @@ package
 		}
 		
 		function goodGuyHit() {
-			decreaseScore( 10 );
-
-			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
+			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("star"));
 			hittedGoodGuy.scale = 0.5;
 			collectedGoodGuys.push(hittedGoodGuy);
 			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
@@ -546,16 +571,14 @@ package
 		}
 		
 		function friendsBubbleHit( i:int ) {
-			decreaseScore( 20 );
-
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
 			character.addProtection();
 			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "protection" );
 		}
 		
-		function decreaseScore( plusScore:int ) {
-			this.score += plusScore;
+		function updateScore( scoreaAdd:int ) {
+			this.score += scoreaAdd;
 			scoreText.text = "Score: " + this.score;
 		}
 		
@@ -598,6 +621,10 @@ package
 			button.alignPivot();
 			button.scale = 0.65;
 			button.x = game.stage.stageWidth / 2;
+		}
+		
+		function pointsTimerHandler( e:TimerEvent ) {
+			updateScore( 10 );
 		}
 	}
 }

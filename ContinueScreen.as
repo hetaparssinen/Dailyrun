@@ -42,15 +42,14 @@ public class ContinueScreen extends Sprite
 			text.y = 50;
 			addChild( text );
 			
-			for(var i:int = 0; i < choosenObjects.length; i++) { 
+			for (var i:int = 0; i < choosenObjects.length; i++) { 
 				objectImage = new Image(assetManager.getTexture(choosenObjects[i]));
 				objectImage.y = game.stage.stageHeight / 2 - objectImage.height/2;
-				objectImage.x = game.stage.stageWidth / 24 + i*objectImage.width;
+				objectImage.alignPivot();
+				objectImage.x = ( game.stage.stageWidth / ( choosenObjects.length + 1 ) ) * ( i + 1 );
 				objectImage.scale = 0.5;
-				
-
 				addChild(objectImage);	
-				}
+			}
 
 			continueButton = new Button(assetManager.getTexture("button-yellow"));
 			continueButton.text = " Go to next level ";

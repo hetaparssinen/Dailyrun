@@ -8,20 +8,20 @@
  </tileset>
  <layer name="Floor" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDGXADMSMSJhpAOwkxW5ceunldloAmJ9wuR+fn0nBpIQPqXZSy+3UikNqhRkut9HC/FFMHQwAsx8A3A==
+   eJxjYBgFo2AUDGXADMSMSJhpAOwkxW5ceunldloAmJ9wuR+fn0nBpIQPOXZiM59Uc6gVh9QKM1xuo4X5o5g6GAC1owDd
   </data>
  </layer>
- <layer name="Enemies" width="110" height="5" visible="0">
+ <layer name="Enemies" width="110" height="5">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2BwAMYB0jucwWi4DDygdRwM9jjG5T508cHuj1FAPwAAJZAACQ==
   </data>
  </layer>
- <layer name="GoodBoys" width="110" height="5">
+ <layer name="GoodBoys" width="110" height="5" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYBgFo2D4AMaBdsAwAkwD7YBRQBYYCnlgKLhxFAwcAAAcPAAG
   </data>
  </layer>
- <layer name="FriendsBubble" width="110" height="5">
+ <layer name="FriendsBubble" width="110" height="5" visible="0">
   <data encoding="base64" compression="zlib">
    eJxjYKAuYKSyeaNgFIyCUTAKRsEoGDkAABDgAAI=
   </data>

@@ -5,15 +5,15 @@
  </tileset>
  <layer name="Floor" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJztU0kOACEIc/n/n8fLXAxii2TiJG3Sk1DKYimCIAjCH9AH62BL0Hh5ohWtmdXDF953HqrzluVvnt8NOL0j6yZ2Wl6Olb+KZ7yiNS1dpMeIR+a+EH3vvpg9dyDO8sPkI2BnyuxYvJctuEvvL0S40kHrZPtB+QAN5wGG
+   eJztlMEOwCAIQ9X9/z/PM0HTQg9b0pf0NCl1EMcwxhjzB56tubUEHl2fSk9VP7VfJ8Mkv3V7qTy7xEzsLGI94nWryepP55msaM/MG7ljJSOz/8icbvvF7B7ytmT3ZeoR2H/Kztj6plZhlhHFLpx82LdBlQfVC9okAXs=
   </data>
  </layer>
  <layer name="Enemies" width="180" height="5">
   <data encoding="base64" compression="zlib">
-   eJzt0kEOABAMRNFy/0Pbs9BGMU3+W8sYMmYAgGr67wIOJx0rvA+rJpK728+cl93bkxe503v21v9nUOmm0gNaXu1CdX8DdtQAFQ==
+   eJxjYBgFo2AUjIJRMNQA00A7gAhAiRuHgv9GASZgHCTmEko/6OZR290DZR6twp8aYLC4bbC4YxQMDkDvumawpj8Ac1QAFQ==
   </data>
  </layer>
- <layer name="GoodBoys" width="180" height="5">
+ <layer name="GoodBoys" width="180" height="5" visible="0">
   <data encoding="base64" compression="zlib">
    eJzt0DERAAAIAzHwb5oJAyxwXKLg2wgAAFpuBxzw+YPP22CiABoIAAQ=
   </data>
