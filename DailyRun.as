@@ -68,7 +68,7 @@ import starling.display.Sprite;
 		{
 			var gameStateManager:GameStateManager = new GameStateManager( assetManager );
 			addChild( gameStateManager );
-			if ( gameStateManager.saveDataObject.data.mute == false ) {
+			if ( gameStateManager.saveDataObject.data.mute != true ) {
 				gameStateManager.saveDataObject.data.backgroundMusic = assetManager.playSound( "music", 0, 100, new SoundTransform( 0.2 ) );
 			}
 		}

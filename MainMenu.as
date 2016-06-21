@@ -26,6 +26,11 @@ import starling.display.Image;
 		private var level3Button:Button;
 		private var lifeLevelButton:Button;
 		private var muteButton:Button;
+		private var clearDataButton:Button;
+		private var confirmButton:Button;
+		private var cancelButton:Button;
+		
+		private var confirmItems:Array;
 		
 		[Embed(source="assets/DKCodswallop.ttf", embedAsCFF="false", fontFamily="DK Codswallop")]
 		private static const FontDK:Class;
@@ -39,6 +44,8 @@ import starling.display.Image;
 			this.game = game;
 			this.assetManager = game.getAssetManager();
 			trace("Main Menu")
+			
+			confirmItems = new Array();
 			
 			drawMainMenu();
 			
@@ -82,7 +89,7 @@ import starling.display.Image;
 		
 		public function mute( e:Event ):void {
 			game.removeChild( muteButton );
-			if ( game.saveDataObject.data.mute == false ) {
+			if ( game.saveDataObject.data.mute != true ) {
 				game.saveDataObject.data.mute = true;
 				game.saveDataObject.data.backgroundMusic.stop();
 				muteButton = new Button( assetManager.getTexture( "soundOff" ) );
@@ -96,7 +103,6 @@ import starling.display.Image;
 		
 		public function drawMainMenu():void {
 			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 16776960 );
-			//background.alpha = 0.8;
 			game.addChild( background );
 			
 			var logo:Image = new Image (assetManager.getTexture("logo"));
@@ -136,12 +142,23 @@ import starling.display.Image;
 			lifeLevelButton.y = 10 + 3 * lifeLevelButton.height + 3 * 5;
 			game.addChild( lifeLevelButton );
 			
-			if ( game.saveDataObject.data.mute == false ) {
+			if ( game.saveDataObject.data.mute != true ) {
 				muteButton = new Button( assetManager.getTexture( "soundOn" ) );
 			} else {
 				muteButton = new Button( assetManager.getTexture( "soundOff" ) );
 			}
 			initMuteButton();
+			
+			clearDataButton = new Button( assetManager.getTexture( "button-yellow" ), "NEW GAME" );
+			clearDataButton.scale = 0.35;
+			clearDataButton.fontName = "DK Codswallop";
+			clearDataButton.fontSize = 48;
+			clearDataButton.fontColor = 15466636;
+			clearDataButton.x = 10;
+			clearDataButton.y = game.stage.stageHeight - clearDataButton.height - 10;
+			game.addChild( clearDataButton );
+			
+			clearDataButton.addEventListener( Event.TRIGGERED, clearData );
 		}
 		
 		private function initButton( button:Button ):void {
@@ -155,11 +172,64 @@ import starling.display.Image;
 		
 		private function initMuteButton():void {
 			muteButton.x = 10;
-			muteButton.y = game.stage.stageHeight - muteButton.height - 10;
+			muteButton.y = 10;
 			game.addChild( muteButton );
 			muteButton.addEventListener( Event.TRIGGERED, mute );
 		}
 		
-
+		private function clearData() {
+			var background:Quad = new Quad( this.game.stage.stageWidth - 40, this.game.stage.stageHeight - 40, 15466636 );
+			background.alpha = 0.9;
+			background.alignPivot();
+			background.x = this.game.stage.stageWidth / 2;
+			background.y = this.game.stage.stageHeight/ 2;
+			this.game.addChild( background );
+			confirmItems.push( background );
+			
+			var text:TextField = new TextField( this.game.stage.stageWidth - 200, 100, "All your objects will be gone.", "Gotham Rounded", 24 );
+			text.x = this.game.stage.stageWidth / 2;
+			text.y = this.game.stage.stageHeight/ 2 - 50;
+			text.alignPivot();
+			this.game.addChild( text );
+			confirmItems.push( text );
+			
+			cancelButton = new Button( assetManager.getTexture( "button-yellow" ), "CANCEL" );
+			initConfirmButton( cancelButton );
+			cancelButton.x = game.stage.stageWidth / 2 - cancelButton.width / 2;
+			confirmItems.push( cancelButton );
+			
+			confirmButton = new Button( assetManager.getTexture( "button-yellow" ), "NEW GAME" );
+			initConfirmButton( confirmButton );
+			confirmItems.push( confirmButton );
+			
+			confirmButton.addEventListener( Event.TRIGGERED, confirm );
+			cancelButton.addEventListener( Event.TRIGGERED, calcel );
+		}
+		
+		function initConfirmButton( button:Button ) {
+			button.scale = 0.5;
+			button.fontName = "DK Codswallop";
+			button.fontSize = 48;
+			button.fontColor = 15466636;
+			button.alignPivot();
+			button.x = game.stage.stageWidth / 2 + button.width / 2;
+			button.y = game.stage.stageHeight / 2 + 50;
+			game.addChild( button );
+		}
+		
+		function calcel( e:Event ) {
+			for ( var i:int = 0; i < confirmItems.length; i++ ) {
+				game.removeChild( confirmItems[i] );
+			}
+		}
+		
+		function confirm( e:Event ) {
+			game.saveDataObject.clear();
+			while ( game.numChildren > 0 ) {
+				game.removeChildAt( 0 );
+			}
+			var dailyrun:DailyRun = new DailyRun();
+			game.addChild( dailyrun );
+		}
     }
 }
