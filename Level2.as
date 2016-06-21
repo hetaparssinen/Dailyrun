@@ -19,6 +19,7 @@ package
 	import starling.textures.Texture;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
+	import starling.display.Button;
 
 	public class Level2 implements GameState
 	{
@@ -55,6 +56,11 @@ package
 		
 		private var blur:Image;
 		private var blurImages:Array;
+		
+		private var pauseButton:Button;
+		private var continueButton:Button;
+		private var mainMenuButton:Button;
+		private var pauseScreen:PauseScreen;
 
 		public function Level2(game: GameStateManager): void
 		{
@@ -228,7 +234,14 @@ package
 				character.y = game.stage.stageHeight - tileWidth * 2;
 				//character.scale = 2;
 				game.addChild(character); 
-				characterChosen = false; 
+				characterChosen = false;
+				
+				pauseButton = new Button( assetManager.getTexture( "pauseButton" ) );
+				pauseButton.x = 10;
+				pauseButton.y = 10;
+				game.addChild( pauseButton );
+				
+				pauseButton.addEventListener( Event.TRIGGERED, pauseGame );
 			}
 			else if (isPlaying && !character.jumping && touch)
 			{
@@ -503,6 +516,7 @@ package
 			if ( !character.protection ) {
 				blur = new Image( assetManager.getTexture( "blur" ) );
 				game.addChild( blur );
+				game.addChild( pauseButton );
 				blurImages.push( blur );
 				
 				var timerShake:Timer = new Timer( 50, 10 );
@@ -563,6 +577,47 @@ package
 		function decreaseScore( plusScore:int ) {
 			this.score += plusScore;
 			scoreText.text = "Score: " + this.score;
+		}
+		
+		function pauseGame( e:Event ) {
+			pauseScreen = new PauseScreen( game );
+			isPlaying = false;
+			
+			continueButton = new Button( assetManager.getTexture( "button-yellow" ), "CONTINUE" );
+			initButton( continueButton );
+			continueButton.y = game.stage.stageHeight / 2 - 40;
+			game.addChild( continueButton );
+			
+			mainMenuButton = new Button( assetManager.getTexture( "button-yellow" ), "MAIN MENU" );
+			initButton( mainMenuButton );
+			mainMenuButton.y = game.stage.stageHeight / 2 + 40;
+			game.addChild( mainMenuButton );
+			
+			continueButton.addEventListener( Event.TRIGGERED, continueGame );
+			mainMenuButton.addEventListener( Event.TRIGGERED, toMainMenu );
+		}
+		
+		function continueGame( e:Event ) {
+			pauseScreen.remove();
+			game.removeChild( continueButton );
+			game.removeChild( mainMenuButton );
+			isPlaying = true;
+		}
+		
+		function toMainMenu( e:Event ) {
+			while ( this.game.numChildren > 0 ) {
+				this.game.removeChildAt( 0 );
+			}
+			this.game.setGameState( MainMenu );
+		}
+		
+		function initButton( button:Button ) {
+			button.fontColor = 16716947;
+			button.fontName = "DK Codswallop";
+			button.fontSize = 54;
+			button.alignPivot();
+			button.scale = 0.65;
+			button.x = game.stage.stageWidth / 2;
 		}
 	}
 }
