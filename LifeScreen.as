@@ -14,12 +14,16 @@
 		
 		private var congratsText:TextField;
 		private var continueButton:Button;
+		
+		private var readMoreItems:Array;
 
 		public function LifeScreen( game:GameStateManager, items:Vector.<Image>, color:String) {
 			this.game = game;
 			assetManager = game.getAssetManager();
 			removeContent();
 			addLifeScreen( items, color );
+			
+			this.readMoreItems = new Array();
 		}
 		
 		private function removeContent():void {
@@ -59,6 +63,7 @@
 			character.y = game.stage.stageHeight - character.height;
 			this.game.addChild( character );
 
+			if ( foundItems != null ) {
 			for ( var i:int = 0; i < foundItems.length; i++ ) {
 				foundItems[i].scale = 0.2;
 				foundItems[i].alignPivot();
@@ -66,6 +71,7 @@
 				foundItems[i].y = game.stage.stageHeight - character.height;
 				this.game.addChild( foundItems[i] );
 			}
+		}
 		}
 		
 		private function continueButtonClicked():void {
@@ -109,38 +115,47 @@
 		}
 		
 		private function restartButtonClicked():void {
-			// Remove all content from current game
-			while ( this.game.numChildren > 0 ) {
-				this.game.removeChildAt( 0 );
-			}
-			// Start a new game
-			var newGame:DailyRun = new DailyRun();
-			this.game.addChild(newGame);
+			removeContent();
+			this.game.setGameState( MainMenu );
 		}
 		
-		private function readMoreButtonClicked():void {
-			while ( this.game.numChildren > 0 ) {
-				this.game.removeChildAt( 0 );
-			}
-			
-			var background:Image = new Image( assetManager.getTexture( "landscape_size ok" ) ); 
-			this.game.addChild( background );
-			
-			var backgroundBlue:Quad = new Quad( this.game.stage.stageWidth - 40, this.game.stage.stageHeight - 40, 41701);
+		private function readMoreButtonClicked():void {			
+			var backgroundBlue:Quad = new Quad( this.game.stage.stageWidth - 20, this.game.stage.stageHeight - 20, 41701);
 			backgroundBlue.alignPivot();
 			backgroundBlue.x = this.game.stage.stageWidth / 2;
 			backgroundBlue.y = this.game.stage.stageHeight/ 2;
 			this.game.addChild( backgroundBlue );
+			this.readMoreItems.push( backgroundBlue );
 			
-			var text:String = "Something...... or then no?";
-			var story:TextField = new TextField( 200, 200, text, "Comic Sans MS", 16, 15466636 );
-			story.alignPivot();
-			story.y = 40;
-			story.x = game.stage.stageWidth / 2;
-			this.game.addChild( story );
+			var text:String = "Thank you for playing Daily Run! We hope you had fun while playing it. Of course fun is an important part in our game, but this game is also about having a good life.";
+			addText( text, 65 );
+			
+			text = "Although pregnancy and having a child is one of the most beautiful things in life for a lot of people, it might be a good idea to not get children early in your life. Early pregnancy might let you drop out of school and get you in situations you don't want to be in. Without education and a stable life it's hard to find a job, take care for your children and fulfil the dreams you have about the future.";
+			addText( text, 210 );
+			
+			var backButton = new Button( assetManager.getTexture( "arrowLeft" ) );
+			backButton.x = 10;
+			backButton.y = 20;
+			this.game.addChild( backButton );
+			this.readMoreItems.push( backButton );
+			
+			backButton.addEventListener( Event.TRIGGERED, goBack );
 		}
 		
+		function addText( text:String, y:int ) {
+			var story:TextField = new TextField( game.stage.stageWidth - 80, 200, text, "Gotham Rounded", 16, 0 );
+			story.alignPivot();
+			story.y = y;
+			story.x = game.stage.stageWidth / 2;
+			this.game.addChild( story );
+			this.readMoreItems.push( story );
+		}
 		
+		function goBack( e:Event ) {
+			for ( var i:int = 0; i < this.readMoreItems.length; i++ ) {
+				game.removeChild( readMoreItems[i] );
+			}
+		}
 	}
 	
 }
