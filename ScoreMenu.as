@@ -24,15 +24,14 @@ package {
 		private var score: int;
 		private var stageWidth;
 		private var stageHeight;
-		private var explanation;
+		private var explanation : TextField;
 		private var wellDone: Image;
 		private var scoreText;
-		private var scoreBike;
-		private var scorePhone;
-		private var scoreDjembe;
-		private var scorelaptop;
 		private var savedData: Array;
 		private var objects: Array;
+		public var choosenObjects: Array;
+		private var continueButton: Button;
+		
 		[Embed(source = "assets/GothamRounded-Medium.otf", embedAsCFF = "false", fontFamily = "Gotham Rounded")]
 		private static const FontGR: Class;
 
@@ -43,6 +42,7 @@ package {
 			trace(savedData);
 			this.stageWidth = game.stage.stageWidth;
 			this.stageHeight = game.stage.stageHeight;
+			this.choosenObjects = new Array();
 			this.score = score;
 			this.addEventListener(Event.ADDED_TO_STAGE, Add);
 		}
@@ -60,8 +60,7 @@ package {
 		}
 
 		private function draw(): void {
-			var background: Quad = new Quad(stageWidth, stageHeight, 16716947);
-			background.alpha = 0.9;
+			var background: Quad = new Quad(stageWidth, stageHeight, 15466636);
 			addChild(background);
 
 			wellDone = new Image(assetManager.getTexture("wellDone"));
@@ -71,19 +70,19 @@ package {
 			wellDone.alignPivot();
 			addChild(wellDone);
 			
-			scoreText = new TextField(300, 30, "Score: " + score, "Gotham Rounded", 15, 16776960);
-			scoreText.alignPivot();
-			scoreText.x = stageWidth / 2;
-			scoreText.y = 70;
-			addChild(scoreText);
-
-			explanation = new TextField(300, 50, "Spend your points to buy some of the following items:",
-				"Gotham Rounded", 15, 16776960);
-			explanation.alignPivot();
-			explanation.x = stageWidth / 2;
-			explanation.y = 100;
-			addChild(explanation);
-
+			updateScore(score);
+			
+			addText("Spend your points to buy some of the following items ");
+			
+			continueButton = new Button( assetManager.getTexture("button-yellow"));
+			continueButton.text = " Continue ";
+			continueButton.fontName = "Gotham Rounded";
+			continueButton.fontColor = 16716947;
+			continueButton.fontSize = 30;
+			continueButton.y = 80 ;
+			continueButton.x = game.stage.stageWidth / 2 - continueButton.width / 5;
+			continueButton.scale = 0.4;
+			
 			bikeButton = new Button(assetManager.getTexture("bike"));
 			phoneButton = new Button(assetManager.getTexture("phone"));
 			djembeButton = new Button(assetManager.getTexture("djembe"));
@@ -109,7 +108,6 @@ package {
 					objects[i].x = this.game.stage.stageWidth / (objects.length / 2 + 1) + i * (this.game.stage.stageWidth / (objects.length / 2 + 1));
 					objects[i].alignPivot();
 					objects[i].scale = 0.5;
-					trace(objects[i].y + "////" + objects[i].x);
 				}
 				else
 				{
@@ -119,7 +117,6 @@ package {
 					objects[i].x = this.game.stage.stageWidth / (objects.length / 2 + 1) + (i-4) * (this.game.stage.stageWidth / (objects.length / 2 + 1));
 					objects[i].alignPivot();
 					objects[i].scale = 0.5;
-					trace(objects[i].y + "////" + objects[i].x);
 				}
 				this.addChild(scoreText);
 				this.addChild(objects[i]);
@@ -130,47 +127,89 @@ package {
 
 		private function onMainMenuClick(event: Event): void {
 			var buttonPress: Button = event.target as Button;
-			if (buttonPress == bikeButton && score >= 10) {
-				removeContent();
-				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
-				pushData("bike");
-				score -= 10;
-				trace(score);
-			} else if (buttonPress == phoneButton && score >= 20) {
-				removeContent();
-				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
-				pushData("phone");
-				score = score - 20;
-			} else if (buttonPress == djembeButton && score >= 30) {
-				removeContent();
-				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
-				pushData("djembe");
-				score = score - 30;
-			} else if (buttonPress == laptopButton && score >= 40) {
-				removeContent();
-				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
-				pushData("laptop");
-				score = score - 40;
+			trace ( buttonPress );
+			if (buttonPress == earphonesButton ) {
+				clickItem( "earphones", 10 );
+			} else if (buttonPress == djembeButton ) {
+				clickItem( "djembe", 20 ); 
+			} else if (buttonPress == phoneButton ) {
+				clickItem( "phone", 30 );
+			} else if (buttonPress == laptopButton ) {
+				clickItem( "laptop", 40 );
+			} else if( buttonPress == bikeButton ) {
+				clickItem( "bike", 50 );
+			} else if( buttonPress == coinsButton ) {
+				clickItem( "coins", 60 );
+			} else if( buttonPress == carButton ) {
+				clickItem( "car", 70 );
+			} else if( buttonPress == houseButton ) {
+				clickItem( "house", 80 );
+			} 
+			if( score == 0 ) {
+				addText("");
+				addChild( continueButton );
+				addEventListener(Event.TRIGGERED, onContinueButtonClicked);
 			}
+			
+			
 			game.saveDataObject.data.totalScore = score;
 
 		}
+		
+		private function onContinueButtonClicked(e:Event): void {
+				
+				removeContent();	
+				var continueScreen: ContinueScreen = new ContinueScreen(game, assetManager, score, choosenObjects);
+				addChild(continueScreen);
+		}
+		
+		private function updateScore(score: int)
+			{
+				removeChild(scoreText);
+				this.score = score;
+				if(this.score >= 10 ) {
+					scoreText = new TextField(300, 30, "Points: " + score, "Gotham Rounded", 15, 16776960, true);
+				} 
+				else {
+					
+					scoreText = new TextField(300, 30, "You don't have points anymore", "Gotham Rounded", 15, 16776960, true);			
+				}
+				scoreText.alignPivot();
+				scoreText.x = stageWidth / 2;
+				scoreText.y = 70;
+				addChild(scoreText);
+			}
+
 
 		private function removeContent() {
 			while (this.numChildren > 0) {
 				this.removeChildAt(0);
-			}
-			var background: Quad = new Quad(stageWidth, stageHeight, 123456);
-			background.alpha = 0.9;
-			addChild(background);
-		}
+			}		}
 
 		private function pushData(object: String) {
 			savedData.push(object);
 			game.saveDataObject.data.boughtItems = savedData;
 
-			var continueScreen: ContinueScreen = new ContinueScreen(game, assetManager, score, object);
-			addChild(continueScreen);
+		}
+		private function addText( text: String ) {
+				removeChild( explanation );
+				explanation = new TextField(450, 50, text, "Gotham Rounded", 15, 16776960);
+				explanation.alignPivot();
+				explanation.x = stageWidth / 2 ;
+				explanation.y = 100;
+				addChild(explanation);
+			}
+		private function clickItem( item:String, neededScore:int ) {
+			if ( this.score >= neededScore ) {
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
+				pushData( item );
+				choosenObjects.push( item );
+				updateScore( score - neededScore );
+				addText("Spend your points to buy some of the following items " );
+			} else if(this.score < neededScore ){
+				addText("You don't have enough points to buy a " + item );
+				
+			} 
 		}
 	}
 }
