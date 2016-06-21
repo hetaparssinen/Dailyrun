@@ -38,17 +38,16 @@
 			var background:Image = new Image( assetManager.getTexture( "landscape_size ok" ) ); 
 			this.game.addChild( background );
 			
-			congratsText = new TextField( game.stage.stageWidth, 200, "CONGRATULATIONS!", "DK Codswallop", 44 );
-			congratsText.color = 15466636;
+			congratsText = new TextField( game.stage.stageWidth, 100, "Congratulations! You didn't get pregnant! Now it's easier to fulfill your dreams!", "Gotham Rounded",25, 16776960);
 			congratsText.alignPivot();
 			congratsText.y = 50;
 			congratsText.x = game.stage.stageWidth / 2;
 			this.game.addChild( congratsText );
 			
-			continueButton = new Button( assetManager.getTexture( "button-pink" ), "CONTINUE");
+			continueButton = new Button( assetManager.getTexture( "button-pink" ), "Start again");
 			continueButton.fontSize = 44;
-			continueButton.fontColor = 41701;
-			continueButton.fontName = "DK Codswallop";
+			continueButton.fontColor = 16776960;
+			continueButton.fontName = "Gotham Rounded";
 			continueButton.alignPivot();
 			continueButton.scale = 0.55;
 			continueButton.x = this.game.stage.stageWidth / 2;
@@ -98,8 +97,8 @@
 			
 			var readMoreButton:Button = new Button( assetManager.getTexture( "button-pink" ), "READ MORE");
 			readMoreButton.fontSize = 44;
-			readMoreButton.fontColor = 41701;
-			readMoreButton.fontName = "DK Codswallop";
+			readMoreButton.fontColor = 16776960;
+			readMoreButton.fontName = "Gotham Rounded";
 			readMoreButton.alignPivot();
 			readMoreButton.scale = 0.55;
 			readMoreButton.x = this.game.stage.stageWidth / 2 + readMoreButton.width / 2 + 5;
@@ -107,7 +106,7 @@
 			this.game.addChild( readMoreButton );
 			readMoreButton.addEventListener(Event.TRIGGERED, readMoreButtonClicked);
 			
-			text = new TextField( 200, 30, "About peer pressure", "Comic Sans MS", 16, 41701 );
+			text = new TextField( 200, 30, "About peer pressure", "Gotham Rounded", 16, 16776960 );
 			text.alignPivot("left", "center");
 			text.y = readMoreButton.y + 40;
 			text.x = readMoreButton.x - readMoreButton.width / 2 - 10;
