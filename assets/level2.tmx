@@ -5,17 +5,17 @@
  </tileset>
  <layer name="Floor" width="140" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRgAyYgZgRirHxqWU+E5nuGUwA2W3E+ocebkF2Dy5xbHKk+gObfmRMrB5cduIyn1j15Lqf1LjEFw741JBq1igevBg9zeAqG4jJM7jUEKMfFwYAdwIBDg==
+   eJxjYBgFo2AUjIJRgAyYgZgRirHxqWU+E5nuGUwA2W3E+ocebkF2Dy5xbHKk+gObfmRMrB5cduIyn1j15Lqf1LjEFw741JBq1ige3BhX3iKU59DTBC41xOjHhQF3mgEP
   </data>
  </layer>
  <layer name="Enemies" width="140" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRMFCAcZjYQQ9Ajj9w6SFkFiMONq0BvewabGmCaaAdMAroAgYy3QEANNQADQ==
+   eJxjYBgFo2AUjIJRMFCAcYjZwURFs0gF5PgDlx5SzKJHHNHbLnr6aRSMAhgYyHQHADWwAAw=
   </data>
  </layer>
- <layer name="GoodBoys" width="140" height="5" visible="0">
+ <layer name="GoodBoys" width="140" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRgAswDrQDRsGgAUM1LQxVd4+CUUBNAAAXhAAE
+   eJxjYBgFo2AUjIJRMApGASHAONAOIBMMBXcPBTeOgqENABQcAAQ=
   </data>
  </layer>
  <layer name="FriendsBubble" width="140" height="5">

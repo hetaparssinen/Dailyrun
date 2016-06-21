@@ -61,6 +61,8 @@ package
 		private var continueButton:Button;
 		private var mainMenuButton:Button;
 		private var pauseScreen:PauseScreen;
+		
+		private var pointsTimer:Timer;
 
 		public function Level2(game: GameStateManager): void
 		{
@@ -242,6 +244,10 @@ package
 				game.addChild( pauseButton );
 				
 				pauseButton.addEventListener( Event.TRIGGERED, pauseGame );
+				
+				pointsTimer = new Timer( 5000, 100 );
+				pointsTimer.addEventListener( TimerEvent.TIMER, pointsTimerHandler );
+				pointsTimer.start();
 			}
 			else if (isPlaying && !character.jumping && touch)
 			{
@@ -529,9 +535,7 @@ package
 					character.decreaseHealth();
 					character.updateCharacter();
 
-					if( score != 0 ) {
-						decreaseScore(-10);
-					}
+					updateScore( -20 );
 				}
 				else if (character.health <= 0)
 				{
@@ -547,8 +551,6 @@ package
 		}
 		
 		function goodGuyHit() {
-			decreaseScore( 10 );
-
 			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );
 
 			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
@@ -565,8 +567,6 @@ package
 		}
 		
 		function friendsBubbleHit( i:int ) {
-			decreaseScore( 20 );
-
 			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "protection" );
 
 				game.removeChild( friendsBubbles[i] );
@@ -574,8 +574,8 @@ package
 			character.addProtection();
 		}
 		
-		function decreaseScore( plusScore:int ) {
-			this.score += plusScore;
+		function updateScore( scoreAdd:int ) {
+			this.score += scoreAdd;
 			scoreText.text = "Score: " + this.score;
 		}
 		
@@ -618,6 +618,10 @@ package
 			button.alignPivot();
 			button.scale = 0.65;
 			button.x = game.stage.stageWidth / 2;
+		}
+		
+		function pointsTimerHandler( e:TimerEvent ) {
+			updateScore( 10 );
 		}
 	}
 }
