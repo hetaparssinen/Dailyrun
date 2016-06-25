@@ -190,7 +190,6 @@ package {
 				addChild(scoreText);
 			}
 
-
 		private function removeContent() {
 			while (this.numChildren > 0) {
 				this.removeChildAt(0);

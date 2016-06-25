@@ -92,7 +92,7 @@ public class GoodLifeLevel implements GameState
         goodLifeItems = new Vector.<Image>();
 
         //Add background
-        background = new Background( assetManager.getTexture( "landscape_size ok"), game.stage.stageWidth );
+        background = new Background( assetManager.getTexture( "landscape4"), game.stage.stageWidth );
         game.addChild( background );
 
         for (var i:int = 0; i < mapTMX.layers.length; i++)
