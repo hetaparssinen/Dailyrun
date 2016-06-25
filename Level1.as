@@ -136,10 +136,10 @@ package
 					newGroundImage( "ground_up", i );
 				}
 			}
-			for ( i = 0; i < game.stage.stageWidth / 64; i++ ) {
+			for ( i = 0; i < game.stage.stageWidth / tileWidth + 1; i++ ) {
 				var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
 				grass.alignPivot( "left", "bottom" );
-				grass.x = i * 64;
+				grass.x = i * tileWidth;
 				grass.y = game.stage.stageHeight;
 				game.addChild( grass );
 				smallGrassImages.push( grass );

@@ -43,6 +43,7 @@ package
 		private var goodGuys:Array;
 		private var collectedGoodGuys:Array;
 		private var groundImages:Array;
+		private var smallGrassImages:Array;
 		private var friendsBubbles:Array;
 		private var characterChosen: Boolean;
 		private var score: int;
@@ -102,6 +103,7 @@ package
 			collectedGoodGuys = new Array();
 			friendsBubbles = new Array();
 			blurImages = new Array();
+			smallGrassImages = new Array();
 
 			//Add background
 			background = new Background(assetManager.getTexture("landscape2"), game.stage.stageWidth);
@@ -131,6 +133,14 @@ package
 				} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
 					newGroundImage( "ground_up", i );
 				}
+			}
+			for ( i = 0; i < game.stage.stageWidth / tileWidth + 1; i++ ) {
+				var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
+				grass.alignPivot( "left", "bottom" );
+				grass.x = i * tileWidth;
+				grass.y = game.stage.stageHeight;
+				game.addChild( grass );
+				smallGrassImages.push( grass );
 			}
 
 			// Add bad boys to the screen
@@ -279,6 +289,8 @@ package
 				
 				// Move flowers and remove if off the screen
 				moveAndRemove( groundImages );
+				
+				moveAndRemove( smallGrassImages, true );
 
 				// Move enemies and remove if off the screen
 				moveAndRemoveMoving( enemies );
@@ -493,19 +505,29 @@ package
 			}
 		}
 		
-		function moveAndRemove( objects:Array ) {
+		function moveAndRemove( objects:Array, addMore:Boolean=false ) {
 			for ( var i:int = 0; i < objects.length; i++ )
 			{
 				if ( objects[i].x <= -objects[i].width )
 				{
 					game.removeChild( objects[i] );
 					objects.splice(i, 1);
+					if ( addMore ) addSmallGrass();
 				}
 				else
 				{
 					objects[i].x -= gameSpeed;
 				}
 			}
+		}
+		
+		function addSmallGrass() {
+			var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
+			grass.alignPivot( "left", "bottom" );
+			grass.x = game.stage.stageWidth;
+			grass.y = game.stage.stageHeight;
+			game.addChild( grass );
+			smallGrassImages.push( grass );
 		}
 		
 		function checkCollision( objects:Array ):int {
@@ -569,7 +591,7 @@ package
 		function friendsBubbleHit( i:int ) {
 			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "protection" );
 
-				game.removeChild( friendsBubbles[i] );
+			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
 			character.addProtection();
 		}
