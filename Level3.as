@@ -45,12 +45,14 @@ package
 		private var goodGuys:Array;
 		private var collectedGoodGuys:Array;
 		private var groundImages:Array;
+		private var smallGrassImages:Array;
 		private var friendsBubbles:Array;
 		private var characterChosen: Boolean;
 		private var score: int;
 		private var scoreText: TextField;
 		private var finish: Image;
 		private var start:Image;
+		private var protectionBubble:Image;
 		private var gameSpeed: int;
 		private var background: Background;
 		private var color:String;
@@ -65,6 +67,7 @@ package
 		private var pauseScreen:PauseScreen;
 		
 		private var pointsTimer:Timer;
+		private var protectionTimer:Timer;
 
 		public function Level3(game: GameStateManager): void
 		{
@@ -102,6 +105,7 @@ package
 			collectedGoodGuys = new Array();
 			friendsBubbles = new Array();
 			blurImages = new Array();
+			smallGrassImages = new Array();
 
 			//Add background
 			background = new Background(assetManager.getTexture("landscape3"), game.stage.stageWidth);
@@ -131,6 +135,14 @@ package
 				} else if ( mapTMX.layers[0].layerData[i] == 3 ) {
 					newGroundImage( "ground_up", i );
 				}
+			}
+			for ( i = 0; i < game.stage.stageWidth / tileWidth + 1; i++ ) {
+				var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
+				grass.alignPivot( "left", "bottom" );
+				grass.x = i * tileWidth;
+				grass.y = game.stage.stageHeight;
+				game.addChild( grass );
+				smallGrassImages.push( grass );
 			}
 
 			// Add bad boys to the screen
@@ -253,7 +265,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
-				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "jump" );
+				character.jumpingSound = true;
 				character.velocity.y = -100;
 			}
 		}		
@@ -279,6 +291,8 @@ package
 				
 				// Move flowers and remove if off the screen
 				moveAndRemove( groundImages );
+				
+				moveAndRemove( smallGrassImages, true );
 
 				// Move enemies and remove if off the screen
 				moveAndRemoveMoving( enemies );
@@ -313,6 +327,11 @@ package
 				var bubble:int = checkCollision( friendsBubbles );
 				if ( bubble != -1 ) {
 					friendsBubbleHit( bubble );
+				}
+				
+				if ( protectionBubble ) {
+					protectionBubble.x = character.x;
+					protectionBubble.y = character.y - character.height / 2;
 				}
 				
 				checkGround();
@@ -368,6 +387,8 @@ package
 			if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
 				character.jumping = false;
 				character.y = game.stage.stageHeight;
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+				character.updateCharacter();
 			}
 			
 			var tileNum:int = countTileNum();
@@ -377,6 +398,7 @@ package
 				if( character.jumping )
 				{
 					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+					character.updateCharacter();
 				}
 				
 				character.jumping = false;
@@ -414,8 +436,11 @@ package
 				var charTileX:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
 				var charTileY:int = (game.stage.stageHeight - character.y) % tileWidth;
 
-				if (charTileY < charTileX)
+				if (charTileY < charTileX) {
 					character.jumping = false;
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+					character.updateCharacter();
+				}
 			}
 		}
 		
@@ -432,8 +457,11 @@ package
 				var charTileX: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
 				var charTileY: int = (game.stage.stageHeight - character.y) % tileWidth;
 
-				if (charTileY < charTileX)
+				if (charTileY < charTileX) {
 					character.jumping = false;
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+					character.updateCharacter();
+				}
 			}
 		}
 		
@@ -488,19 +516,29 @@ package
 			}
 		}
 		
-		function moveAndRemove( objects:Array ) {
+		function moveAndRemove( objects:Array, addMore:Boolean=false ) {
 			for ( var i:int = 0; i < objects.length; i++ )
 			{
 				if ( objects[i].x <= -objects[i].width )
 				{
 					game.removeChild( objects[i] );
 					objects.splice(i, 1);
+					if ( addMore ) addSmallGrass();
 				}
 				else
 				{
 					objects[i].x -= gameSpeed;
 				}
 			}
+		}
+		
+		function addSmallGrass() {
+			var grass:Image = new Image( assetManager.getTexture( "smallGrass" ) );
+			grass.alignPivot( "left", "bottom" );
+			grass.x = game.stage.stageWidth;
+			grass.y = game.stage.stageHeight;
+			game.addChild( grass );
+			smallGrassImages.push( grass );
 		}
 		
 		function checkCollision( objects:Array ):int {
@@ -542,16 +580,6 @@ package
 					gameOver.y = game.stage.stageHeight / 2;
 
 					game.addChild(gameOver);
-
-					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
-						game.saveDataObject.data.level1HighScore = score;
-						game.saveDataObject.flush();
-					}
-
-					trace( "FINISH" );
-					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "applause" );
-					
-					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
 			}
 		}
@@ -578,7 +606,22 @@ package
 
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
-			character.addProtection();
+			character.protection = true;
+			protectionTimer = new Timer(config.character.protectionTime);
+			protectionTimer.start();
+			protectionTimer.addEventListener(TimerEvent.TIMER, protectionTimerHandler);
+			protectionBubble = new Image( assetManager.getTexture( "protectionBubble" ) );
+			protectionBubble.alignPivot();
+			protectionBubble.x = character.x + character.width / 2;
+			protectionBubble.y = character.y + character.height / 2;
+			game.addChild( protectionBubble );
+		}
+		
+		private function protectionTimerHandler(e: TimerEvent): void
+		{
+			character.protection = false;
+			protectionTimer.stop();
+			game.removeChild( protectionBubble );
 		}
 		
 		function updateScore( scoreAdd:int ) {

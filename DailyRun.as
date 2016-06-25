@@ -55,6 +55,7 @@ import starling.display.Sprite;
 			if( ratio == 1 )
 			{
 				trace( "assetmanager loaded..")
+				removeChild( loader );
 				startDailyRun();
 			}
 		}

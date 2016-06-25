@@ -200,7 +200,7 @@ public class GoodLifeLevel implements GameState
         else if (isPlaying && !character.jumping && touch)
         {
             character.jumping = true;
-            if ( !game.saveDataObject.data.mute ) assetManager.playSound( "jump" );
+            character.jumpingSound = true;
             character.velocity.y = -100;
         }
 
@@ -297,6 +297,7 @@ public class GoodLifeLevel implements GameState
             if( character.jumping )
             {
                 if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+				character.updateCharacter();
             }
 
             character.jumping = false;
@@ -309,6 +310,7 @@ public class GoodLifeLevel implements GameState
             if( character.jumping )
             {
                 if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+				character.updateCharacter();
             }
 
 			character.jumping = false;
@@ -349,6 +351,7 @@ public class GoodLifeLevel implements GameState
 			if (charTileY < charTileX)
 				character.jumping = false;
                 if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+				character.updateCharacter();
 		}
 	}
 	
@@ -368,6 +371,7 @@ public class GoodLifeLevel implements GameState
 			if (charTileY < charTileX)
 				character.jumping = false;
                 if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+				character.updateCharacter();
 		}
 	}
 	

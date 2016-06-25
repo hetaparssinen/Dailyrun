@@ -10,6 +10,7 @@
 	import flash.geom.Point;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
+	import flash.ui.GameInput;
 
 
 	public class Character extends Sprite
@@ -55,7 +56,6 @@
 
 			addChild(mainCharacter);
 			Starling.juggler.add(mainCharacter);
-			// Fix this and use same size of assets
 			this.height = 64;
 			this.velocity.y = -100;
 
@@ -66,8 +66,8 @@
 		{
 			if( jumpingSound )
 			{
-				trace("sound")
 				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "jump" );
+				jump();
 				jumpingSound = false;
 			}
 			if (jumping)
@@ -75,6 +75,7 @@
 				this.y += this.velocity.y * deltaTime * 3;
 
 				this.velocity.y += 5;
+				
 			}
 		}
 
@@ -87,45 +88,42 @@
 		{
 			if (health == 1)
 			{
-				removeChild(mainCharacter);
-				Starling.juggler.remove(mainCharacter);
-				mainCharacter = new MovieClip(assetManager.getTextures("illGirl"), 12);
-				addChild(mainCharacter);
-				Starling.juggler.add(mainCharacter);
-				this.alignPivot("center", "bottom");
+				newTextures( "illGirl" );
 			}
 			else if (health == 0)
 			{
-				removeChild(mainCharacter);
-				Starling.juggler.remove(mainCharacter);
-				mainCharacter = new MovieClip(assetManager.getTextures("pregnantGirl"), 12);
-				addChild(mainCharacter);
-				Starling.juggler.add(mainCharacter);
-				this.alignPivot("center", "bottom");
+				newTextures( "pregnantGirl" );
+			}
+			else 
+			{
+				trace("HERE");
+				newTextures( color + "Character" );
 			}
 		}
-
-		public function addProtection(): void
-		{
-			protection = true;
-			protectionTimer = new Timer(config.character.protectionTime);
-			protectionTimer.start();
-			protectionTimer.addEventListener(TimerEvent.TIMER, protectionTimerHandler);
-			protectionBubble = new Image( assetManager.getTexture( "protectionBubble" ) );
-			protectionBubble.alignPivot();
-			protectionBubble.x = mainCharacter.x + mainCharacter.width / 2;
-			protectionBubble.y = mainCharacter.y + mainCharacter.height / 2;
-			addChild( protectionBubble );
-			
+		
+		public function jump():void {
+			if (health == 1)
+			{
+				newTextures( "jump_ill" );
+			}
+			else if (health == 0)
+			{
+				newTextures( "jump_pregnant" );
+			}
+			else 
+			{
+				newTextures( "jump_" + color );
+			}
 		}
-
-		private function protectionTimerHandler(e: TimerEvent): void
-		{
-			protection = false;
-			protectionTimer.stop();
-			removeChild( protectionBubble );
+		
+		private function newTextures( texture:String ) {
+			removeChild(mainCharacter);
+			Starling.juggler.remove(mainCharacter);
+			mainCharacter = new MovieClip(assetManager.getTextures( texture ), 12);
+			addChild(mainCharacter);
+			Starling.juggler.add(mainCharacter);
+			this.alignPivot("center", "bottom");
 		}
-
 	}
 
 }
