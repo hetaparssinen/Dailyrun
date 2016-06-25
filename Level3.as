@@ -52,6 +52,7 @@ package
 		private var scoreText: TextField;
 		private var finish: Image;
 		private var start:Image;
+		private var protectionBubble:Image;
 		private var gameSpeed: int;
 		private var background: Background;
 		private var color:String;
@@ -66,6 +67,7 @@ package
 		private var pauseScreen:PauseScreen;
 		
 		private var pointsTimer:Timer;
+		private var protectionTimer:Timer;
 
 		public function Level3(game: GameStateManager): void
 		{
@@ -263,7 +265,7 @@ package
 			else if (isPlaying && !character.jumping && touch)
 			{
 				character.jumping = true;
-				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "jump" );
+				character.jumpingSound = true;
 				character.velocity.y = -100;
 			}
 		}		
@@ -327,6 +329,11 @@ package
 					friendsBubbleHit( bubble );
 				}
 				
+				if ( protectionBubble ) {
+					protectionBubble.x = character.x;
+					protectionBubble.y = character.y - character.height / 2;
+				}
+				
 				checkGround();
 				//check if on ascending hill (3)
 				checkIfHill(3);
@@ -380,6 +387,8 @@ package
 			if ( character.y >= game.stage.stageHeight && character.jumping == true ) {
 				character.jumping = false;
 				character.y = game.stage.stageHeight;
+				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+				character.updateCharacter();
 			}
 			
 			var tileNum:int = countTileNum();
@@ -389,6 +398,7 @@ package
 				if( character.jumping )
 				{
 					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+					character.updateCharacter();
 				}
 				
 				character.jumping = false;
@@ -426,8 +436,11 @@ package
 				var charTileX:int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
 				var charTileY:int = (game.stage.stageHeight - character.y) % tileWidth;
 
-				if (charTileY < charTileX)
+				if (charTileY < charTileX) {
 					character.jumping = false;
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+					character.updateCharacter();
+				}
 			}
 		}
 		
@@ -444,8 +457,11 @@ package
 				var charTileX: int = (character.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
 				var charTileY: int = (game.stage.stageHeight - character.y) % tileWidth;
 
-				if (charTileY < charTileX)
+				if (charTileY < charTileX) {
 					character.jumping = false;
+					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "landing" );
+					character.updateCharacter();
+				}
 			}
 		}
 		
@@ -564,16 +580,6 @@ package
 					gameOver.y = game.stage.stageHeight / 2;
 
 					game.addChild(gameOver);
-
-					if ( game.saveDataObject.data.level1HighScore == null || game.saveDataObject.data.level1HighScore < score ) {
-						game.saveDataObject.data.level1HighScore = score;
-						game.saveDataObject.flush();
-					}
-
-					trace( "FINISH" );
-					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "applause" );
-					
-					game.removeEventListener( Event.ENTER_FRAME, update ); //Doesn't work???
 				}
 			}
 		}
@@ -599,7 +605,22 @@ package
 
 			game.removeChild( friendsBubbles[i] );
 			friendsBubbles.splice( i, 1 );
-			character.addProtection();
+			character.protection = true;
+			protectionTimer = new Timer(config.character.protectionTime);
+			protectionTimer.start();
+			protectionTimer.addEventListener(TimerEvent.TIMER, protectionTimerHandler);
+			protectionBubble = new Image( assetManager.getTexture( "protectionBubble" ) );
+			protectionBubble.alignPivot();
+			protectionBubble.x = character.x + character.width / 2;
+			protectionBubble.y = character.y + character.height / 2;
+			game.addChild( protectionBubble );
+		}
+		
+		private function protectionTimerHandler(e: TimerEvent): void
+		{
+			character.protection = false;
+			protectionTimer.stop();
+			game.removeChild( protectionBubble );
 		}
 		
 		function updateScore( scoreAdd:int ) {
