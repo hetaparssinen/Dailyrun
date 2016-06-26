@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="110" height="5" tilewidth="64" tileheight="64" backgroundcolor="#ff00ff" nextobjectid="1">
  <tileset firstgid="1" name="sprites" tilewidth="64" tileheight="64" tilecount="4" columns="2">
   <image source="sprites.png" width="128" height="128"/>
  </tileset>
- <layer name="Floor" width="100" height="5">
+ <layer name="Floor" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUUAqYgZgRCROrlgmPGdgwEwN5AJvZxJhFir/IcQcx7iRkPzHhRo4eUjC2sCTXDlLMwiVPKG5JNW8UDw0MAANmAPc=
+   eJxjYBgFo2AUDDbADMSMSJhYtUx4zMCGmRjIA9jMJsYsUvxFjjuIcSc5mBi7idFHLffgC3Ny7SDFLFzyhNIAqeaN4pGJAYB6ARU=
   </data>
  </layer>
- <layer name="Items" width="100" height="5">
+ <layer name="Items" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYKAvYBxi5g41QM9wINcucvRR01+jaYU+YDSchx4YjbOhDQA2YAAK
+   eJxjYKAvYBxi5g5XQM/wItcucvRR01+jaWpwgdH4GAWjYGQAADqQAAk=
   </data>
  </layer>
- <layer name="Finish" width="100" height="5">
+ <layer name="Finish" width="110" height="5">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUwADjQDtgFIyCUTAKyAQADJAAAg==
+   eJxjYBgFo2AUkAoYB9oBo2AUjIJRMEwBAA34AAI=
   </data>
  </layer>
 </map>

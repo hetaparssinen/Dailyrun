@@ -141,7 +141,7 @@ public class GoodLifeLevel implements GameState
         {
             if( mapTMX.layers[2].layerData[i] == 1 )
             {
-                finish = new Image( assetManager.getTexture( "school") );
+                finish = new Image( assetManager.getTexture( "home") );
 
                 finish.scale = 128 / finish.height;
 
