@@ -94,18 +94,19 @@ package {
 
 			objects = new Array(earphonesButton, djembeButton, phoneButton, laptopButton, bikeButton, coinsButton, carButton, houseButton);
 
+			var scoreText:TextField;
 			for (var i: int = 0; i < objects.length; i++) {
 				if( i < 4) {
-					var scoreText: TextField = new TextField(300, 20, "You need " + (i + 1)* 10, 
+					scoreText = new TextField(300, 20, "You need " + (i + 1)* 10, 
 					"Gotham Rounded", 10, 16776960);
 				} else if (i >= 4 && i < 6) {
-					var scoreText: TextField = new TextField(300, 20, "You need " + i * 20, 
+					scoreText = new TextField(300, 20, "You need " + i * 20, 
 					"Gotham Rounded", 10, 16776960);
 				} else if( i==6 ){
-					var scoreText: TextField = new TextField(300, 20, "You need " + 110, 
+					scoreText = new TextField(300, 20, "You need " + 110, 
 					"Gotham Rounded", 10, 16776960);
 				} else {
-					var scoreText: TextField = new TextField(300, 20, "You need " + 130, 
+					scoreText = new TextField(300, 20, "You need " + 130, 
 					"Gotham Rounded", 10, 16776960);
 				}
 				scoreText.alignPivot("center", "top");

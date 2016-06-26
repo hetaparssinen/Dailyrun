@@ -481,6 +481,22 @@ package
 				enemy.y = game.stage.stageHeight - groundHeight - hillHeight;
 			}
 		}
+			
+		function countTileNum():int {
+			var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
+			var yLoc: int = (character.y - tileWidth) / tileWidth;
+			var tileNum: int = (yLoc * mapWidth) + xLoc;
+			return tileNum;
+		}
+		
+		function newGroundImage( image:String, i:int ) {
+			var flower:Image = new Image( assetManager.getTexture( image ) );
+			flower.x = (i % mapWidth) * tileWidth;
+			flower.y = int(i / mapWidth) * tileWidth - (flower.height - tileWidth);
+			game.addChild(flower);
+			groundImages.push( flower );
+		}
+		
 		function moveAndRemoveMoving(objects:Array) {
 			for ( var i:int = 0; i < objects.length; i++ )
 			{
