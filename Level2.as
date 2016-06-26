@@ -472,7 +472,7 @@ package
 			var xLoc: int = (enemy.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
 			var yLoc: int = (enemy.y - tileWidth) / tileWidth;
 			var tileNum: int = (yLoc * mapWidth) + xLoc;
-			// Check only going down ;) we don't need to check going up....at least for now
+			// Check only going down, we don't need to check going up
 			if ((mapTMX.layers[0].layerData[tileNum] == 2 || mapTMX.layers[0].layerData[tileNum + mapWidth] == 2))
 			{
 				var groundHeight:int = (game.stage.stageHeight - enemy.y) / tileWidth;
@@ -480,21 +480,6 @@ package
 				var hillHeight:int = tileWidth - (enemy.x - mapTMX.layers[0].layerSprite.x) % tileWidth;
 				enemy.y = game.stage.stageHeight - groundHeight - hillHeight;
 			}
-		}
-		
-		function countTileNum():int {
-			var xLoc: int = (character.x - mapTMX.layers[0].layerSprite.x) / tileWidth;
-			var yLoc: int = (character.y - tileWidth) / tileWidth;
-			var tileNum: int = (yLoc * mapWidth) + xLoc;
-			return tileNum;
-		}
-		
-		function newGroundImage( image:String, i:int ) {
-			var flower:Image = new Image( assetManager.getTexture( image ) );
-			flower.x = (i % mapWidth) * tileWidth;
-			flower.y = int(i / mapWidth) * tileWidth - (flower.height - tileWidth);
-			game.addChild(flower);
-			groundImages.push( flower );
 		}
 		function moveAndRemoveMoving(objects:Array) {
 			for ( var i:int = 0; i < objects.length; i++ )
@@ -588,12 +573,11 @@ package
 		
 		function goodGuyHit() {
 			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );
-
-			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
+			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("star"));
 			hittedGoodGuy.scale = 0.5;
 			collectedGoodGuys.push(hittedGoodGuy);
 			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
-			hittedGoodGuy.y = 30;
+			hittedGoodGuy.y = 15;
 			game.addChild(hittedGoodGuy);
 			
 			if ( blurImages != null ) {

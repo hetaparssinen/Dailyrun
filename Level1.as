@@ -333,7 +333,7 @@ package
 					enemyHit();
 				}
 		
-				// Check collision with good boys
+				// Check collision with boys
 				if ( checkCollision( goodGuys ) != -1 ) {
 					goodGuyHit();
 				}
@@ -565,8 +565,8 @@ package
 				}
 			}
 		}
-		
 		function goodGuyHit() {
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );
 			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("star"));
 			hittedGoodGuy.scale = 0.5;
 			collectedGoodGuys.push(hittedGoodGuy);

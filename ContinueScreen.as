@@ -34,7 +34,7 @@ public class ContinueScreen extends Sprite
 		}
 		
 		private function draw():void {
-			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 15466636);15466636
+			var background:Quad = new Quad( game.stage.stageWidth, game.stage.stageHeight, 15466636);
 			addChild( background );
 			text = new TextField (350, 100, "Great! Now you have this items  ", "Gotham Rounded", 20, 16776960);
 			text.alignPivot();
@@ -66,8 +66,16 @@ public class ContinueScreen extends Sprite
 		}
 		
 		private function continueClick(event:Event):void
-		{
-			game.setGameState( MainMenu );
+		{		
+			var currentState:String = String(this.game.currentState());
+			
+			if( currentState == "[object Level1]" ){
+				game.setGameState( Level2 );
+			} else if ( currentState == "[object Level2]" ) {
+				game.setGameState( Level3 );
+			} else if ( currentState == "[object Level3]" ) {
+				game.setGameState( GoodLifeLevel );
+			}
 		}
 		
 	}

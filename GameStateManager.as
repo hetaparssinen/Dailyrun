@@ -39,6 +39,8 @@
 			return this.currentGameState;
 		}
 		
+		
+		
 		/*
 		* This function sets the initial gameState (Main Menu) and adds an eventlistener
 		* for entering a stage (for updating).
@@ -47,8 +49,6 @@
 		private function initialize():void
 		{
 			var mainMenu:MainMenu = new MainMenu( this );
-			//var scoreMenu: ScoreMenu = new ScoreMenu( this, assetManager, 100)
-			//addChild(scoreMenu);
 			addEventListener( Event.ENTER_FRAME, update );
 		}
 		

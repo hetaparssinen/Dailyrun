@@ -47,7 +47,7 @@ package
 			var restartButton: Button = new Button( assetManager.getTexture( "button-pink" ), "PLAY AGAIN");
 			restartButton.fontSize = 54;
 			restartButton.fontColor = 16776960;
-			restartButton.fontName = "DK Codswallop";
+			restartButton.fontName = "Gotham Rounded";
 			restartButton.alignPivot();
 			restartButton.scale = 0.65;
 			restartButton.x = currentGame.stage.stageWidth / 2;
@@ -66,6 +66,5 @@ package
 			var game:DailyRun = new DailyRun();
 			currentGame.addChild(game);
 		}
-
 	}
 }

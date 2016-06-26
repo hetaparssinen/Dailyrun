@@ -585,11 +585,12 @@ package
 		}
 		
 		function goodGuyHit() {
-			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("goodBoy"));
+			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );
+			var hittedGoodGuy = new GoodGuy(assetManager.getTexture("star"));
 			hittedGoodGuy.scale = 0.5;
 			collectedGoodGuys.push(hittedGoodGuy);
 			hittedGoodGuy.x = game.stage.stageWidth - 30 * collectedGoodGuys.length;
-			hittedGoodGuy.y = 30;
+			hittedGoodGuy.y = 15;
 			game.addChild(hittedGoodGuy);
 
 			if ( !game.saveDataObject.data.mute ) assetManager.playSound( "hitGoodBoy" );

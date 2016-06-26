@@ -95,9 +95,19 @@ package {
 			objects = new Array(earphonesButton, djembeButton, phoneButton, laptopButton, bikeButton, coinsButton, carButton, houseButton);
 
 			for (var i: int = 0; i < objects.length; i++) {
-				
-				var scoreText: TextField = new TextField(300, 20, "You need " + (i + 1)* 10, 
-				"Gotham Rounded", 10, 16776960);
+				if( i < 4) {
+					var scoreText: TextField = new TextField(300, 20, "You need " + (i + 1)* 10, 
+					"Gotham Rounded", 10, 16776960);
+				} else if (i >= 4 && i < 6) {
+					var scoreText: TextField = new TextField(300, 20, "You need " + i * 20, 
+					"Gotham Rounded", 10, 16776960);
+				} else if( i==6 ){
+					var scoreText: TextField = new TextField(300, 20, "You need " + 110, 
+					"Gotham Rounded", 10, 16776960);
+				} else {
+					var scoreText: TextField = new TextField(300, 20, "You need " + 130, 
+					"Gotham Rounded", 10, 16776960);
+				}
 				scoreText.alignPivot("center", "top");
 				scoreText.height = 20;
 				if(i < 4)
@@ -137,13 +147,13 @@ package {
 			} else if (buttonPress == laptopButton ) {
 				clickItem( "laptop", 40 );
 			} else if( buttonPress == bikeButton ) {
-				clickItem( "bike", 50 );
+				clickItem( "bike", 80 );
 			} else if( buttonPress == coinsButton ) {
-				clickItem( "coins", 60 );
+				clickItem( "coins", 90 );
 			} else if( buttonPress == carButton ) {
-				clickItem( "car", 70 );
+				clickItem( "car", 110 );
 			} else if( buttonPress == houseButton ) {
-				clickItem( "house", 80 );
+				clickItem( "house", 140 );
 			} 
 			if( score == 0 ) {
 				addText("");
@@ -179,7 +189,6 @@ package {
 				scoreText.y = 70;
 				addChild(scoreText);
 			}
-
 
 		private function removeContent() {
 			while (this.numChildren > 0) {

@@ -5,6 +5,8 @@
 	import starling.text.TextField;
 	import starling.display.Button;
 	import starling.events.Event;
+	import starling.display.MovieClip;
+	import starling.core.Starling;
 	
 	public class LifeScreen {
 		
@@ -34,21 +36,26 @@
 		
 		private function addLifeScreen( items:Vector.<Image>, color:String ):void {
 			var foundItems:Vector.<Image> = items;
-
-			var background:Image = new Image( assetManager.getTexture( "landscape_size ok" ) ); 
+			
+			var background:Image = new Image( assetManager.getTexture( "landscape4" ) ); 
 			this.game.addChild( background );
 			
-			congratsText = new TextField( game.stage.stageWidth, 200, "CONGRATULATIONS!", "DK Codswallop", 44 );
-			congratsText.color = 15466636;
+			/*var winningText:MovieClip = new MovieClip(assetManager.getTextures("youWin"),12);
+			Starling.juggler.add(winningText);
+			winningText.scale = 0.5;
+			this.game.addChild(winningText);*/
+
+			
+			congratsText = new TextField( game.stage.stageWidth, 100, "Congratulations! You didn't get pregnant! Now it's easier to fulfill your dreams!", "Gotham Rounded",25, 16716947);
 			congratsText.alignPivot();
 			congratsText.y = 50;
 			congratsText.x = game.stage.stageWidth / 2;
 			this.game.addChild( congratsText );
 			
-			continueButton = new Button( assetManager.getTexture( "button-pink" ), "CONTINUE");
+			continueButton = new Button( assetManager.getTexture( "button-pink" ), "Start again");
 			continueButton.fontSize = 44;
-			continueButton.fontColor = 41701;
-			continueButton.fontName = "DK Codswallop";
+			continueButton.fontColor = 16776960;
+			continueButton.fontName = "Gotham Rounded";
 			continueButton.alignPivot();
 			continueButton.scale = 0.55;
 			continueButton.x = this.game.stage.stageWidth / 2;
@@ -65,7 +72,7 @@
 
 			if ( foundItems != null ) {
 			for ( var i:int = 0; i < foundItems.length; i++ ) {
-				foundItems[i].scale = 0.2;
+				foundItems[i].scale = 0.5;
 				foundItems[i].alignPivot();
 				foundItems[i].x = 140 + i * 70;
 				foundItems[i].y = game.stage.stageHeight - character.height;
@@ -85,10 +92,10 @@
 			text.x = this.game.stage.stageWidth / 2;
 			this.game.addChild( text );
 			
-			var restartButton:Button = new Button( assetManager.getTexture( "button-pink" ), "MAIN MENU");
-			restartButton.fontSize = 44;
-			restartButton.fontColor = 41701;
-			restartButton.fontName = "DK Codswallop";
+			var restartButton:Button = new Button( assetManager.getTexture( "button-pink" ), "Go to Main Menu");
+			restartButton.fontSize = 25;
+			restartButton.fontColor = 16776960;
+			restartButton.fontName = "Gotham Rounded";
 			restartButton.alignPivot();
 			restartButton.scale = 0.55;
 			restartButton.x = this.game.stage.stageWidth / 2 - restartButton.width / 2 - 5;
@@ -96,10 +103,10 @@
 			this.game.addChild( restartButton );
 			restartButton.addEventListener(Event.TRIGGERED, restartButtonClicked);
 			
-			var readMoreButton:Button = new Button( assetManager.getTexture( "button-pink" ), "READ MORE");
-			readMoreButton.fontSize = 44;
-			readMoreButton.fontColor = 41701;
-			readMoreButton.fontName = "DK Codswallop";
+			var readMoreButton:Button = new Button( assetManager.getTexture( "button-pink" ), "Read More about peer presure");
+			readMoreButton.fontSize = 25;
+			readMoreButton.fontColor = 16776960;
+			readMoreButton.fontName = "Gotham Rounded";
 			readMoreButton.alignPivot();
 			readMoreButton.scale = 0.55;
 			readMoreButton.x = this.game.stage.stageWidth / 2 + readMoreButton.width / 2 + 5;
@@ -107,11 +114,11 @@
 			this.game.addChild( readMoreButton );
 			readMoreButton.addEventListener(Event.TRIGGERED, readMoreButtonClicked);
 			
-			text = new TextField( 200, 30, "About peer pressure", "Comic Sans MS", 16, 41701 );
+			/*text = new TextField( 200, 30, "About peer pressure", "Gotham Rounded", 16, 16776960 );
 			text.alignPivot("left", "center");
 			text.y = readMoreButton.y + 40;
 			text.x = readMoreButton.x - readMoreButton.width / 2 - 10;
-			this.game.addChild( text );
+			this.game.addChild( text );*/
 		}
 		
 		private function restartButtonClicked():void {
