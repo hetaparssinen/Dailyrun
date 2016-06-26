@@ -66,14 +66,19 @@
 			this.game.addChild( character );
 
 			if ( foundItems != null ) {
-			for ( var i:int = 0; i < foundItems.length; i++ ) {
-				foundItems[i].scale = 0.5;
-				foundItems[i].alignPivot();
-				foundItems[i].x = 140 + i * 70;
-				foundItems[i].y = game.stage.stageHeight - character.height;
-				this.game.addChild( foundItems[i] );
+				for ( var i:int = 0; i < foundItems.length; i++ ) {
+					foundItems[i].scale = 0.5;
+					foundItems[i].alignPivot();
+					if ( i > 3 ) {
+						foundItems[i].y = game.stage.stageHeight - character.height + 50;
+						foundItems[i].x = 140 + (i - 4) * 80;
+					} else {
+						foundItems[i].y = game.stage.stageHeight - character.height - 20;
+						foundItems[i].x = 140 + i * 80;
+					}
+					this.game.addChild( foundItems[i] );
+				}
 			}
-		}
 		}
 		
 		private function continueButtonClicked():void {
