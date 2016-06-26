@@ -82,27 +82,23 @@ package
 			
 			if (clickYellow)
 			{
-				trace("You touched yellow");
 				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				level.startPlaying("yellow");
 			}
 			else if(clickBlue)		
 			{
-				trace("You touched blue");
 				if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 				level.startPlaying("blue");
 			}
 			else
 				if(clickGreen)
 				{
-					trace("You touched green");
 					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 					level.startPlaying("green");
 				}
 			else
 				if(clickPink)
 				{
-					trace("you touched pink");
 					if ( !game.saveDataObject.data.mute ) assetManager.playSound( "mouseClick" );
 					level.startPlaying("pink");
 				}

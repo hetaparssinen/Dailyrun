@@ -40,12 +40,7 @@
 			var background:Image = new Image( assetManager.getTexture( "landscape4" ) ); 
 			this.game.addChild( background );
 			
-			/*var winningText:MovieClip = new MovieClip(assetManager.getTextures("youWin"),12);
-			Starling.juggler.add(winningText);
-			winningText.scale = 0.5;
-			this.game.addChild(winningText);*/
-
-			
+	
 			congratsText = new TextField( game.stage.stageWidth, 100, "Congratulations! You didn't get pregnant! Now it's easier to fulfill your dreams!", "Gotham Rounded",25, 16716947);
 			congratsText.alignPivot();
 			congratsText.y = 50;

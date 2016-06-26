@@ -96,7 +96,6 @@
 			}
 			else 
 			{
-				trace("HERE");
 				newTextures( color + "Character" );
 			}
 		}
